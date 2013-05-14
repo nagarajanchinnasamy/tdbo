@@ -1,0 +1,6 @@
+TODO:
+=====
+	1. tcltest based test cases
+	2. Documentation
+	3. Add support for other databases (mysql, oracle etc.)
+	4. Consider using tdbc as the base layer

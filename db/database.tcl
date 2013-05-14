@@ -1,3 +1,13 @@
+# database.tcl --
+#
+# Generic Database interface that needs to be implemented by
+# database-specific modules (eg., sqlite, mysql, oracle etc.
+#
+# Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
 # ----------------------------------------------------------------------
 # class Database
 #

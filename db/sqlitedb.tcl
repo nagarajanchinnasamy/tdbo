@@ -1,3 +1,13 @@
+# sqlitedb.tcl --
+#
+# sqlite3 implementation module. Takes care of translating object methods
+# to corresponding sql queries and executes them.
+#
+# Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
 # ----------------------------------------------------------------------
 # class SQLite
 #

@@ -1,3 +1,13 @@
+# object.tcl --
+#
+# Provides few enhancements over Itcl's object interface through enhanced
+# configure and cget methods.
+#
+# Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
 # ----------------------------------------------------------------------
 # class Object
 #
@@ -138,6 +148,3 @@ private method _itcl_cget {{option ""} args} @itcl-builtin-cget
 
 # ----------------------------------END---------------------------------
 }
-
-
-

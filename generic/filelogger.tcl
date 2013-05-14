@@ -1,3 +1,12 @@
+# filelogger.tcl --
+#
+# Logger interface to log messages to a file. See tcllib's logger package.
+#
+# Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+
 # ----------------------------------------------------------------------
 #
 #

@@ -70,4 +70,4 @@ Simple steps to use this package are:
 		puts [emp cget]
 
 
-For more details please visit: http://nagarajanchinnasamy.blogspot.in/
+For more detailed examples please check demo foler.

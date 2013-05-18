@@ -104,8 +104,12 @@ public method close {} {
 #
 #
 # ----------------------------------------------------------------------
-public method get {schema_name condition} {
-	return [lindex [_select $schema_name -condition $condition] 0]
+public method get {schema_name condition {fieldslist ""}} {
+	if {$fieldslist == ""} {
+		return [_select $schema_name -condition $condition]
+	} else {
+		return [_select $schema_name -condition $condition -fields $fieldslist]
+	}
 }
 # ----------------------------------------------------------------------
 #

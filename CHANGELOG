@@ -1,3 +1,8 @@
+Version: 0.1.1
+Date: 2013-05-18
+Changes:
+  1. Added public API comments
+  2. Changed few interfaces without affecting 0.1.0 interface
 Version: 0.1.0
 Date: 2013-05-14
 Changes:

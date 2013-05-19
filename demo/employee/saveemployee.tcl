@@ -22,9 +22,6 @@ proc saveemployee {db op employee address} {
 }
 
 itcl::body SaveEmployee::execute {} {
-	${log}::debug "Employee: [$employee cget]"
-	${log}::debug "Address: [$address cget]"
-
 	begin
 		switch $op {
 			add {

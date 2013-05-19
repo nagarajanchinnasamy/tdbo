@@ -5,7 +5,7 @@ package require sqlite3 3.7.14.1
 namespace eval ::tdbo {
 	namespace export *
 
-	variable version 0.1.0
+	variable version 0.1.1
 	variable library [file dirname [info script]]
 }
 

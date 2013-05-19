@@ -1,0 +1,34 @@
+# ----------------------------------------------------------------------
+# This folder contains following files:
+#    employeeapp.tcl  - Main application
+#    employee.tcl     - Defines Employee object
+#    address.tcl      - Defines Address object
+#    saveemployee.tcl - Defines a transaction to add/save Employee and
+#                       Address objects
+#    employee.db      - Pre-configured SQLite3 database with employee
+#                       address tables
+# 
+# Before running this demo, please clear any existing records from
+# employee and address tables in employee.db by issuing following
+# commands in sqlite3 client:
+#
+#    sqlite3 employee.db
+#    delete from addr;
+#    delete from employee;
+#    .exit
+#
+# To see the log messages, in shell prompt, issue the following command:
+#
+#    tail -f employee.log
+#
+# To run this application, in another shell, issue the following
+# command:
+#
+#    tclsh employeeapp.tcl
+#
+# Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# ----------------------------------------------------------------------

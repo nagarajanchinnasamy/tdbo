@@ -154,6 +154,9 @@ public method add {args} {
 #                   ((pk1=pk1value and pk2=pk2vaue) or
 #                        (uq2=uq2value and uq3=uq3value))
 #
+#                If the condition results into a retrieval of more than
+#                one record, then this method returns an error.
+#
 #                Upon successful execution, in addition to populating
 #                the member variables, this method returns the
 #                name-value pairs retrieved from database as a dict. If
@@ -169,6 +172,7 @@ public method get {args} {
 		return -code error "Multiple records retrieved in get operation"
 	}
 
+	set result [lindex $result 0]
 	foreach {fname val} $result {
 		dict set objcfg "-$fname" "$val"
 	}

@@ -1,3 +1,14 @@
+# ----------------------------------------------------------------------
+# Please see README file in this folder for details on how to use this
+# demo application.
+#
+# Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
+#
+# See the file "license.terms" for information on usage and redistribution
+# of this file, and for a DISCLAIMER OF ALL WARRANTIES.
+#
+# ----------------------------------------------------------------------
+
 package require logger
 package require sqlite3
 package require Itcl
@@ -8,12 +19,19 @@ source [file join $dir "employee.tcl"]
 source [file join $dir "address.tcl"]
 source [file join $dir "saveemployee.tcl"]
 
-tdbo::FileLogger::open /tmp/test1.log
+# Setup logging facility
+tdbo::FileLogger::open employee.log
+set log [tdbo::FileLogger::init EmployeeApp debug]
+puts "log: $log"
 
-set db [::tdbo::SQLite #auto -location /tmp/test.db]
+# Open SQLite Database implementation
+set db [::tdbo::SQLite #auto -location employee.db]
 $db open
 
+# Create Employee and Address instances 
+
 Employee emp $db -name "Employee Name1" -rollno "INBNG0001"
+${log}::debug "Employee before adding: [emp cget]"
 
 Address addr $db \
 	-addrline1 "Address Line 1" \
@@ -21,14 +39,29 @@ Address addr $db \
 	-city "City Name" \
 	-country "Country Name" \
 	-postalcode "560000"
+${log}::debug "Address before adding: [emp cget]"
 
-saveemployee $db add emp addr
+# Add Employee and Address objects to database using a transaction
+if {![saveemployee $db add emp addr]} {
+	${log}::error "Saving Employee failed... Please delete any pre-existing records from the table"
+	$db close
+	exit
+}
 
+${log}::debug "Employee after adding: [emp cget]"
+${log}::debug "Address after adding: [addr cget]"
+
+# Modify and save Address object.
+addr configure \
+	-addrline1 "Updated Address Line 1" \
+	-addrline2 "Updated Address Line 2" \
+	-city "Updated City Name" \
+	-country "Updated Country Name" \
+	-postalcode "Updated Postal Code"
+addr save
+
+# Check if the changes are reflected by retrieving it from database
 addr clear
-emp clear
-
-emp configure -rollno "INBNG0001"
-puts [emp get]
-
 addr configure -id [emp cget -address_id]
-puts [addr get]
+addr get
+${log}::debug "Modified address: [addr cget]"

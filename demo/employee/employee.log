@@ -22,3 +22,18 @@
 [17:27:01] [::tdbo::SQLite] [debug] UPDATE address SET country='Updated Country Name', addrline1='Updated Address Line 1', city='Updated City Name', addrline2='Updated Address Line 2', postalcode='Updated Postal Code' WHERE ((id='11'))
 [17:27:01] [::tdbo::SQLite] [debug] SELECT * FROM address WHERE ((id='11'))
 [17:27:01] [EmployeeApp] [debug] Modified address: -country {Updated Country Name} -addrline1 {Updated Address Line 1} -city {Updated City Name} -addrline2 {Updated Address Line 2} -id 11 -postalcode {Updated Postal Code}
+[11:20:57] [EmployeeApp] [debug] Employee before adding: -name {Employee Name1} -id <undefined> -address_id <undefined> -rollno INBNG0001
+[11:20:57] [EmployeeApp] [debug] Address before adding: -name {Employee Name1} -id <undefined> -address_id <undefined> -rollno INBNG0001
+[11:20:57] [::tdbo::SQLite] [debug] INSERT INTO address (country, addrline1, city, addrline2, postalcode) VALUES ('Country Name', 'Address Line 1', 'City Name', 'Address Line 2', '560000')
+[11:20:57] [::tdbo::SQLite] [debug] INSERT INTO employee (name, address_id, rollno) VALUES ('Employee Name1', '12', 'INBNG0001')
+[11:20:57] [::SaveEmployee] [debug] Add Employee failed. Employee: -name {Employee Name1} -id <undefined> -address_id 12 -rollno INBNG0001
+[11:20:57] [EmployeeApp] [debug] Saving Employee failed... Please delete any pre-existing records from the table
+[11:22:04] [EmployeeApp] [debug] Employee before adding: -name {Employee Name1} -id <undefined> -address_id <undefined> -rollno INBNG0001
+[11:22:04] [EmployeeApp] [debug] Address before adding: -name {Employee Name1} -id <undefined> -address_id <undefined> -rollno INBNG0001
+[11:22:04] [::tdbo::SQLite] [debug] INSERT INTO address (country, addrline1, city, addrline2, postalcode) VALUES ('Country Name', 'Address Line 1', 'City Name', 'Address Line 2', '560000')
+[11:22:04] [::tdbo::SQLite] [debug] INSERT INTO employee (name, address_id, rollno) VALUES ('Employee Name1', '12', 'INBNG0001')
+[11:22:05] [EmployeeApp] [debug] Employee after adding: -name {Employee Name1} -id 9 -address_id 12 -rollno INBNG0001
+[11:22:05] [EmployeeApp] [debug] Address after adding: -country {Country Name} -addrline1 {Address Line 1} -city {City Name} -addrline2 {Address Line 2} -id 12 -postalcode 560000
+[11:22:05] [::tdbo::SQLite] [debug] UPDATE address SET country='Updated Country Name', addrline1='Updated Address Line 1', city='Updated City Name', addrline2='Updated Address Line 2', postalcode='Updated Postal Code' WHERE ((id='12'))
+[11:22:05] [::tdbo::SQLite] [debug] SELECT * FROM address WHERE ((id='12'))
+[11:22:05] [EmployeeApp] [debug] Modified address: -country {Updated Country Name} -addrline1 {Updated Address Line 1} -city {Updated City Name} -addrline2 {Updated Address Line 2} -id 12 -postalcode {Updated Postal Code}

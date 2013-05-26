@@ -18,19 +18,23 @@ itcl::class tdbo::Transaction {
 	inherit tdbo::Object
 
 # ----------------------------------------------------------------------
-#
-#
+# method - constructor
+#                        
+# args   - db - instance of a specific Database implementation
+#               such as SQLite
 #
 # ----------------------------------------------------------------------
 constructor {db} {
 	if {[namespace tail [info class]] == "Transaction"} {
-		return -code error "Error: Can't create Transaction objects - abstract class."
+		return -code error \
+			"Error: Can't create Transaction objects - abstract class."
 	}
 	if {$db == "" || ![$db isa tdbo::Database]} {
 		return -code error "Invalid db object type"
 	}
 	set [itcl::scope db] $db
 }
+
 
 # ----------------------------------------------------------------------
 #
@@ -39,46 +43,70 @@ constructor {db} {
 # ----------------------------------------------------------------------
 destructor {
 }
+
+
 # ----------------------------------------------------------------------
-#
-#
+# method - execute - To be implemented by the derived classes.
+#                    Implementation of this method is expected to make
+#                    use of begin and commit/rollback methods to execute
+#                    a transaction.
+#                        
+# args   - none
 #
 # ----------------------------------------------------------------------
 public method execute {}
+
+
 # ----------------------------------------------------------------------
 #
-#
+# db - instance of a specific Database implementation such as SQLite.
 #
 #
 # ----------------------------------------------------------------------
 protected variable db
+
+
 # ----------------------------------------------------------------------
+# method - begin a database transaction
 #
+# args   - as defined by a specific database implementation such as
+#          SQLite
 #
 #
 #
 # ----------------------------------------------------------------------
-protected method begin {{lock deferred}} {
-	$db begin $lock
+protected method begin {args} {
+	$db begin {*}$args
 }
+
+
 # ----------------------------------------------------------------------
+# method - commit - commit the database transaction that is currently
+#                   active.
 #
+# args   - as defined by a specific database implementation such as
+#          SQLite
 #
 #
 #
 # ----------------------------------------------------------------------
-protected method commit {} {
-	$db commit
+protected method commit {args} {
+	$db commit {*}$args
 }
+
+
 # ----------------------------------------------------------------------
+# method - rollback - rollback the database transaction that is
+#                     currently active.
 #
-#
-#
+# args   - as defined by a specific database implementation such as
+#          SQLite
 #
 # ----------------------------------------------------------------------
-protected method rollback {} {
-	$db rollback
+protected method rollback {args} {
+	$db rollback {*}$args
 }
+
 
 # ---------------------------------END----------------------------------
 }

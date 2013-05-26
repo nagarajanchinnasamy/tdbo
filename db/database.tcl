@@ -58,8 +58,19 @@ public method close {}
 # ----------------------------------------------------------------------
 # method  : get - Retrieve a single record from a table/view          
 # args    : schema_name - name of the table/view
-#           condition - a dict of name-value pairs
-#           fieldslist - optional list of fields to be retrieved
+#           condition   - list of dictionaries. Every dictionary contains
+#                         name-value pairs that will be joined with an
+#                         AND operator. The list elements are joined
+#                         with an OR operator. For e.g., the list:
+#
+#                          {{f1 val1 f2 val2} {f1 val3 f2 val4}}
+#
+#                         is translated into:
+#
+#                          ((f1='val1' AND f2='val2') OR
+#                                (f1='val3' AND f2='va	l4'))
+#           fieldslist  - optional list of fields to be retrieved
+#
 # returns : a record as a dict with fieldname-value pairs
 #
 # ----------------------------------------------------------------------
@@ -96,7 +107,18 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}}
 # method  : update         - update one or more records in a table/view           
 # args    : schema_name    - name of the table/view
 #           namevaluepairs - a dict containing fieldname-value pairs
-#           condition      - optional dict of name-value pairs
+#           condition   - list of dictionaries. Every dictionary contains
+#                         name-value pairs that will be joined with an
+#                         AND operator. The list elements are joined
+#                         with an OR operator. For e.g., the list:
+#
+#                          {{f1 val1 f2 val2} {f1 val3 f2 val4}}
+#
+#                         is translated into:
+#
+#                          ((f1='val1' AND f2='val2') OR
+#                                (f1='val3' AND f2='va	l4'))
+#
 # returns : status of the update operation.
 #
 # ----------------------------------------------------------------------
@@ -106,7 +128,17 @@ public method update {schema_name namevaluepairs {condition ""}}
 # ----------------------------------------------------------------------
 # method  : delete         - delete one or more records from a table/view           
 # args    : schema_name    - name of the table/view
-#           condition      - optional dict of name-value pairs
+#           condition   - list of dictionaries. Every dictionary contains
+#                         name-value pairs that will be joined with an
+#                         AND operator. The list elements are joined
+#                         with an OR operator. For e.g., the list:
+#
+#                          {{f1 val1 f2 val2} {f1 val3 f2 val4}}
+#
+#                         is translated into:
+#
+#                          ((f1='val1' AND f2='val2') OR
+#                                (f1='val3' AND f2='va	l4'))
 # returns : status of delete operation.
 #
 # ----------------------------------------------------------------------

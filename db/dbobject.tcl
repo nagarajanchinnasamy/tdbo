@@ -251,6 +251,8 @@ public method save {args} {
 	
 	return $result
 }
+
+
 # ----------------------------------------------------------------------
 # method : delete - delete the record represented by the object in
 #                   database and reset the object values.
@@ -297,13 +299,34 @@ public method delete {} {
 
 
 # ----------------------------------------------------------------------
+# method : _mget - Helper routine to retrieve multiple records from a
+#                  table / view. This proc is to be invoked from within
+#                  mget proc of a class derived from DBObject.
 #
-# list: objcfgs
+# args   : schema_name - name of the table/view
+#          db    - Specific tdbo::Database implementation object
+#          args  - A dict of options. This proc consumes optional
+#                  -format option from this dict. Other options are
+#                  passed to db object for processing.
 #
+#                  Allowed values for -format option are:
+#                      dict - Indicates that the records retrieved are
+#                             to be returned as a list of dictionaries.
+#                             A dictionary contains field-name-value
+#                             pairs of a record.
 #
+#                      list - Indicates that the records retrieved are
+#                             to be returned as a list of lists. A list
+#                             contains only the values of the fields
+#                             in a record.
+#
+#                  The default value for -format option is: dict
+#
+# returns : Records as defined by -format option.
 # ----------------------------------------------------------------------
-protected proc _mget {objClsName db args} {
-	if {![$db isa Database]} {
+protected proc _mget {schema_name db args} {
+
+	if {$db == "" || ![$db isa tdbo::Database]} {
 		return -code error "Invalid db object type"
 	}
 
@@ -313,7 +336,7 @@ protected proc _mget {objClsName db args} {
 		dict unset args -format
 	}
 
-	set records [$db mget [${objClsName}::schema] {*}$args]
+	set records [$db mget [schema_name {*}$args]
 	set result [list]
 	switch $format {
 		dict {
@@ -325,7 +348,7 @@ protected proc _mget {objClsName db args} {
 				lappend result [dict get $objconfig]
 			}
 		}
-		values {
+		list {
 			foreach record  $records {
 				lappend result {*}[dict values $record]
 			}
@@ -334,33 +357,47 @@ protected proc _mget {objClsName db args} {
 
 	return $result
 }
+
+
 # ----------------------------------------------------------------------
+# method  : define_primarykey - method to be invoked by derived classes
+#                               from within _define_primarykey method.
+# args    : a list of fieldnames that constitute the primary key
 #
-#
-#
-#
+# returns : none
 # ----------------------------------------------------------------------
 protected method define_primarykey {args} {
 	set fields($clsName,pklist) [list {*}$args]
 }
+
+
 # ----------------------------------------------------------------------
+# method  : define_unque - method to be invoked by derived classes
+#                          from within _define_primarykey method.
+# args    : a list of lists with each list containing fieldnames that
+#           constitute a unique key
 #
-#
-#
-#
+# returns : none
 # ----------------------------------------------------------------------
 protected method define_unique {args} {
 	set fields($clsName,uqlist) [list {*}$args]
 }
+
+
 # ----------------------------------------------------------------------
+# method  : define_autoincrement - method to be invoked by derived
+#                                  classes from within
+#                                  _define_autoincrement method.
+# args    : a list containing fieldnames that are autoincrement/sequence
+#           fields.
 #
-#
-#
-#
+# returns : none
 # ----------------------------------------------------------------------
 protected method define_autoincrement {args} {
 	set fields($clsName,sqlist) [list {*}$args]
 }
+
+
 # ----------------------------------------------------------------------
 #
 #

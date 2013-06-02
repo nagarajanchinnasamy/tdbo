@@ -1,0 +1,334 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+      "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>object</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+</head>
+
+<body>
+<p style="text-align:right;margin-left:auto;margin-right:0;"><a
+href="index.html">Table Of Contents</a></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="1"><strong>Class: tdbo::Object</strong></td>
+    </tr>
+    <tr>
+      <td>Generic Object Interface that enhances <code>configure</code>,
+        <code>cget</code> methods of IncrTcl's objects. Also, it adds
+        copy-constructor mechanism, a method (<code>clear</code>) to reset
+        public variables and a TclLib's logger object to IncrTcl's objects.
+        Application object classes are expected to be derived from this class.
+        This class cannot be instantiated directly.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col>
+  <col>
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="2"><strong>Constructor Summary</strong></td>
+    </tr>
+    <tr>
+      <td><a href="#constructor">constructor {}</a></td>
+      <td>Object constructor. Initializes logger object with the name of the
+        class as its service name.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="2"><strong>Procs/Methods Summary</strong></td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#cget">cget {{option ""} args}</a></code> 
+        <dl>
+          <dt>This method has 3 usages:</dt>
+            <dd><ol>
+                <li><dl>
+                    <dt><code>objName cget -opt</code></dt>
+                      <dd>to get the value of a specific public member
+                      variable</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName cget -opt vName -opt vName ...</code></dt>
+                      <dd>to get the value of public member variables into the
+                        respective variable names specified.</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName cget</code></dt>
+                      <dd>to get current values of all public member variables
+                        as a Tcl dictionary</dd>
+                  </dl>
+                </li>
+              </ol>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#clear">clear {}</a></code> 
+        <dl>
+          <dt>To reset all public member variables to their initial value.</dt>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code></td>
+      <td><code><a href="#configure">configure {{option ""} args}</a></code> 
+        <dl>
+          <dt>This method has 4 usages:</dt>
+            <dd><ol>
+                <li><dl>
+                    <dt><code>objName configure -opt val -opt val
+                    ...</code></dt>
+                      <dd>to set public member variable values</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName1 configure objName2</code></dt>
+                      <dd>object to object copy</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>className objName1 objName2</code></dt>
+                      <dd>copy constructor</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName configure</code></dt>
+                      <dd>to retrieve initial and current values of all public
+                        member variables</dd>
+                  </dl>
+                </li>
+              </ol>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col>
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>Constructor Detail</strong></td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><pre><b><a id="constructor"></a>constructor {}</b></pre>
+          </dt>
+            <dd>Object constructor. Initializes logger object with the name of
+              the class as its service name.</dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>Proc/Method Detail</strong></td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="cget"></a>public method cget {{option ""}
+          args}</b></code> </dt>
+            <dd><dl>
+                <dt>This method has 3 usages:</dt>
+                  <dd><ol>
+                      <li><dl>
+                          <dt><code>objName cget -opt</code></dt>
+                            <dd>To get the value of a specific public member
+                              variable. <code>opt</code> is the name of a
+                              public member variable. Returns current value of
+                              the public member variable specified by
+                              <code>opt</code>.</dd>
+                        </dl>
+                      </li>
+                      <li><dl>
+                          <dt><code>objName cget -opt1 vName1 -opt2 vName2
+                          ...</code></dt>
+                            <dd>To get the value of public member variables
+                              into the respective variable names specified.
+                              <code>opt</code> is the name of a public member
+                              variable. <code>vName</code> is the name of a
+                              variable into which the value of the
+                              <code>opt</code> is to be stored.</dd>
+                        </dl>
+                      </li>
+                      <li><dl>
+                          <dt><code>objName cget</code></dt>
+                            <dd>To get current values of all public member
+                              variables as a Tcl dictionary. Returns the
+                              dictionary in the format: <code>-opt1 val1 -opt2
+                              val2 ...</code></dd>
+                        </dl>
+                      </li>
+                    </ol>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><pre><b><a id="clear"></a>public method clear {}</b></pre>
+          </dt>
+            <dd>Resets all public member variables with the initialization
+              value given in the class definition.</dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="configure"></a>public method configure {{option
+          ""} args}</b></code> </dt>
+            <dd><dl>
+                <dt>This method has 4 usages:</dt>
+                  <dd><ol>
+                      <li><dl>
+                          <dt><code>objName configure -opt1 val -opt2 val
+                          ...</code></dt>
+                            <dd>To set values of public member variables.
+                              <code>opt</code> is the name of a public member
+                              variable.</dd>
+                        </dl>
+                      </li>
+                      <li><dl>
+                          <dt><code>objName1 configure objName2</code></dt>
+                            <dd>Object to object copy. To copy the values of
+                              all public member variables of
+                              <code>objName2</code> into the corresponding
+                              public member variables of
+                            <code>objName1</code>.</dd>
+                        </dl>
+                      </li>
+                      <li><dl>
+                          <dt><code>className objName1 objName2</code></dt>
+                            <dd>While this is not a direct usage of this
+                              method, when <code>objName1</code> is being
+                              constructed, ITcl's object construction mechanism
+                              invokes the 2nd usage of the configure method on
+                              <code>objName1</code> passing
+                              <code>objName2</code> as its parameter. Hence, it
+                              results into object-to-object copy of public
+                              member variables.</dd>
+                        </dl>
+                      </li>
+                      <li><dl>
+                          <dt><code>objName configure</code></dt>
+                            <dd>To retrieve initial and current values of all
+                              public member variables. Returns a dictionary in
+                              the format: <code>-opt {-ival val -cval val} -opt
+                              {-ival val -cval val} ...</code></dd>
+                        </dl>
+                      </li>
+                    </ol>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col>
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>An Example Application Object Class</strong></td>
+    </tr>
+    <tr>
+      <td><pre>package require logger
+package require sqlite3
+package require Itcl
+package require tdbo
+
+itcl::class Employee {
+    inherit tdbo::DBObject
+
+    constructor {db args} {tdbo::DBObject::constructor $db} {
+       configure {*}$args
+    }
+
+    destructor {}
+
+    public {
+
+        proc schema_name {} {
+            return "employee"
+        }
+
+        variable id
+        variable name
+        variable rollno
+        variable address_id
+    }
+
+    protected {
+        method _define_primarykey {} {
+           define_primarykey id
+        }
+
+        method _define_autoincrement {} {
+            define_autoincrement id
+        }
+
+        method _define_unique {} {
+            define_unique {{rollno}}
+        }
+    }
+}
+
+# Setup logging facility
+tdbo::FileLogger::open employee.log
+
+# Setup SQLite database connectivity 
+set db [::tdbo::SQLite #auto -location employee.db]
+$db open
+
+# Create Employee instances
+Employee emp1 $db -name "My Name" -rollno "99999"
+Employee emp2 $db emp1
+
+puts "[emp1 cget]"
+puts "[emp2 configure]"</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<p style="text-align:right;margin-left:auto;margin-right:0;"><a
+href="index.html">Table Of Contents</a></p>
+
+<p></p>
+</body>
+</html>

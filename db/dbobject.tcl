@@ -1,6 +1,6 @@
 # dbobject.tcl --
 #
-# Database Object Interface that needs to be inherited by
+# Data Object Interface that needs to be inherited by
 # application-specific object classes (eg., Employee, PurchaseItem etc.)
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
@@ -336,7 +336,7 @@ protected proc _mget {schema_name db args} {
 		dict unset args -format
 	}
 
-	set records [$db mget [schema_name {*}$args]
+	set records [$db mget $schema_name {*}$args]
 	set result [list]
 	switch $format {
 		dict {

@@ -1,0 +1,463 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>database</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+</head>
+
+<body>
+<p style="text-align:right;margin-left:auto;margin-right:0;"><a
+href="index.html">Table Of Contents</a></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="1"><strong>Class: tdbo::Database</strong></td>
+    </tr>
+    <tr>
+      <td>Generic Database Connectivity Interface that needs to be inherited by
+        specific database connectivity implementations such as SQLite, MySQL
+        etc. This class cannot be directly instantiated.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="1"><strong>Inherits: tdbo::Object</strong></td>
+    </tr>
+    <tr>
+      <td>Methods: cget, clear, configure 
+
+        <p>Variables: clsName, log</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="2"><strong>Constructor Summary</strong></td>
+    </tr>
+    <tr>
+      <td><a href="#constructor">constructor {}</a></td>
+      <td>Constructor.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="2"><strong>Procs/Methods Summary</strong></td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#open">open {args}</a></code> 
+
+        <p style="margin-left:2em;">Establish connection to the database. Pure
+        virtual function to be implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#close">close {}</a></code> 
+
+        <p style="margin-left:2em;">Close the database connection. Pure virtual
+        function to be implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#get">get {schema_name condition {fieldslist
+        ""}}</a></code> 
+
+        <p style="margin-left:2em;">Retrieve a record that meets the
+        <code>condition</code> from a table/view indicated by
+        <code>schema_name</code>. Pure virtual function to be implemented by
+        derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#get">mget {schema_name args} </a></code> 
+
+        <p style="margin-left:2em;">Retrieve multiple records from a table/view
+        indicated by <code>schema_name</code>. Pure virtual function to be
+        implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#insert">insert {schema_name namevaluepairs
+        {sequence_fields ""}}</a></code> 
+
+        <p style="margin-left:2em;">Insert a new record into the table/view
+        indicated by <code>schema_name</code>. Pure virtual function to be
+        implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#update">update {schema_name namevaluepairs {condition
+        ""}} </a></code> 
+
+        <p style="margin-left:2em;">Update one or more existing records that
+        meet the <code>condition</code> in the table/view indicated by
+        <code>schema_name</code>. Pure virtual function to be implemented by
+        derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#delete">delete {schema_name {condition ""}}
+        </a></code> 
+
+        <p style="margin-left:2em;">Delete one or more existing records that
+        meet the <code>condition</code> from the table/view indicated by
+        <code>schema_name</code>. Pure virtual function to be implemented by
+        derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#delete">begin {args} </a></code> 
+
+        <p style="margin-left:2em;">Begin a database transaction. Pure virtual
+        function to be implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#delete">commit {args} </a></code> 
+
+        <p style="margin-left:2em;">Commit the currently active database
+        transaction. Pure virtual function to be implemented by derived
+        classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#delete">rollback {args} </a></code> 
+
+        <p style="margin-left:2em;">Rollback the currently active database
+        transaction. Pure virtual function to be implemented by derived
+        classes.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>Constructor Detail</strong></td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="constructor"></a>constructor {}</b></code> </dt>
+            <dd>Constructor. 
+              <dl>
+                <dt><b>Throws:</b></dt>
+                  <dd>error - if an attempt is made to instantiate this class
+                    directly.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>Proc/Method Detail</strong></td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="add">public method open {args}</a></b></code>
+          </dt>
+            <dd>Pure virtual function to be implemented by derived classes. The
+              implementation (such as SQLite etc.) is expected to obtain
+              necessary parameters and establish connection to the
+            database.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>Implementation specific. Implementations (such as
+                          SQLite etc.) are expected to obtain necessary
+                          parameters to establish connection to the
+                        database.</dd>
+                    </dl>
+                  </dd>
+                <dt><b>Returns:</b></dt>
+                  <dd>The connection object on successfully establishing the
+                    connection to database. Empty string to indicate a failure.
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="delete"></a>public method close {}</b></code>
+          </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Implementations (such as SQLite etc.) are expected to close the
+              database connection.</dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="get"></a>public method get {schema_name condition
+          {fieldslist ""}}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Retrieves a record that meets the <code>condition</code> from a
+              table/view indicated by <code>schema_name</code>.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>schema_name</b></dt>
+                        <dd>name of the table/view from where the record is to
+                          be retrieved from the database.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt><b>condition</b></dt>
+                        <dd>list of dictionaries. Every dictionary contains
+                          fieldname-value pairs that will be joined with an AND
+                          operator. The list elements are joined with an OR
+                          operator. For e.g., the list of dictionaries {{f1
+                          val1 f2 val2} {f1 val3 f2 val4}} is translated into
+                          ((f1='val1' AND f2='val2') OR (f1='val3' AND
+                          f2='val4')) that will be used in WHERE clause of
+                          SELECT query to retrieve a record.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt><b>fieldslist</b></dt>
+                        <dd>optional list of field names of the record that
+                          needs to be retrieved. If this argument is not
+                          provided, all fields of the record will be
+                        retrieved.</dd>
+                    </dl>
+                  </dd>
+                <dt><b>Returns:</b></dt>
+                  <dd>fieldname-value pairs retrieved from database as a Tcl
+                    dictionary. If the retrieval does not return any record
+                    from database, then the result will be an empty string.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="save"></a>public method mget {schema_name
+          args}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Retrieve multiple records from a table/view indicated by
+              <code>schema_name</code>. </dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>schema_name</b></dt>
+                        <dd>name of the table/view from where the record is to
+                          be retrieved from the database.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>Implementation specific. Implementations (such as
+                          SQLite etc.) are expected to obtain necessary
+                          parameters to support various features of SELECT
+                          statement in SQL. Suggested parameters are:
+                          <code>-fields</code>, <code>-condition</code>,
+                          <code>-orderby</code> and <code>-groupby</code>.</dd>
+                    </dl>
+                  </dd>
+                <dt><b>Returns:</b></dt>
+                  <dd>list of dictionaries with each dictionary representing a
+                    record with fieldname-value pairs. If the retrieval does
+                    not return any record from database, then the result will
+                    be an empty string.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="define_autoincrement"></a>public method insert
+          {schema_name namevaluepairs {sequence_fields ""}}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Define a list of public variable names that are auto-incremented
+              (also known as sequence fields) by the database whenever a new
+              record is inserted. This method is meant to be invoked by derived
+              classes from within <code><a
+              href="#_define_autoincrement">_define_autoincrement</a></code>
+              method.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list containing fieldnames that are
+                          autoincrement/sequence fields.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="define_primarykey"></a>public method update
+          {schema_name namevaluepairs {condition ""}}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Define a list of public variable names that map to the primary
+              key fields of the associated table/view in the database. This
+              method is meant to be invoked by derived classes from within
+              <code><a href="#_define_primarykey">_define_primarykey</a></code>
+              method.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of field names that constitute the primary
+                          key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="define_unique"></a>public method delete
+          {schema_name {condition ""}}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Define a list of list of public variable names with each list
+              mapping to a set of fields that identify a record of the
+              associated table/view in the database uniquely. This method is
+              meant to be invoked by derived classes from within <code><a
+              href="#_define_unique">_define_unique</a></code> method. </dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of lists with each list containing field
+                          names that constitute a unique key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="_define_autoincrement"></a>public method begin
+          {args}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Provides a default implementation by invoking
+              <code>define_autoincrement</code> with an empty list. Override
+              this method to invoke <code><a
+              href="#define_autoincrement">define_autoincrement</a></code> with
+              your own list of public variable names.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list containing fieldnames that are
+                          autoincrement/sequence fields.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="_define_primarykey"></a>public method commit
+          {args}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Provides a default implementation by invoking define_primarykey
+              with an empty list. Override this method to invoke <code><a
+              href="#define_primarykey">define_primarykey</a></code> with your
+              own list of public variable names.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of field names that constitute the primary
+                          key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="_define_unique"></a>public method rollback
+          {args}</b></code> </dt>
+            <dd>Pure virtual function to be implemented by derived classes.
+              Provides a default implementation by invoking define_unique with
+              an empty list. Override this method to invoke <code><a
+              href="#define_unique">define_unique</a></code> with your own list
+              of list of public variable names. </dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of lists with each list containing field
+                          names that constitute a unique key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<p style="text-align:right;margin-left:auto;margin-right:0;"><a
+href="index.html">Table Of Contents</a></p>
+
+<p></p>
+</body>
+</html>

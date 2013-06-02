@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
+      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+  <title>dbobject</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+</head>
+
+<body>
+<p style="text-align:right;margin-left:auto;margin-right:0;"><a
+href="index.html">Table Of Contents</a></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="1"><strong>Class: tdbo::DBObject</strong></td>
+    </tr>
+    <tr>
+      <td>Data Object Interface that needs to be inherited by
+        application-specific object classes (eg., Employee, PurchaseItem etc.).
+        This class cannot be directly instantiated.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="1"><strong>Inherits: tdbo::Object</strong></td>
+    </tr>
+    <tr>
+      <td>Methods: cget, clear, configure 
+
+        <p>Variables: clsName, log</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="2"><strong>Constructor Summary</strong></td>
+    </tr>
+    <tr>
+      <td><a href="#constructor">constructor {db}</a></td>
+      <td>Stores the definition of primary keys, unique fields and sequence /
+        auto-increment fields by invoking following protected methods: <code><a
+        href="#_define_primarykey">_define_primarykey</a></code>, <code><a
+        href="#_define_unique">_define_unique</a></code> and <code><a
+        href="#_define_autoincrement">_define_autoincrement</a></code>. Also
+        prepares list of field names for later usage by insert and update
+        operations.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td colspan="2"><strong>Procs/Methods Summary</strong></td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#add">add {args}</a></code> 
+
+        <p style="margin-left:2em;">Save object in the database by inserting a
+        new record.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#delete">delete {}</a></code> 
+
+        <p style="margin-left:2em;">Delete associated record from database and
+        reset object values.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#get">get {args}</a></code> 
+
+        <p style="margin-left:2em;">Retrieve associated record from database
+        and refresh object's values.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#save">save {args}</a></code> 
+
+        <p style="margin-left:2em;">Save object by updating the associated
+        record in the database.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#define_autoincrement">define_autoincrement
+        {args}</a></code> 
+
+        <p style="margin-left:2em;">Define a list of public variable names that
+        are auto-incremented (also known as sequence fields) whenever a new
+        record is inserted into the database .</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#define_primarykey">define_primarykey
+        {args}</a></code> 
+
+        <p style="margin-left:2em;">Define a list of public variable names that
+        map to the primary key fields of the associated table/view in the
+        database.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#define_unique">define_unique {args}</a></code> 
+
+        <p style="margin-left:2em;">Define a list of list of public variable
+        names with each list mapping to a set of fields that help uniquely
+        identify a record in the associated table/view.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#_define_autoincrement">_define_autoincrement
+        {args}</a></code> 
+
+        <p style="margin-left:2em;">Provides a default implementation by
+        invoking <code>define_autoincrement</code> with an empty list. Override
+        this method to invoke <code><a
+        href="#define_autoincrement">define_autoincrement</a></code> with your
+        own list of public variable names.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#_define_primarykey">_define_primarykey
+        {args}</a></code> 
+
+        <p style="margin-left:2em;">Provides a default implementation by
+        invoking <code>define_primarykey</code> with an empty list. Override
+        this method to invoke <code><a
+        href="#define_primarykey">define_primarykey</a></code> with your own
+        list of public variable names.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#_define_unique">_define_unique {args}</a></code> 
+
+        <p style="margin-left:2em;">Provides a default implementation by
+        invoking <code>define_unique</code> with an empty list. Override this
+        method to invoke <code><a
+        href="#define_unique">define_unique</a></code> with your own list of
+        list of public variable names.</p>
+
+        <p></p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected proc</code> </td>
+      <td><code><a href="#_mget">_mget {schema_name db args}</a></code> 
+
+        <p style="margin-left:2em;">Helper routine to retrieve multiple records
+        from a table / view. This proc is meant to be invoked from within
+        <code>mget</code> proc of a derived class.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>Constructor Detail</strong></td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="constructor"></a>constructor {db}</b></code> </dt>
+            <dd>Stores the definition of primary keys, unique fields and
+              sequence / auto-increment fields by invoking following protected
+              methods: <code><a
+              href="#_define_primarykey">_define_primarykey</a></code>,
+              <code><a href="#_define_unique">_define_unique</a></code> and
+              <code><a
+              href="#_define_autoincrement">_define_autoincrement</a></code>.
+              Also prepares list of field names for later usage by insert and
+              update operations. 
+              <dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd>db - instance of a specific Database Access
+                    implementation such as SQLite.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>Proc/Method Detail</strong></td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="add"></a>public method add {args}</b></code> </dt>
+            <dd>Insert the object as a new record into database. In preparing
+              the record to insert, this method prepares a list of name-value
+              pairs, by default, from all public member variables of the
+              object. However, if the argument args is passed, it uses only
+              those field names in the args-list in preparing the name-value
+              pairs. While preparing the name-value pairs, it includes only
+              those member variables that are initialized with a value other
+              than &lt;undefined&gt;. In Itcl, Member variables that are
+              uninitialized are internally identified with the value
+              &lt;undefined&gt;. Instead of an empty string, we make use of
+              this state of a member variable to indicate the absense of a
+              field in the insert operation (thus resulting in NULL or default
+              value in the database). Upon successful completion of add
+              operation, the new values of sequence / auto-incremented fields
+              are populated back into the object.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>optional list of public member variable names that
+                          represent the fields in the database record that
+                          needs to be inserted. If this argument is not
+                          provided, all public member variable names are used
+                          as list of field names to be inserted.</dd>
+                    </dl>
+                  </dd>
+                <dt><b>Returns:</b></dt>
+                  <dd>Returns the status of add operation as a numerical value.
+                    A value greater than zero indicates success </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="delete"></a>public method delete {}</b></code>
+          </dt>
+            <dd>delete the record represented by the object from database and
+              reset the object values. The record to be deleted from the
+              database is identified based on the description provided in <a
+              href="#ORMapping">Object To Database Record Mapping</a>.</dd>
+            <dd><dl>
+                <dt><b>Returns:</b></dt>
+                  <dd>Returns the status of add operation as a numerical value.
+                    A value greater than zero indicates success.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="get"></a>public method get {args}</b></code> </dt>
+            <dd>Retrieve a record from the database and populate object's
+              member variables with values retrieved. The record to be
+              retrieved from the database is identified based on the
+              description provided in <a href="#ORMapping">Object To Database
+              Record Mapping</a>. By default, this method uses all public
+              member variable names as the fields of the record to be retrieved
+              from the database. However, if the argument args is passed with a
+              list of field names (corresponding to its public member
+              variables), then only those fields are retrieved and populated
+              into the object.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>optional list of public member variable names that
+                          represent the fields in the database record that
+                          needs to be retrieved. If this argument is not
+                          provided, all public member variable names are used
+                          as the fields of the record to be retrieved from the
+                          database.</dd>
+                    </dl>
+                  </dd>
+                <dt><b>Returns:</b></dt>
+                  <dd>fieldname-value pairs retrieved from database as a Tcl
+                    dictionary. If the retrieval does not return any record
+                    from database, then the result will be an empty string.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="save"></a>public method save {args}</b></code>
+          </dt>
+            <dd>Save the object by updating the corresponding record into the
+              database. The record to be updated in the database is identified
+              based on the description provided in <a href="#ORMapping">Object
+              To Database Record Mapping</a>. In preparing the record to save,
+              this method prepares a list of name-value pairs, by default, from
+              all public member variables of the object. However, if the
+              argument args is passed, it uses only those field names in the
+              args-list in preparing the name-value pairs. While preparing the
+              name-value pairs, it includes only those member variables that
+              are initialized with a value other than &lt;undefined&gt;. In
+              Itcl, member variables that are not initialized are internally
+              identified with the value &lt;undefined&gt;. Instead of an empty
+              string, we make use of this state of a member variable to
+              indicate the absense of a field in the update operation (thus not
+              affecting those fields in the database). </dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>optional list of public member variable names that
+                          represent the fields in the database record that
+                          needs to be updated. If this argument is not
+                          provided, all public member variable names are used
+                          as the list of fields to be updated in the
+                        record.</dd>
+                    </dl>
+                  </dd>
+                <dt><b>Returns:</b></dt>
+                  <dd>the status of save operation as a numerical value. A
+                    value greater than zero indicates success.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="define_autoincrement"></a>protected method
+          define_autoincrement {args}</b></code> </dt>
+            <dd>Define a list of public variable names that are
+              auto-incremented (also known as sequence fields) by the database
+              whenever a new record is inserted. This method is meant to be
+              invoked by derived classes from within <code><a
+              href="#_define_autoincrement">_define_autoincrement</a></code>
+              method.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list containing fieldnames that are
+                          autoincrement/sequence fields.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="define_primarykey"></a>protected method
+          define_primarykey {args}</b></code> </dt>
+            <dd>Define a list of public variable names that map to the primary
+              key fields of the associated table/view in the database. This
+              method is meant to be invoked by derived classes from within
+              <code><a href="#_define_primarykey">_define_primarykey</a></code>
+              method.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of field names that constitute the primary
+                          key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="define_unique"></a>protected method define_unique
+          {args}</b></code> </dt>
+            <dd>Define a list of list of public variable names with each list
+              mapping to a set of fields that identify a record of the
+              associated table/view in the database uniquely. This method is
+              meant to be invoked by derived classes from within <code><a
+              href="#_define_unique">_define_unique</a></code> method. </dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of lists with each list containing field
+                          names that constitute a unique key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="_define_autoincrement"></a>protected method
+          _define_autoincrement {args}</b></code> </dt>
+            <dd>Provides a default implementation by invoking
+              <code>define_autoincrement</code> with an empty list. Override
+              this method to invoke <code><a
+              href="#define_autoincrement">define_autoincrement</a></code> with
+              your own list of public variable names.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list containing fieldnames that are
+                          autoincrement/sequence fields.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="_define_primarykey"></a>protected method
+          _define_primarykey {args}</b></code> </dt>
+            <dd>Provides a default implementation by invoking define_primarykey
+              with an empty list. Override this method to invoke <code><a
+              href="#define_primarykey">define_primarykey</a></code> with your
+              own list of public variable names.</dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of field names that constitute the primary
+                          key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="_define_unique"></a>protected method
+          _define_unique {args}</b></code> </dt>
+            <dd>Provides a default implementation by invoking define_unique
+              with an empty list. Override this method to invoke <code><a
+              href="#define_unique">define_unique</a></code> with your own list
+              of list of public variable names. </dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>a list of lists with each list containing field
+                          names that constitute a unique key.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><b><a id="_mget"></a>protected proc _mget {schema_name db
+          args}</b></code> </dt>
+            <dd>Helper routine to retrieve multiple records from a table view.
+              This proc is to be invoked from within <code>mget</code> proc of
+              a class derived from DBObject. </dd>
+            <dd><dl>
+                <dt><b>Parameters:</b></dt>
+                  <dd><dl>
+                      <dt><b>schema_name</b></dt>
+                        <dd>name of the table/view</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt><b>db</b></dt>
+                        <dd>instance of a specific database access class such
+                          as SQLite</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt><b>args</b></dt>
+                        <dd>A dictionary of options. This proc consumes
+                          optional -format option from this dict. Other options
+                          are passed to db object for processing. Allowed
+                          values for -format option are: </dd>
+                        <dd><dl>
+                            <dt>dict</dt>
+                              <dd>Indicates that the records retrieved are to
+                                be returned as a list of dictionaries. A
+                                dictionary contains fieldname-value pairs of a
+                                record. </dd>
+                            <dt>list</dt>
+                              <dd>Indicates that the records retrieved are to
+                                be returned as a list of lists. A list contains
+                                only the values of the fields in a record. </dd>
+                          </dl>
+                        </dd>
+                        <dd>The default value for -format option is: dict </dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+            <dd><dl>
+                <dt><b>Returns:</b></dt>
+                  <dd>List of records in the format defined by -format option.
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong><a id="ORMapping"></a>Object To Database Record
+        Mapping</strong></td>
+    </tr>
+    <tr>
+      <td>The record to be retrieved/saved/deleted in the database is uniquely
+        identified by the values of primary key or unique member variables of
+        the object. An application object class (e.g., Employee) derived from
+        DBObject class implements _define_primarykey and _define_unique methods
+        to list the fields that can be used to uniquely identify a record in
+        the database that an object instance represents. 
+
+        <p>For e.g., if the primary key was defined as {pk1 pk2} and unique
+        fields are defined as {{uq1} {uq2 uq3}} then the condition to be used
+        in WHERE clause of SQL to identify the unique record will be:
+        <code>((pk1='pk1value' AND pk2='pk2vaue') OR (uq1='uq1value') OR
+        (uq2='uq2value' AND uq3='uq3value'))</code>.</p>
+
+        <p>If any of the public member variables listed as primary key or
+        unique fields are uninitialized (i.e., having the value
+        &lt;undefined&gt;), then those fields are not included in the
+        condition. For e.g., if pk1 is uninitialized, then the condition will
+        be: <code>((uq1='uq1value') OR (uq2='uq2value' AND
+        uq3='uq3value'))</code>. Or, for e.g., if uq2 is uninitialized, then
+        the condition will be: <code>((pk1='pk1value' AND pk2='pk2vaue') OR
+        (uq1='uq1value'))</code>. Or, for e.g., if uq1 is uninitialized, then
+        the condition will be: <code>((pk1='pk1value' AND pk2='pk2vaue') OR
+        (uq2='uq2value' AND uq3='uq3value'))</code>.</p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr style="background-color:#add8e6">
+      <td><strong>An Example Application Object Class</strong></td>
+    </tr>
+    <tr>
+      <td><pre>itcl::class Employee {
+    inherit tdbo::DBObject
+
+    constructor {db args} {tdbo::DBObject::constructor $db} {
+       configure {*}$args
+    }
+
+    destructor {}
+
+    public {
+
+        proc schema_name {} {
+            return "employee"
+        }
+
+        variable id
+        variable name
+        variable rollno
+        variable address_id
+    }
+
+    protected {
+        method _define_primarykey {} {
+           define_primarykey id
+        }
+
+        method _define_autoincrement {} {
+            define_autoincrement id
+        }
+
+        method _define_unique {} {
+            define_unique {{rollno}}
+        }
+    }
+}</pre>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<p style="text-align:right;margin-left:auto;margin-right:0;"><a
+href="index.html">Table Of Contents</a></p>
+
+<p></p>
+</body>
+</html>

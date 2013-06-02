@@ -23,6 +23,9 @@ itcl::class tdbo::Object {
 #
 # ----------------------------------------------------------------------
 constructor {} {
+	if {[namespace tail [info class]] == "Object"} {
+		return -code error "Error: Can't create Object instances - abstract class."
+	}
 	set clsName [$this info class]
 	set log [tdbo::FileLogger::init $clsName debug]
 }
@@ -111,7 +114,7 @@ public method cget {{option ""} args} {
 #
 #
 # ----------------------------------------------------------------------
-public method clear {args} {
+public method clear {} {
 	set config [configure]
 	foreach opt [dict keys $config] {
 		configure $opt [dict get $config $opt -ival]

@@ -30,7 +30,7 @@ constructor {db} {
 			"Error: Can't create Transaction objects - abstract class."
 	}
 	if {$db == "" || ![$db isa tdbo::Database]} {
-		return -code error "Invalid db object type"
+		return -code error "db is not a tdbo::Database"
 	}
 	set [itcl::scope db] $db
 }

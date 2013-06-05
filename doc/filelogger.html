@@ -1,0 +1,310 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+      "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>filelogger</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <style type="text/css" title="Amaya theme">
+/* Modern style for Amaya Editor Lite */
+
+/* default rules for the whole document */
+body {
+    font-size: 12pt;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: black;
+    background-color: white;
+    line-height: 1.2em;
+    margin-left: 4em;
+    margin-right: 2em;
+   }
+
+/* paragraphs */
+p  {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+   }
+
+/* headings */
+h1 {
+    font-size: 180%;
+    font-weight: bold;
+    font-style: normal;
+    font-variant: small-caps;
+    text-align: left;
+    padding: 0;
+    margin-top: 1.7em;
+    margin-bottom: 1.7em;
+   }
+h2 {
+    font-size: 150%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.5em;
+    margin-bottom: 1.1em;
+   }
+h3 {
+    font-size: 130%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.3em;
+    margin-bottom: 1.1em;
+   }
+h4 {
+    font-size: 110%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.1em;
+    margin-bottom: 1.1em;
+   }
+h5 {
+    font-size: 100%;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+h6 {
+    font-size: 100%;
+    font-weight: normal;
+    font-style: italic;
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+
+/* divisions */
+div {
+    padding: 0;
+    margin-top: 0em;
+    margin-bottom: 0em;
+   }
+
+/* lists */
+ul, ol {
+    padding: 0 0 0 3em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+ul ul, ol ol, ul ol, ol ul {
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+li {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+   }
+li p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+dl {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+   }
+dl dl {
+    margin-top: 0em;
+    margin-bottom: 0em;
+   }
+dt {
+    padding: 0;
+    font-weight: bold;
+    margin-top: .3em;
+    margin-bottom: .3em;
+   }
+dd {
+    padding: 0;
+    margin-top: .3em;
+    margin-left: 3em;
+    margin-bottom: .3em;
+   }
+dl p {
+    margin-top: .3em;
+    margin-bottom: .3em;
+   }
+
+/* inline */
+strong {
+    font-weight: bold;
+   }
+em {
+    font-style: italic;
+   }
+code {
+    font-family: Courier New, Courier, monospace;
+   }
+ins {
+    background-color: yellow;
+    text-decoration: underline;
+   }
+del {
+    text-decoration: line-through;
+   }
+
+/* anchors */
+a[href] {
+    color: blue;
+    text-decoration: underline;
+   }
+
+/* end */
+  </style>
+</head>
+
+<body>
+
+<table border="1" style="width: 100%">
+  <col>
+  <col>
+  <col>
+  <tbody>
+    <tr>
+      <td align="center" colspan="3"><a href="reference.html">Table Of
+        Contents</a></td>
+    </tr>
+    <tr>
+      <td><a href="#ClassSummary">Class Summary</a></td>
+      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
+      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr>
+      <td colspan="1"><a id="ClassSummary"></a><strong>Class:
+        tdbo::FileLogger</strong></td>
+    </tr>
+    <tr>
+      <td>Logger implementation that logs messages to a specified file.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr>
+      <td colspan="2"><strong><a id="ProcMethodsSummary"></a>Proc/Methods
+        Summary</strong></td>
+    </tr>
+    <tr>
+      <td align="right"><code>public proc</code> </td>
+      <td><code><a href="#open">open {location}</a></code> 
+        <dl>
+            <dd>Initializes logging facility to log messages in given
+              <code>location</code>. </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public proc</code> </td>
+      <td><code><a href="#open">init {service {level warn} {slaveinterp
+        ""}}</a></code> 
+        <dl>
+            <dd>Initializes the <em><code>service</code></em> (or category)
+              <code>for logging</code>. </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr>
+      <td><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><strong><a id="open"></a>public method open
+          {location}</strong></code> </dt>
+            <dd>This method needs to be called only once in an application to
+              initialize the logging facility to log messages in
+              <em><code>location</code></em>. If the file already exists, it is
+              opened to append the log messages. Otherwise, the file is
+            created.</dd>
+            <dd><dl>
+                <dt>Parameters:</dt>
+                  <dd><dl>
+                      <dt>location</dt>
+                        <dd>Pathname of the file where messages are to be
+                          logged in</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><strong><a id="init"></a>public method init {service {level
+          warn} {slaveinterp ""}}</strong></code> </dt>
+            <dd>This method needs to be called only once per
+              <em><code>service</code></em> in a class or namespace. It invokes
+              <code>logger::init</code> command for the
+              <em><code>service</code></em>. See TclLib's logger package
+              documentation for more details.</dd>
+            <dd><dl>
+                <dt>Parameters:</dt>
+                  <dd><dl>
+                      <dt>location</dt>
+                        <dd>Pathname of the file where messages are to be
+                          logged in</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col>
+  <col>
+  <col>
+  <tbody>
+    <tr>
+      <td><a href="#ClassSummary">Class Summary</a></td>
+      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
+      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
+    </tr>
+    <tr>
+      <td align="center" colspan="3"><a href="reference.html">Table Of
+        Contents</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4></h4>
+
+<p></p>
+
+<p style="font-size: 10pt">Copyright (c) 2013 by Nagarajan Chinnasamy
+&lt;nagarajanchinnasamy@gmail.com&gt;. See <a href="license.html">License</a>
+for information on usage and redistribution</p>
+</body>
+</html>

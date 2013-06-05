@@ -6,22 +6,193 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
   <title>dbobject</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+  <style type="text/css" title="Amaya theme">
+/* Modern style for Amaya Editor Lite */
+
+/* default rules for the whole document */
+body {
+    font-size: 12pt;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: black;
+    background-color: white;
+    line-height: 1.2em;
+    margin-left: 4em;
+    margin-right: 2em;
+   }
+
+/* paragraphs */
+p  {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+   }
+
+/* headings */
+h1 {
+    font-size: 180%;
+    font-weight: bold;
+    font-style: normal;
+    font-variant: small-caps;
+    text-align: left;
+    padding: 0;
+    margin-top: 1.7em;
+    margin-bottom: 1.7em;
+   }
+h2 {
+    font-size: 150%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.5em;
+    margin-bottom: 1.1em;
+   }
+h3 {
+    font-size: 130%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.3em;
+    margin-bottom: 1.1em;
+   }
+h4 {
+    font-size: 110%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.1em;
+    margin-bottom: 1.1em;
+   }
+h5 {
+    font-size: 100%;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+h6 {
+    font-size: 100%;
+    font-weight: normal;
+    font-style: italic;
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+
+/* divisions */
+div {
+    padding: 0;
+    margin-top: 0em;
+    margin-bottom: 0em;
+   }
+
+/* lists */
+ul, ol {
+    padding: 0 0 0 3em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+ul ul, ol ol, ul ol, ol ul {
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+li {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+   }
+li p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+dl {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+   }
+dl dl {
+    margin-top: 0em;
+    margin-bottom: 0em;
+   }
+dt {
+    padding: 0;
+    font-weight: bold;
+    margin-top: .3em;
+    margin-bottom: .3em;
+   }
+dd {
+    padding: 0;
+    margin-top: .3em;
+    margin-left: 3em;
+    margin-bottom: .3em;
+   }
+dl p {
+    margin-top: .3em;
+    margin-bottom: .3em;
+   }
+
+/* inline */
+strong {
+    font-weight: bold;
+   }
+em {
+    font-style: italic;
+   }
+code {
+    font-family: Courier New, Courier, monospace;
+   }
+ins {
+    background-color: yellow;
+    text-decoration: underline;
+   }
+del {
+    text-decoration: line-through;
+   }
+
+/* anchors */
+a[href] {
+    color: blue;
+    text-decoration: underline;
+   }
+
+/* end */
+  </style>
 </head>
 
 <body>
-<p style="text-align:right;margin-left:auto;margin-right:0;"><a
-href="index.html">Table Of Contents</a></p>
 
 <table border="1" style="width: 100%">
   <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td colspan="1"><strong>Class: tdbo::DBObject</strong></td>
+    <tr>
+      <td align="center" colspan="6"><a href="reference.html">Table Of
+        Contents</a></td>
     </tr>
     <tr>
-      <td>Data Object Interface that needs to be inherited by
-        application-specific object classes (eg., Employee, PurchaseItem etc.).
-        This class cannot be directly instantiated.</td>
+      <td><a href="#ClassSummary">Class Summary</a></td>
+      <td><a href="#Inheritance">Inheritance</a></td>
+      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
+      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
+      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
+      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
+    </tr>
+    <tr>
+      <td><a href="#ORMapping">Object To Database Record Mapping</a></td>
+      <td><a href="#Example">Example Application Object Class</a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
     </tr>
   </tbody>
 </table>
@@ -31,8 +202,26 @@ href="index.html">Table Of Contents</a></p>
 <table border="1" style="width: 100%">
   <col />
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td colspan="1"><strong>Inherits: tdbo::Object</strong></td>
+    <tr>
+      <td colspan="1"><strong><a id="ClassSummary"></a>Class:
+        tdbo::DBObject</strong></td>
+    </tr>
+    <tr>
+      <td>Data Object Interface that needs to be inherited by
+        application-specific object classes (eg., Employee, PurchaseItem etc.).
+        This class cannot be instantiated directly.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<table border="1" style="width: 100%">
+  <col />
+  <tbody>
+    <tr>
+      <td colspan="1"><strong><a id="Inheritance"></a>Inherits:
+        tdbo::Object</strong></td>
     </tr>
     <tr>
       <td>Methods: cget, clear, configure 
@@ -49,8 +238,9 @@ href="index.html">Table Of Contents</a></p>
   <col />
   <col />
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td colspan="2"><strong>Constructor Summary</strong></td>
+    <tr>
+      <td colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
+        Summary</strong></td>
     </tr>
     <tr>
       <td><a href="#constructor">constructor {db}</a></td>
@@ -70,39 +260,37 @@ href="index.html">Table Of Contents</a></p>
 <table border="1" style="width: 100%">
   <col />
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td colspan="2"><strong>Procs/Methods Summary</strong></td>
+    <tr>
+      <td colspan="2"><strong><a id="ProcMethodsSummary"></a>Proc/Methods
+        Summary</strong></td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#add">add {args}</a></code> 
 
-        <p style="margin-left:2em;">Save object in the database by inserting a
-        new record.</p>
+        <p>Save object in the database by inserting a new record.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#delete">delete {}</a></code> 
 
-        <p style="margin-left:2em;">Delete associated record from database and
-        reset object values.</p>
+        <p>Delete associated record from database and reset object values.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#get">get {args}</a></code> 
 
-        <p style="margin-left:2em;">Retrieve associated record from database
-        and refresh object's values.</p>
+        <p>Retrieve associated record from database and refresh object's
+        values.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#save">save {args}</a></code> 
 
-        <p style="margin-left:2em;">Save object by updating the associated
-        record in the database.</p>
+        <p>Save object by updating the associated record in the database.</p>
       </td>
     </tr>
     <tr>
@@ -110,9 +298,9 @@ href="index.html">Table Of Contents</a></p>
       <td><code><a href="#define_autoincrement">define_autoincrement
         {args}</a></code> 
 
-        <p style="margin-left:2em;">Define a list of public variable names that
-        are auto-incremented (also known as sequence fields) whenever a new
-        record is inserted into the database .</p>
+        <p>Define a list of public variable names that are auto-incremented
+        (also known as sequence fields) whenever a new record is inserted into
+        the database .</p>
       </td>
     </tr>
     <tr>
@@ -120,18 +308,17 @@ href="index.html">Table Of Contents</a></p>
       <td><code><a href="#define_primarykey">define_primarykey
         {args}</a></code> 
 
-        <p style="margin-left:2em;">Define a list of public variable names that
-        map to the primary key fields of the associated table/view in the
-        database.</p>
+        <p>Define a list of public variable names that map to the primary key
+        fields of the associated table/view in the database.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>protected method</code> </td>
       <td><code><a href="#define_unique">define_unique {args}</a></code> 
 
-        <p style="margin-left:2em;">Define a list of list of public variable
-        names with each list mapping to a set of fields that help uniquely
-        identify a record in the associated table/view.</p>
+        <p>Define a list of list of public variable names with each list
+        mapping to a set of fields that help uniquely identify a record in the
+        associated table/view.</p>
       </td>
     </tr>
     <tr>
@@ -139,9 +326,9 @@ href="index.html">Table Of Contents</a></p>
       <td><code><a href="#_define_autoincrement">_define_autoincrement
         {args}</a></code> 
 
-        <p style="margin-left:2em;">Provides a default implementation by
-        invoking <code>define_autoincrement</code> with an empty list. Override
-        this method to invoke <code><a
+        <p>Provides a default implementation by invoking
+        <code>define_autoincrement</code> with an empty list. Override this
+        method to invoke <code><a
         href="#define_autoincrement">define_autoincrement</a></code> with your
         own list of public variable names.</p>
       </td>
@@ -151,9 +338,9 @@ href="index.html">Table Of Contents</a></p>
       <td><code><a href="#_define_primarykey">_define_primarykey
         {args}</a></code> 
 
-        <p style="margin-left:2em;">Provides a default implementation by
-        invoking <code>define_primarykey</code> with an empty list. Override
-        this method to invoke <code><a
+        <p>Provides a default implementation by invoking
+        <code>define_primarykey</code> with an empty list. Override this method
+        to invoke <code><a
         href="#define_primarykey">define_primarykey</a></code> with your own
         list of public variable names.</p>
       </td>
@@ -162,22 +349,19 @@ href="index.html">Table Of Contents</a></p>
       <td align="right"><code>protected method</code> </td>
       <td><code><a href="#_define_unique">_define_unique {args}</a></code> 
 
-        <p style="margin-left:2em;">Provides a default implementation by
-        invoking <code>define_unique</code> with an empty list. Override this
-        method to invoke <code><a
-        href="#define_unique">define_unique</a></code> with your own list of
-        list of public variable names.</p>
-
-        <p></p>
+        <p>Provides a default implementation by invoking
+        <code>define_unique</code> with an empty list. Override this method to
+        invoke <code><a href="#define_unique">define_unique</a></code> with
+        your own list of list of public variable names.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>protected proc</code> </td>
       <td><code><a href="#_mget">_mget {schema_name db args}</a></code> 
 
-        <p style="margin-left:2em;">Helper routine to retrieve multiple records
-        from a table / view. This proc is meant to be invoked from within
-        <code>mget</code> proc of a derived class.</p>
+        <p>Helper routine to retrieve multiple records from a table / view.
+        This proc is meant to be invoked from within <code>mget</code> proc of
+        a derived class.</p>
       </td>
     </tr>
   </tbody>
@@ -190,12 +374,13 @@ href="index.html">Table Of Contents</a></p>
 <table border="1" style="width: 100%">
   <col />
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td><strong>Constructor Detail</strong></td>
+    <tr>
+      <td><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></td>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="constructor"></a>constructor {db}</b></code> </dt>
+          <dt><a id="constructor"></a><code><strong>constructor
+          {db}</strong></code> </dt>
             <dd>Stores the definition of primary keys, unique fields and
               sequence / auto-increment fields by invoking following protected
               methods: <code><a
@@ -206,8 +391,8 @@ href="index.html">Table Of Contents</a></p>
               Also prepares list of field names for later usage by insert and
               update operations. 
               <dl>
-                <dt><b>Parameters:</b></dt>
-                  <dd>db - instance of a specific Database Access
+                <dt><strong>Parameters:</strong></dt>
+                  <dd>db - instance of a specific Database Connectivity
                     implementation such as SQLite.</dd>
               </dl>
             </dd>
@@ -221,12 +406,13 @@ href="index.html">Table Of Contents</a></p>
 
 <table border="1" style="width: 100%">
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td><strong>Proc/Method Detail</strong></td>
+    <tr>
+      <td><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></td>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="add"></a>public method add {args}</b></code> </dt>
+          <dt><code><strong><a id="add"></a>public method add
+          {args}</strong></code> </dt>
             <dd>Insert the object as a new record into database. In preparing
               the record to insert, this method prepares a list of name-value
               pairs, by default, from all public member variables of the
@@ -243,9 +429,9 @@ href="index.html">Table Of Contents</a></p>
               operation, the new values of sequence / auto-incremented fields
               are populated back into the object.</dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>optional list of public member variable names that
                           represent the fields in the database record that
                           needs to be inserted. If this argument is not
@@ -253,7 +439,7 @@ href="index.html">Table Of Contents</a></p>
                           as list of field names to be inserted.</dd>
                     </dl>
                   </dd>
-                <dt><b>Returns:</b></dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>Returns the status of add operation as a numerical value.
                     A value greater than zero indicates success </dd>
               </dl>
@@ -263,14 +449,14 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="delete"></a>public method delete {}</b></code>
-          </dt>
+          <dt><code><strong><a id="delete"></a>public method delete
+          {}</strong></code> </dt>
             <dd>delete the record represented by the object from database and
               reset the object values. The record to be deleted from the
               database is identified based on the description provided in <a
               href="#ORMapping">Object To Database Record Mapping</a>.</dd>
             <dd><dl>
-                <dt><b>Returns:</b></dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>Returns the status of add operation as a numerical value.
                     A value greater than zero indicates success.</dd>
               </dl>
@@ -280,7 +466,8 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="get"></a>public method get {args}</b></code> </dt>
+          <dt><code><strong><a id="get"></a>public method get
+          {args}</strong></code> </dt>
             <dd>Retrieve a record from the database and populate object's
               member variables with values retrieved. The record to be
               retrieved from the database is identified based on the
@@ -292,9 +479,9 @@ href="index.html">Table Of Contents</a></p>
               variables), then only those fields are retrieved and populated
               into the object.</dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>optional list of public member variable names that
                           represent the fields in the database record that
                           needs to be retrieved. If this argument is not
@@ -303,7 +490,7 @@ href="index.html">Table Of Contents</a></p>
                           database.</dd>
                     </dl>
                   </dd>
-                <dt><b>Returns:</b></dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>fieldname-value pairs retrieved from database as a Tcl
                     dictionary. If the retrieval does not return any record
                     from database, then the result will be an empty string.</dd>
@@ -314,8 +501,8 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="save"></a>public method save {args}</b></code>
-          </dt>
+          <dt><code><strong><a id="save"></a>public method save
+          {args}</strong></code> </dt>
             <dd>Save the object by updating the corresponding record into the
               database. The record to be updated in the database is identified
               based on the description provided in <a href="#ORMapping">Object
@@ -332,9 +519,9 @@ href="index.html">Table Of Contents</a></p>
               indicate the absense of a field in the update operation (thus not
               affecting those fields in the database). </dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>optional list of public member variable names that
                           represent the fields in the database record that
                           needs to be updated. If this argument is not
@@ -343,7 +530,7 @@ href="index.html">Table Of Contents</a></p>
                         record.</dd>
                     </dl>
                   </dd>
-                <dt><b>Returns:</b></dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>the status of save operation as a numerical value. A
                     value greater than zero indicates success.</dd>
               </dl>
@@ -353,8 +540,8 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="define_autoincrement"></a>protected method
-          define_autoincrement {args}</b></code> </dt>
+          <dt><code><strong><a id="define_autoincrement"></a>protected method
+          define_autoincrement {args}</strong></code> </dt>
             <dd>Define a list of public variable names that are
               auto-incremented (also known as sequence fields) by the database
               whenever a new record is inserted. This method is meant to be
@@ -362,9 +549,9 @@ href="index.html">Table Of Contents</a></p>
               href="#_define_autoincrement">_define_autoincrement</a></code>
               method.</dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>a list containing fieldnames that are
                           autoincrement/sequence fields.</dd>
                     </dl>
@@ -376,17 +563,17 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="define_primarykey"></a>protected method
-          define_primarykey {args}</b></code> </dt>
+          <dt><code><strong><a id="define_primarykey"></a>protected method
+          define_primarykey {args}</strong></code> </dt>
             <dd>Define a list of public variable names that map to the primary
               key fields of the associated table/view in the database. This
               method is meant to be invoked by derived classes from within
               <code><a href="#_define_primarykey">_define_primarykey</a></code>
               method.</dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>a list of field names that constitute the primary
                           key.</dd>
                     </dl>
@@ -398,17 +585,17 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="define_unique"></a>protected method define_unique
-          {args}</b></code> </dt>
+          <dt><code><strong><a id="define_unique"></a>protected method
+          define_unique {args}</strong></code> </dt>
             <dd>Define a list of list of public variable names with each list
               mapping to a set of fields that identify a record of the
               associated table/view in the database uniquely. This method is
               meant to be invoked by derived classes from within <code><a
               href="#_define_unique">_define_unique</a></code> method. </dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>a list of lists with each list containing field
                           names that constitute a unique key.</dd>
                     </dl>
@@ -420,17 +607,17 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="_define_autoincrement"></a>protected method
-          _define_autoincrement {args}</b></code> </dt>
+          <dt><code><strong><a id="_define_autoincrement"></a>protected method
+          _define_autoincrement {args}</strong></code> </dt>
             <dd>Provides a default implementation by invoking
               <code>define_autoincrement</code> with an empty list. Override
               this method to invoke <code><a
               href="#define_autoincrement">define_autoincrement</a></code> with
               your own list of public variable names.</dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>a list containing fieldnames that are
                           autoincrement/sequence fields.</dd>
                     </dl>
@@ -442,16 +629,16 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="_define_primarykey"></a>protected method
-          _define_primarykey {args}</b></code> </dt>
+          <dt><code><strong><a id="_define_primarykey"></a>protected method
+          _define_primarykey {args}</strong></code> </dt>
             <dd>Provides a default implementation by invoking define_primarykey
               with an empty list. Override this method to invoke <code><a
               href="#define_primarykey">define_primarykey</a></code> with your
               own list of public variable names.</dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>a list of field names that constitute the primary
                           key.</dd>
                     </dl>
@@ -463,16 +650,16 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="_define_unique"></a>protected method
-          _define_unique {args}</b></code> </dt>
+          <dt><code><strong><a id="_define_unique"></a>protected method
+          _define_unique {args}</strong></code> </dt>
             <dd>Provides a default implementation by invoking define_unique
               with an empty list. Override this method to invoke <code><a
               href="#define_unique">define_unique</a></code> with your own list
               of list of public variable names. </dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>a list of lists with each list containing field
                           names that constitute a unique key.</dd>
                     </dl>
@@ -484,26 +671,26 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="_mget"></a>protected proc _mget {schema_name db
-          args}</b></code> </dt>
+          <dt><code><strong><a id="_mget"></a>protected proc _mget {schema_name
+          db args}</strong></code> </dt>
             <dd>Helper routine to retrieve multiple records from a table view.
               This proc is to be invoked from within <code>mget</code> proc of
               a class derived from DBObject. </dd>
             <dd><dl>
-                <dt><b>Parameters:</b></dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt><b>schema_name</b></dt>
+                      <dt><strong>schema_name</strong></dt>
                         <dd>name of the table/view</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt><b>db</b></dt>
+                      <dt><strong>db</strong></dt>
                         <dd>instance of a specific database access class such
                           as SQLite</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt><b>args</b></dt>
+                      <dt><strong>args</strong></dt>
                         <dd>A dictionary of options. This proc consumes
                           optional -format option from this dict. Other options
                           are passed to db object for processing. Allowed
@@ -526,7 +713,7 @@ href="index.html">Table Of Contents</a></p>
               </dl>
             </dd>
             <dd><dl>
-                <dt><b>Returns:</b></dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>List of records in the format defined by -format option.
                   </dd>
               </dl>
@@ -542,7 +729,7 @@ href="index.html">Table Of Contents</a></p>
 <table border="1" style="width: 100%">
   <col />
   <tbody>
-    <tr style="background-color:#add8e6">
+    <tr>
       <td><strong><a id="ORMapping"></a>Object To Database Record
         Mapping</strong></td>
     </tr>
@@ -580,45 +767,68 @@ href="index.html">Table Of Contents</a></p>
 <table border="1" style="width: 100%">
   <col />
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td><strong>An Example Application Object Class</strong></td>
+    <tr>
+      <td><strong><a id="Example"></a>An Example Application Object
+        Class</strong></td>
     </tr>
     <tr>
-      <td><pre>itcl::class Employee {
+      <td><pre>package require logger
+package require sqlite3
+package require Itcl
+package require tdbo
+
+# For this example to work, we assume that you already have
+# setup address.db with address table defined
+
+itcl::class Address {
     inherit tdbo::DBObject
 
     constructor {db args} {tdbo::DBObject::constructor $db} {
-       configure {*}$args
+        configure {*}$args
+    }
+    destructor {
     }
 
-    destructor {}
-
-    public {
-
-        proc schema_name {} {
-            return "employee"
-        }
-
-        variable id
-        variable name
-        variable rollno
-        variable address_id
+    public proc schema_name {} {
+        return "address"
     }
 
-    protected {
-        method _define_primarykey {} {
-           define_primarykey id
-        }
+    public variable id
+    public variable addrline1
+    public variable addrline2
+    public variable city
+    public variable postalcode
+    public variable country
 
-        method _define_autoincrement {} {
-            define_autoincrement id
-        }
-
-        method _define_unique {} {
-            define_unique {{rollno}}
-        }
+    protected method _define_primarykey {} {
+        define_primarykey id
     }
-}</pre>
+    protected method _define_autoincrement {} {
+        define_autoincrement id
+    }
+}
+
+# Setup logging facility
+tdbo::FileLogger::open address.log
+
+# Open SQLite Database implementation 
+set db [::tdbo::SQLite #auto -location address.db]
+$db open
+
+# Instantiate Address
+Address addr $db \
+    -addrline1 "Address Line 1" \
+    -addrline2 "Address Line 2" \
+    -city "City Name" \
+    -country "Country Name" \
+    -postalcode "560000"
+
+# Add to database
+puts "[addr add]"
+
+# Retrieve values
+puts "[addr cget]"
+        </pre>
       </td>
     </tr>
   </tbody>
@@ -626,9 +836,43 @@ href="index.html">Table Of Contents</a></p>
 
 <p></p>
 
-<p style="text-align:right;margin-left:auto;margin-right:0;"><a
-href="index.html">Table Of Contents</a></p>
+<table border="1" style="width: 100%">
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <col />
+  <tbody>
+    <tr>
+      <td><a href="#ClassSummary">Class Summary</a></td>
+      <td><a href="#Inheritance">Inheritance</a></td>
+      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
+      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
+      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
+      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
+    </tr>
+    <tr>
+      <td><a href="#ORMapping">Object To Database Record Mapping</a></td>
+      <td><a href="#Example">Example Application Object Class</a></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td align="center" colspan="6"><a href="reference.html">Table Of
+        Contents</a></td>
+    </tr>
+  </tbody>
+</table>
 
 <p></p>
+
+<p></p>
+
+<p style="font-size: 10pt">Copyright (c) 2013 by Nagarajan Chinnasamy
+&lt;nagarajanchinnasamy@gmail.com&gt;. See <a href="license.html">License</a>
+for information on usage and redistribution</p>
 </body>
 </html>

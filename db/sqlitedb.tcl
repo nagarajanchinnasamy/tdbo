@@ -22,8 +22,7 @@ itcl::class tdbo::SQLite {
 #
 #
 # ----------------------------------------------------------------------
-constructor {args} {
-	configure {*}$args
+constructor {} {
 }
 
 
@@ -38,43 +37,6 @@ destructor {
 
 
 # ----------------------------------------------------------------------
-# variable conn: Variable to hold sqlite database connection interface
-#                returned by sqlite's open command.
-#
-#
-#
-# ----------------------------------------------------------------------
-public variable conn
-
-
-# ----------------------------------------------------------------------
-# variable location: Variable to hold the pathname of the database file.
-#
-#
-#
-# ----------------------------------------------------------------------
-public variable location {} {
-	if {[info exists conn] && $conn != ""} {
-		return -code error "Cannot set location when conn is non-empty"
-	}
-}
-
-
-# ----------------------------------------------------------------------
-# variable initscript: Variable to hold a block of sqlite SQL commands.
-#                      Upon successful opening of the database, if this
-#                      variable is non-empty, this SQL script is
-#                      evaluated.
-#
-# ----------------------------------------------------------------------
-public variable initscript "" {
-	if {$conn != ""} {
-		return -code error "Cannot set initscript when conn is non-empty"
-	}
-}
-
-
-# ----------------------------------------------------------------------
 # method - open - Open a database connection. It returns an error if
 #                 the connection is already open or if the location of
 #                 the database file is not defined. Upon successful
@@ -85,22 +47,22 @@ public variable initscript "" {
 #                 Returns the sqlite connection interface command.
 #
 # ----------------------------------------------------------------------
-public method open {args} {
-	configure {*}$args
+public method open {location {initscript ""}} {
 	if {[info exists conn] && $conn != ""} {
-		return -code error "Cannot invoke open when conn is non-empty"
-	}
-	if {$location == ""} {
-		return -code error "Cannot invoke open without setting location"
+		return -code error "An opened connection already exists."
 	}
 
 	incr conncount
 	set conn sqlite_$conncount
-	uplevel #0 sqlite3 $conn $location
+	if {[catch {sqlite3 $conn $location} err]} {
+		unset conn
+		return
+	}
 
 	if {$initscript != ""} {
 		$conn eval $initscript
 	}
+
 	return $conn
 }
 
@@ -112,10 +74,8 @@ public method open {args} {
 #
 # ----------------------------------------------------------------------
 public method close {} {
-	if {$conn != ""} {
-		catch {$conn close}
-		set conn ""
-	}
+	catch {$conn close}
+	unset conn
 }
 
 
@@ -203,7 +163,24 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 #
 # ----------------------------------------------------------------------
 public method update {schema_name namevaluepairs {condition ""}} {
-	return [_update $schema_name $namevaluepairs $condition]
+	set setlist ""
+	foreach {name val} $namevaluepairs {
+		lappend setlist "$name='$val'"
+	}
+	set setlist [join $setlist ", "]
+
+	set sqlscript "UPDATE $schema_name SET $setlist"
+	if [string length $condition] {
+		append sqlscript " WHERE [_prepare_condition $condition]"
+	}
+
+	${log}::debug $sqlscript
+
+	if {[catch {$conn eval $sqlscript} err]} {
+		return 0
+	}
+
+	return [$conn changes]
 }
 
 
@@ -214,7 +191,18 @@ public method update {schema_name namevaluepairs {condition ""}} {
 #
 # ----------------------------------------------------------------------
 public method delete {schema_name {condition ""}} {
-	return [_delete $schema_name $condition]
+	set sqlscript "DELETE FROM $schema_name"
+	if {[string length $condition]} {
+		append sqlscript " WHERE [_prepare_condition $condition]"
+	}
+
+	${log}::debug $sqlscript
+
+	if {[catch {$conn eval $sqlscript} err]} {
+		return 0
+	}
+
+	return [$conn changes]
 }
 
 
@@ -251,6 +239,16 @@ public method commit {} {
 public method rollback {} {
 	$conn eval rollback
 }
+
+
+# ----------------------------------------------------------------------
+# variable conn: Variable to hold sqlite database connection interface
+#                returned by sqlite's open command.
+#
+#
+#
+# ----------------------------------------------------------------------
+protected variable conn
 
 
 # ----------------------------------------------------------------------
@@ -316,7 +314,7 @@ private method _select {table_name args} {
 #
 #
 # ----------------------------------------------------------------------
-private method _insert {table_name namevaluepairs} {
+private method _insert {schema_name namevaluepairs} {
 	set fnamelist [join [dict keys $namevaluepairs] ", "]
 	set valuelist [list]
 	foreach value [dict values $namevaluepairs] {
@@ -324,7 +322,7 @@ private method _insert {table_name namevaluepairs} {
 	} 
 	set valuelist [join $valuelist ", "]
 
-	set sqlscript "INSERT INTO $table_name ($fnamelist) VALUES ($valuelist)"
+	set sqlscript "INSERT INTO $schema_name ($fnamelist) VALUES ($valuelist)"
 	${log}::debug $sqlscript
 	
 	if {[catch {$conn eval $sqlscript} err]} {
@@ -343,56 +341,6 @@ private method _insert {table_name namevaluepairs} {
 # ----------------------------------------------------------------------
 private method _last_insert_rowid {} {
 	return [$conn last_insert_rowid]
-}
-
-
-# ----------------------------------------------------------------------
-#
-#
-#
-#
-# ----------------------------------------------------------------------
-private method _update {table_name namevaluepairs {update_condition ""}} {
-	set setlist ""
-	foreach {name val} $namevaluepairs {
-		lappend setlist "$name='$val'"
-	}
-	set setlist [join $setlist ", "]
-
-	set sqlscript "UPDATE $table_name SET $setlist"
-	if [string length $update_condition] {
-		append sqlscript " WHERE [_prepare_condition $update_condition]"
-	}
-
-	${log}::debug $sqlscript
-
-	if {[catch {$conn eval $sqlscript} err]} {
-		return 0
-	}
-
-	return [$conn changes]
-}
-
-
-# ----------------------------------------------------------------------
-#
-#
-#
-#
-# ----------------------------------------------------------------------
-private method _delete {table_name {delete_condition ""}} {
-	set sqlscript "DELETE FROM $table_name"
-	if [string length $delete_condition] {
-		append sqlscript " WHERE [_prepare_condition $delete_condition]"
-	}
-
-	${log}::debug $sqlscript
-
-	if {[catch {$conn eval $sqlscript} err]} {
-		return 0
-	}
-
-	return [$conn changes]
 }
 
 

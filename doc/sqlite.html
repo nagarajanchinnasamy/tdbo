@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+      "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <title>database</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>sqlite</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css" title="Amaya theme">
 /* Modern style for Amaya Editor Lite */
 
@@ -167,12 +166,12 @@ a[href] {
 <body>
 
 <table border="1" style="width: 100%">
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
   <tbody>
     <tr>
       <td align="center" colspan="6"><a href="reference.html">Table Of
@@ -192,19 +191,15 @@ a[href] {
 <p></p>
 
 <table border="1" style="width: 100%">
-  <col />
+  <col>
   <tbody>
     <tr>
       <td colspan="1"><strong><a id="ClassSummary"></a>Class:
-        tdbo::Database</strong></td>
+        tdbo::SQLite</strong></td>
     </tr>
     <tr>
-      <td>Generic Database Connectivity Interface that needs to be implemented
-        by specific <a href="reference.html">Database Connectivity
-        Implementations</a> such as <a href="sqlite.html">SQLite</a>, MySQL
-        etc. This class defines interfaces that must be adhered to by database
-        connectivity implementations such as SQLite, MySQL etc. This is an
-        abstract class and cannot be instantiated directly.</td>
+      <td>Database Connectivity Interface to SQLite database. Implements
+        interfaces defined by <a href="database.html">tdbo::Database</a>.</td>
     </tr>
   </tbody>
 </table>
@@ -212,17 +207,16 @@ a[href] {
 <p></p>
 
 <table border="1" style="width: 100%">
-  <col />
+  <col>
   <tbody>
     <tr>
-      <td colspan="1"><strong><a id="Inheritance"></a>Inherits:
-        tdbo::Object</strong></td>
+      <td colspan="1"><strong><a id="Inheritance"></a>Inherits: <a
+        href="object.html">tdbo::Object</a>&lt;-<a
+        href="database.html">tdbo::Database</a></strong></td>
     </tr>
     <tr>
-      <td>Methods: cget, clear, configure 
-
-        <p>Variables: clsName, log</p>
-      </td>
+      <td>Methods: open, close, get, mget, insert, update, delete, begin,
+        commit, rollback</td>
     </tr>
   </tbody>
 </table>
@@ -230,8 +224,8 @@ a[href] {
 <p></p>
 
 <table border="1" style="width: 100%">
-  <col />
-  <col />
+  <col>
+  <col>
   <tbody>
     <tr>
       <td colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
@@ -247,7 +241,7 @@ a[href] {
 <p></p>
 
 <table border="1" style="width: 100%">
-  <col />
+  <col>
   <tbody>
     <tr>
       <td colspan="2"><strong><a id="ProcMethodsSummary"></a>Procs/Methods
@@ -255,18 +249,18 @@ a[href] {
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#open">open {args}</a></code> 
+      <td><code><a href="#open">open {location {initscript ""}}</a></code> 
 
-        <p>Establish connection to the database. Pure virtual function to be
-        implemented by derived classes.</p>
+        <p>Open sqlite3 database file from location. Upon successful
+        connection, optionally, evaluate sqlite3 SQL script passed through
+        initscript.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#close">close {}</a></code> 
 
-        <p>Close the database connection. Pure virtual function to be
-        implemented by derived classes.</p>
+        <p>Close the database connection.</p>
       </td>
     </tr>
     <tr>
@@ -274,18 +268,16 @@ a[href] {
       <td><code><a href="#get">get {schema_name condition {fieldslist
         ""}}</a></code> 
 
-        <p>Retrieve a record, that meets the <code>condition</code>, from a
-        table/view indicated by <code>schema_name</code>. Pure virtual function
-        to be implemented by derived classes.</p>
+        <p>Retrieve a record, that meets the <code>condition,</code> from a
+        table/view indicated by <code>schema_name</code>.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#get">mget {schema_name args} </a></code> 
+      <td><code><a href="#get">mget {schema_name args}</a></code> 
 
         <p>Retrieve multiple records from a table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
+        <code>schema_name</code>.</p>
       </td>
     </tr>
     <tr>
@@ -294,54 +286,48 @@ a[href] {
         {sequence_fields ""}}</a></code> 
 
         <p>Insert a new record into the table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
+        <code>schema_name</code>.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#update">update {schema_name namevaluepairs {condition
-        ""}} </a></code> 
+        ""}}</a></code> 
 
         <p>Update one or more existing records, that meet the
         <code>condition</code>, of the table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
+        <code>schema_name</code>.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">delete {schema_name {condition ""}}
-        </a></code> 
+      <td><code><a href="#delete">delete {schema_name {condition
+        ""}}</a></code> 
 
         <p>Delete one or more existing records, that meet the
-        <code>condition</code>, from the table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
+        <code>condition,</code> from the table/view indicated by
+        <code>schema_name</code>.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">begin {args} </a></code> 
+      <td><code><a href="#delete">begin {{lock deferred}}</a></code> 
 
-        <p>Begin a database transaction. Pure virtual function to be
-        implemented by derived classes.</p>
+        <p>Begin a database transaction.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">commit {args} </a></code> 
+      <td><code><a href="#delete">commit {}</a></code> 
 
-        <p>Commit the currently active database transaction. Pure virtual
-        function to be implemented by derived classes.</p>
+        <p>Commit the currently active database transaction.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">rollback {args} </a></code> 
+      <td><code><a href="#delete">rollback {}</a></code> 
 
-        <p>Rollback the currently active database transaction. Pure virtual
-        function to be implemented by derived classes.</p>
+        <p>Rollback the currently active database transaction.</p>
       </td>
     </tr>
   </tbody>
@@ -350,7 +336,7 @@ a[href] {
 <p></p>
 
 <table border="1" style="width: 100%">
-  <col />
+  <col>
   <tbody>
     <tr>
       <td><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></td>
@@ -359,13 +345,7 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="constructor"></a>constructor
           {}</strong></code> </dt>
-            <dd>Constructor. 
-              <dl>
-                <dt>Throws:</dt>
-                  <dd>error - if an attempt is made to instantiate this class
-                    directly.</dd>
-              </dl>
-            </dd>
+            <dd>Constructor. </dd>
         </dl>
       </td>
     </tr>
@@ -381,30 +361,32 @@ a[href] {
     </tr>
     <tr>
       <td><dl>
-          <dt><code><strong><a id="open">public method open
-          {args}</a></strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes. The
-              implementation (such as SQLite etc.) is expected to obtain
-              parameters that are necessary to establish connection to the
-              database.</dd>
+          <dt><code><strong><a id="open"></a>public method open {location
+          {initscript ""}}</strong></code> </dt>
+            <dd>Open sqlite3 database file from <code>location</code>. Upon
+              establishing the connection successfully, if non-empty, evaluate
+              sqlite3 SQL script passed through <code>initscript</code>.</dd>
             <dd><dl>
-                <dt>Parameters:</dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt>args</dt>
-                        <dd>Implementation specific. Implementations (such as
-                          SQLite etc.) are expected to obtain necessary
-                          parameters to establish connection to the
-                        database.</dd>
+                      <dt><strong>location</strong></dt>
+                        <dd>Pathname of the sqlite3 database file.</dd>
+                      <dt><strong>initscript</strong></dt>
+                        <dd>Optional sqlite3 SQL script that will be evaluated
+                          upon establishing the connection successfully. </dd>
                     </dl>
                   </dd>
-                <dt>Returns:</dt>
-                  <dd>The connection object on successfully establishing the
-                    connection to database. Empty string to indicate a failure.
-                  </dd>
-              </dl>
-              <dl>
-                <dt>Throws:</dt>
-                  <dd>Error if an opened connection already exists.</dd>
+                <dl>
+                  <dt><strong>Returns:</strong></dt>
+                    <dd>The connection command object on successfully
+                      establishing the connection to database. Empty string on
+                      failure.</dd>
+                </dl>
+                <dl>
+                  <dt><strong>Throws:</strong></dt>
+                    <dd>Error - If an attempt is made to invoke this method
+                      without closing the existing connection.</dd>
+                </dl>
               </dl>
             </dd>
         </dl>
@@ -413,31 +395,28 @@ a[href] {
     <tr>
       <td><dl>
           <dt><code><strong><a id="close"></a>public method close
-          {}</strong></code></dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Implementations (such as SQLite etc.) are expected to close the
-              database connection. When attempted to close a non-existent
-              connection, it is suggested not to throw any error.</dd>
+          {}</strong></code> </dt>
+            <dd>Close the database connection. Attempting to close a
+              non-existent connection does not throw any error. </dd>
         </dl>
       </td>
     </tr>
     <tr>
       <td><dl>
           <dt><code><strong><a id="get"></a>public method get {schema_name
-          condition {fieldslist ""}}</strong></code></dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Retrieves a record, that meets the <code>condition</code>, from a
-              table/view indicated by <code>schema_name</code>.</dd>
+          condition {fieldslist ""}}</strong></code> </dt>
+            <dd>Retrieves a record, that meets the <code>condition</code>, from
+              a table/view indicated by <code>schema_name</code>.</dd>
             <dd><dl>
-                <dt>Parameters:</dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt>schema_name</dt>
+                      <dt><strong>schema_name</strong></dt>
                         <dd>name of the table/view from where the record is to
                           be retrieved from the database.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>condition</dt>
+                      <dt><strong>condition</strong></dt>
                         <dd>list of dictionaries. Every dictionary contains
                           fieldname-value pairs that will be joined with an AND
                           operator. The list elements are joined with an OR
@@ -450,14 +429,14 @@ a[href] {
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>fieldslist</dt>
+                      <dt><strong>fieldslist</strong></dt>
                         <dd>optional list of field names of the record that
                           needs to be retrieved. If this argument is not
                           provided, all fields of the record will be
                         retrieved.</dd>
                     </dl>
                   </dd>
-                <dt>Returns:</dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>fieldname-value pairs retrieved from database as a Tcl
                     dictionary. If the retrieval does not return any record
                     from database, then the result will be an empty string.</dd>
@@ -470,28 +449,42 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="mget"></a>public method mget {schema_name
           args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Retrieve multiple records from a table/view indicated by
+            <dd>Retrieve multiple records from a table/view indicated by
               <code>schema_name</code>. </dd>
             <dd><dl>
-                <dt>Parameters:</dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt>schema_name</dt>
+                      <dt><strong>schema_name</strong></dt>
                         <dd>name of the table/view from where the record is to
                           be retrieved from the database.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>args</dt>
-                        <dd>Implementation specific. Implementations (such as
-                          SQLite etc.) are expected to obtain necessary
-                          parameters to support various features of SELECT
-                          statement in SQL. Suggested parameters are:
-                          <code>-fields</code>, <code>-condition</code>,
-                          <code>-orderby</code> and <code>-groupby</code>.</dd>
+                      <dt><strong>args</strong></dt>
+                        <dd><dl>
+                            <dt><strong><code>-fields</code></strong></dt>
+                              <dd>List of fieldnames to be retrieved. By
+                                default all the fields are retrieved.</dd>
+                            <dt><strong><code>-condition</code></strong></dt>
+                              <dd>Condition to be used in <code>WHERE</code>
+                                caluse of <code>SELECT</code> query. Note, this
+                                must be a valid SQLite SQL clause. By default
+                                all the records are retrieved.</dd>
+                            <dt><strong><code>-orderby</code></strong></dt>
+                              <dd>Sorting term to be used in
+                                <code>SELECT</code> query. Note: This must be a
+                                valid SQLite SQL ordering-tem. Default behavior
+                                is as defined by SQLite API.</dd>
+                            <dt><strong><code>-groupby</code></strong></dt>
+                              <dd>Grouping clause to be used in
+                                <code>SELECT</code> query. Note: This must be a
+                                valid SQLite SQL grouping clause. Default
+                                behavior is as defined by SQLite API.</dd>
+                          </dl>
+                        </dd>
                     </dl>
                   </dd>
-                <dt>Returns:</dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>list of dictionaries where each dictionary represents a
                     record with fieldname-value pairs. If the retrieval does
                     not return any record from database, then the result will
@@ -506,32 +499,32 @@ a[href] {
           <dt><code><strong><a id="insert"></a>public method insert
           {schema_name namevaluepairs {sequence_fields ""}}</strong></code>
           </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Insert a new record into the table/view indicated by
+            <dd>Insert a new record into the table/view indicated by
               <code>schema_name</code>.</dd>
             <dd><dl>
-                <dt>Parameters:</dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt>schema_name</dt>
+                      <dt><strong>schema_name</strong></dt>
                         <dd>name of the table/view into which the record is to
                           be inserted.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>namevaluepairs</dt>
+                      <dt><strong>namevaluepairs</strong></dt>
                         <dd>A dictionary containing fieldname-value pairs.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>sequence_fields</dt>
+                      <dt><strong>sequence_fields</strong></dt>
                         <dd>optional list of field names that are
                           sequence/auto-increment fields. Upon successful
-                          insertion of the record, this method returns the new
-                          sequence values of these fields as part of the
-                        result.</dd>
+                          insertion of the record, all the fields listed in
+                          this parameter are given the value obtained from
+                          <code>last_insert_rowid</code> command of sqlite3 API
+                          and returned as part of the result.</dd>
                     </dl>
                   </dd>
-                <dt>Returns:</dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>The status of insert operation. A value greater than zero
                     indicates success. When <code>sequence_fields</code> is
                     non-empty, the return value will be a list containing two
@@ -547,25 +540,24 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="update"></a>public method update
           {schema_name namevaluepairs {condition ""}}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Update one or more existing records, that meet the
+            <dd>Update one or more existing records, that meet the
               <code>condition</code>, of the table/view indicated by
               <code>schema_name</code>.</dd>
             <dd><dl>
-                <dt>Parameters:</dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt>schema_name</dt>
+                      <dt><strong>schema_name</strong></dt>
                         <dd>name of the table/view into which the record is to
                           be inserted.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>namevaluepairs</dt>
+                      <dt><strong>namevaluepairs</strong></dt>
                         <dd>A dictionary containing fieldname-value pairs.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>condition</dt>
+                      <dt><strong>condition</strong></dt>
                         <dd>Optional list of dictionaries where each dictionary
                           contains fieldname-value pairs that will be joined
                           with an AND operator. The list elements are joined
@@ -577,7 +569,7 @@ a[href] {
                           <code>UPDATE</code> query to update the records.</dd>
                     </dl>
                   </dd>
-                <dt>Returns:</dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>Number of records that are updated.</dd>
               </dl>
             </dd>
@@ -588,20 +580,19 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="delete"></a>public method delete
           {schema_name {condition ""}}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Delete one or more existing records, that meet the
-              <code>condition</code>, from the table/view indicated by
+            <dd>Delete one or more existing records that meet the
+              <code>condition</code> from the table/view indicated by
               <code>schema_name</code>. </dd>
             <dd><dl>
-                <dt>Parameters:</dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt>schema_name</dt>
+                      <dt><strong>schema_name</strong></dt>
                         <dd>name of the table/view into which the record is to
                           be inserted.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>condition</dt>
+                      <dt><strong>condition</strong></dt>
                         <dd>Optional list of dictionaries. Every dictionary
                           contains fieldname-value pairs that will be joined
                           with an AND operator. The list elements are joined
@@ -613,7 +604,7 @@ a[href] {
                           <code>DELETE</code> query to delete the records.</dd>
                     </dl>
                   </dd>
-                <dt>Returns:</dt>
+                <dt><strong>Returns:</strong></dt>
                   <dd>Number of records that are deleted.</dd>
               </dl>
             </dd>
@@ -622,16 +613,17 @@ a[href] {
     </tr>
     <tr>
       <td><dl>
-          <dt><code><strong><a id="begin"></a>public method begin
-          {args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Begin a database transaction.</dd>
+          <dt><code><strong><a id="begin"></a>public method begin {{lock
+          "deferred"}}</strong></code> </dt>
+            <dd>Begin a database transaction.</dd>
             <dd><dl>
-                <dt>Parameters:</dt>
+                <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
-                      <dt>args</dt>
-                        <dd>Implementation specific. Implementations are
-                          expected to obtain necessary parameters.</dd>
+                      <dt><strong>lock</strong></dt>
+                        <dd>Type of locking to be done for this transaction.
+                          Allowed values are: <code>deferred</code>,
+                          <code>immediate</code> and <code>exclusive</code>.
+                          See SQLite API documentation for further details.</dd>
                     </dl>
                   </dd>
               </dl>
@@ -642,38 +634,16 @@ a[href] {
     <tr>
       <td><dl>
           <dt><code><strong><a id="commit"></a>public method commit
-          {args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Commit the currently active database transaction.</dd>
-            <dd><dl>
-                <dt>Parameters:</dt>
-                  <dd><dl>
-                      <dt>args</dt>
-                        <dd>Implementation specific. Implementations are
-                          expected to obtain necessary parameters.</dd>
-                    </dl>
-                  </dd>
-              </dl>
-            </dd>
+          {}</strong></code> </dt>
+            <dd>Commit the currently active database transaction.</dd>
         </dl>
       </td>
     </tr>
     <tr>
       <td><dl>
           <dt><code><strong><a id="rollback"></a>public method rollback
-          {args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Rollback the currently active database transaction. </dd>
-            <dd><dl>
-                <dt>Parameters:</dt>
-                  <dd><dl>
-                      <dt>args</dt>
-                        <dd>Implementation specific. Implementations are
-                          expected to obtain necessary parameters.</dd>
-                    </dl>
-                  </dd>
-              </dl>
-            </dd>
+          {}</strong></code> </dt>
+            <dd>Rollback the currently active database transaction.</dd>
         </dl>
       </td>
     </tr>
@@ -683,12 +653,12 @@ a[href] {
 <p></p>
 
 <table border="1" style="width: 100%">
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
   <tbody>
     <tr>
       <td><a href="#ClassSummary">Class Summary</a></td>

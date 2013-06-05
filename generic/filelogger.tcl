@@ -26,6 +26,7 @@ public proc open {location} {
 	set perm 0600
 
 	if { [catch { set logchan [::open $location $access $perm] } logerr] } {
+		unset logchan
 		return -code error "Unable to open $location.\n$logerr"
 	}
 }

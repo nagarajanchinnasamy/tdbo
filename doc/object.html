@@ -5,24 +5,205 @@
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <title>object</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
+  <style type="text/css" title="Amaya theme">
+/* Modern style for Amaya Editor Lite */
+
+/* default rules for the whole document */
+body {
+    font-size: 12pt;
+    font-family: Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-style: normal;
+    color: black;
+    background-color: white;
+    line-height: 1.2em;
+    margin-left: 4em;
+    margin-right: 2em;
+   }
+
+/* paragraphs */
+p  {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+   }
+
+/* headings */
+h1 {
+    font-size: 180%;
+    font-weight: bold;
+    font-style: normal;
+    font-variant: small-caps;
+    text-align: left;
+    padding: 0;
+    margin-top: 1.7em;
+    margin-bottom: 1.7em;
+   }
+h2 {
+    font-size: 150%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.5em;
+    margin-bottom: 1.1em;
+   }
+h3 {
+    font-size: 130%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.3em;
+    margin-bottom: 1.1em;
+   }
+h4 {
+    font-size: 110%;
+    font-weight: bold;
+    font-style: normal;
+    padding: 0;
+    margin-top: 1.1em;
+    margin-bottom: 1.1em;
+   }
+h5 {
+    font-size: 100%;
+    font-weight: bold;
+    font-style: italic;
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+h6 {
+    font-size: 100%;
+    font-weight: normal;
+    font-style: italic;
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+
+/* divisions */
+div {
+    padding: 0;
+    margin-top: 0em;
+    margin-bottom: 0em;
+   }
+
+/* lists */
+ul, ol {
+    padding: 0 0 0 3em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+ul ul, ol ol, ul ol, ol ul {
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+li {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    text-align: left;
+   }
+li p {
+    margin-top: 1em;
+    margin-bottom: 1em;
+   }
+dl {
+    padding: 0;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: 1em;
+   }
+dl dl {
+    margin-top: 0em;
+    margin-bottom: 0em;
+   }
+dt {
+    padding: 0;
+    font-weight: bold;
+    margin-top: .3em;
+    margin-bottom: .3em;
+   }
+dd {
+    padding: 0;
+    margin-top: .3em;
+    margin-left: 3em;
+    margin-bottom: .3em;
+   }
+dl p {
+    margin-top: .3em;
+    margin-bottom: .3em;
+   }
+
+/* inline */
+strong {
+    font-weight: bold;
+   }
+em {
+    font-style: italic;
+   }
+code {
+    font-family: Courier New, Courier, monospace;
+   }
+ins {
+    background-color: yellow;
+    text-decoration: underline;
+   }
+del {
+    text-decoration: line-through;
+   }
+
+/* anchors */
+a[href] {
+    color: blue;
+    text-decoration: underline;
+   }
+
+/* end */
+  </style>
 </head>
 
 <body>
-<p style="text-align:right;margin-left:auto;margin-right:0;"><a
-href="index.html">Table Of Contents</a></p>
+
+<table border="1" style="width: 100%">
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
+  <tbody>
+    <tr>
+      <td align="center" colspan="6"><a href="reference.html">Table Of
+        Contents</a></td>
+    </tr>
+    <tr>
+      <td><a href="#ClassSummary">Class Summary</a></td>
+      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
+      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
+      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
+      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
+      <td><a href="#Example">Example Application Object Class</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
 
 <table border="1" style="width: 100%">
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td colspan="1"><strong>Class: tdbo::Object</strong></td>
+    <tr>
+      <td colspan="1"><a id="ClassSummary"></a><strong>Class:
+        tdbo::Object</strong></td>
     </tr>
     <tr>
       <td>Generic Object Interface that enhances <code>configure</code>,
         <code>cget</code> methods of IncrTcl's objects. Also, it adds
         copy-constructor mechanism, a method (<code>clear</code>) to reset
-        public variables and a TclLib's logger object to IncrTcl's objects.
+        public variables and logging facility through TclLib's logger object.
         Application object classes are expected to be derived from this class.
-        This class cannot be instantiated directly.</td>
+        See <a href="#Example">Example Application Object Class</a>. This class
+        cannot be instantiated directly.</td>
     </tr>
   </tbody>
 </table>
@@ -33,8 +214,9 @@ href="index.html">Table Of Contents</a></p>
   <col>
   <col>
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td colspan="2"><strong>Constructor Summary</strong></td>
+    <tr>
+      <td colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
+        Summary</strong></td>
     </tr>
     <tr>
       <td><a href="#constructor">constructor {}</a></td>
@@ -48,14 +230,15 @@ href="index.html">Table Of Contents</a></p>
 
 <table border="1" style="width: 100%">
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td colspan="2"><strong>Procs/Methods Summary</strong></td>
+    <tr>
+      <td colspan="2"><strong><a id="ProcMethodsSummary"></a>Proc/Methods
+        Summary</strong></td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#cget">cget {{option ""} args}</a></code> 
         <dl>
-          <dt>This method has 3 usages:</dt>
+            <dd>This method has following usages:</dd>
             <dd><ol>
                 <li><dl>
                     <dt><code>objName cget -opt</code></dt>
@@ -84,7 +267,8 @@ href="index.html">Table Of Contents</a></p>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#clear">clear {}</a></code> 
         <dl>
-          <dt>To reset all public member variables to their initial value.</dt>
+            <dd>To reset all public member variables to their initial
+            value.</dd>
         </dl>
       </td>
     </tr>
@@ -92,7 +276,7 @@ href="index.html">Table Of Contents</a></p>
       <td align="right"><code>public method</code></td>
       <td><code><a href="#configure">configure {{option ""} args}</a></code> 
         <dl>
-          <dt>This method has 4 usages:</dt>
+            <dd>This method has following usages:</dd>
             <dd><ol>
                 <li><dl>
                     <dt><code>objName configure -opt val -opt val
@@ -106,14 +290,21 @@ href="index.html">Table Of Contents</a></p>
                   </dl>
                 </li>
                 <li><dl>
-                    <dt><code>className objName1 objName2</code></dt>
-                      <dd>copy constructor</dd>
-                  </dl>
-                </li>
-                <li><dl>
                     <dt><code>objName configure</code></dt>
                       <dd>to retrieve initial and current values of all public
                         member variables</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>className objName1 -opt val -opt val
+                    ...</code></dt>
+                      <dd>construction time configuration of public member
+                        variables</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>className objName1 objName2</code></dt>
+                      <dd>copy constructor</dd>
                   </dl>
                 </li>
               </ol>
@@ -129,13 +320,13 @@ href="index.html">Table Of Contents</a></p>
 <table border="1" style="width: 100%">
   <col>
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td><strong>Constructor Detail</strong></td>
+    <tr>
+      <td><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></td>
     </tr>
     <tr>
       <td><dl>
-          <dt><pre><b><a id="constructor"></a>constructor {}</b></pre>
-          </dt>
+          <dt><code><strong><a id="constructor"></a>constructor
+          {}</strong></code> </dt>
             <dd>Object constructor. Initializes logger object with the name of
               the class as its service name.</dd>
         </dl>
@@ -148,55 +339,49 @@ href="index.html">Table Of Contents</a></p>
 
 <table border="1" style="width: 100%">
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td><strong>Proc/Method Detail</strong></td>
+    <tr>
+      <td><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></td>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="cget"></a>public method cget {{option ""}
-          args}</b></code> </dt>
-            <dd><dl>
-                <dt>This method has 3 usages:</dt>
-                  <dd><ol>
-                      <li><dl>
-                          <dt><code>objName cget -opt</code></dt>
-                            <dd>To get the value of a specific public member
-                              variable. <code>opt</code> is the name of a
-                              public member variable. Returns current value of
-                              the public member variable specified by
-                              <code>opt</code>.</dd>
-                        </dl>
-                      </li>
-                      <li><dl>
-                          <dt><code>objName cget -opt1 vName1 -opt2 vName2
-                          ...</code></dt>
-                            <dd>To get the value of public member variables
-                              into the respective variable names specified.
-                              <code>opt</code> is the name of a public member
-                              variable. <code>vName</code> is the name of a
-                              variable into which the value of the
-                              <code>opt</code> is to be stored.</dd>
-                        </dl>
-                      </li>
-                      <li><dl>
-                          <dt><code>objName cget</code></dt>
-                            <dd>To get current values of all public member
-                              variables as a Tcl dictionary. Returns the
-                              dictionary in the format: <code>-opt1 val1 -opt2
-                              val2 ...</code></dd>
-                        </dl>
-                      </li>
-                    </ol>
-                  </dd>
-              </dl>
+          <dt><code><strong><a id="cget"></a>public method cget {{option ""}
+          args}</strong></code> </dt>
+            <dd>This method has following usages:</dd>
+            <dd><ol>
+                <li><dl>
+                    <dt><code>objName cget -opt</code></dt>
+                      <dd>To get the value of a specific public member
+                        variable. <code>opt</code> is the name of a public
+                        member variable. Returns current value of the public
+                        member variable specified by <code>opt</code>.</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName cget -opt1 vName1 -opt2 vName2
+                    ...</code></dt>
+                      <dd>To get the value of public member variables into the
+                        respective variable names specified. <code>opt</code>
+                        is the name of a public member variable.
+                        <code>vName</code> is the name of a variable into which
+                        the value of the <code>opt</code> is to be stored.</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName cget</code></dt>
+                      <dd>To get current values of all public member variables
+                        as a Tcl dictionary. Returns the dictionary in the
+                        format: <code>-opt1 val1 -opt2 val2 ...</code></dd>
+                  </dl>
+                </li>
+              </ol>
             </dd>
         </dl>
       </td>
     </tr>
     <tr>
       <td><dl>
-          <dt><pre><b><a id="clear"></a>public method clear {}</b></pre>
-          </dt>
+          <dt><code><strong><a id="clear"></a>public method clear
+          {}</strong></code> </dt>
             <dd>Resets all public member variables with the initialization
               value given in the class definition.</dd>
         </dl>
@@ -204,51 +389,57 @@ href="index.html">Table Of Contents</a></p>
     </tr>
     <tr>
       <td><dl>
-          <dt><code><b><a id="configure"></a>public method configure {{option
-          ""} args}</b></code> </dt>
-            <dd><dl>
-                <dt>This method has 4 usages:</dt>
-                  <dd><ol>
-                      <li><dl>
-                          <dt><code>objName configure -opt1 val -opt2 val
-                          ...</code></dt>
-                            <dd>To set values of public member variables.
-                              <code>opt</code> is the name of a public member
-                              variable.</dd>
-                        </dl>
-                      </li>
-                      <li><dl>
-                          <dt><code>objName1 configure objName2</code></dt>
-                            <dd>Object to object copy. To copy the values of
-                              all public member variables of
-                              <code>objName2</code> into the corresponding
-                              public member variables of
-                            <code>objName1</code>.</dd>
-                        </dl>
-                      </li>
-                      <li><dl>
-                          <dt><code>className objName1 objName2</code></dt>
-                            <dd>While this is not a direct usage of this
-                              method, when <code>objName1</code> is being
-                              constructed, ITcl's object construction mechanism
-                              invokes the 2nd usage of the configure method on
-                              <code>objName1</code> passing
-                              <code>objName2</code> as its parameter. Hence, it
-                              results into object-to-object copy of public
-                              member variables.</dd>
-                        </dl>
-                      </li>
-                      <li><dl>
-                          <dt><code>objName configure</code></dt>
-                            <dd>To retrieve initial and current values of all
-                              public member variables. Returns a dictionary in
-                              the format: <code>-opt {-ival val -cval val} -opt
-                              {-ival val -cval val} ...</code></dd>
-                        </dl>
-                      </li>
-                    </ol>
-                  </dd>
-              </dl>
+          <dt><code><strong><a id="configure"></a>public method configure
+          {{option ""} args}</strong></code> </dt>
+            <dd>This method has following usages:</dd>
+            <dd><ol>
+                <li><dl>
+                    <dt><code>objName configure -opt1 val -opt2 val
+                    ...</code></dt>
+                      <dd>To set values of public member variables.
+                        <code>opt</code> is the name of a public member
+                        variable.</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName1 configure objName2</code></dt>
+                      <dd>Object to object copy. To copy the values of all
+                        public member variables of <code>objName2</code> into
+                        the corresponding public member variables of
+                        <code>objName1</code>.</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>objName configure</code></dt>
+                      <dd>To retrieve initial and current values of all public
+                        member variables. Returns a dictionary in the format:
+                        <code>-opt {-ival val -cval val} -opt {-ival val -cval
+                        val} ...</code></dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>className objName1 -opt1 val -opt2 val
+                    ...</code></dt>
+                      <dd>Though this is not a direct usage of this method,
+                        when <code>objName1</code> is being constructed, ITcl's
+                        object construction mechanism invokes the 1st usage of
+                        the configure method on <code>objName1</code> passing
+                        <code>-opt1 val -opt2 val ...</code> as its parameters
+                        to set the values of the public member variables.</dd>
+                  </dl>
+                </li>
+                <li><dl>
+                    <dt><code>className objName1 objName2</code></dt>
+                      <dd>Though this is not a direct usage of this method,
+                        when <code>objName1</code> is being constructed, ITcl's
+                        object construction mechanism invokes the 2nd usage of
+                        the configure method on <code>objName1</code> passing
+                        <code>objName2</code> as its parameter. Hence, it
+                        results into object-to-object copy of public member
+                        variables.</dd>
+                  </dl>
+                </li>
+              </ol>
             </dd>
         </dl>
       </td>
@@ -261,8 +452,9 @@ href="index.html">Table Of Contents</a></p>
 <table border="1" style="width: 100%">
   <col>
   <tbody>
-    <tr style="background-color:#add8e6">
-      <td><strong>An Example Application Object Class</strong></td>
+    <tr>
+      <td><strong><a id="Example"></a>An Example Application Object
+        Class</strong></td>
     </tr>
     <tr>
       <td><pre>package require logger
@@ -270,55 +462,63 @@ package require sqlite3
 package require Itcl
 package require tdbo
 
-itcl::class Employee {
+# For this example to work, we assume that you already have
+# setup address.db with address table defined
+
+itcl::class Address {
     inherit tdbo::DBObject
 
     constructor {db args} {tdbo::DBObject::constructor $db} {
-       configure {*}$args
+        configure {*}$args
+    }
+    destructor {
     }
 
-    destructor {}
-
-    public {
-
-        proc schema_name {} {
-            return "employee"
-        }
-
-        variable id
-        variable name
-        variable rollno
-        variable address_id
+    public proc schema_name {} {
+        return "address"
     }
 
-    protected {
-        method _define_primarykey {} {
-           define_primarykey id
-        }
+    public variable id
+    public variable addrline1
+    public variable addrline2
+    public variable city
+    public variable postalcode
+    public variable country
 
-        method _define_autoincrement {} {
-            define_autoincrement id
-        }
-
-        method _define_unique {} {
-            define_unique {{rollno}}
-        }
+    protected method _define_primarykey {} {
+        define_primarykey id
+    }
+    protected method _define_autoincrement {} {
+        define_autoincrement id
     }
 }
 
 # Setup logging facility
-tdbo::FileLogger::open employee.log
+tdbo::FileLogger::open address.log
 
-# Setup SQLite database connectivity 
-set db [::tdbo::SQLite #auto -location employee.db]
+# Open SQLite Database implementation 
+set db [::tdbo::SQLite #auto -location address.db]
 $db open
 
-# Create Employee instances
-Employee emp1 $db -name "My Name" -rollno "99999"
-Employee emp2 $db emp1
+# Instantiate Address
+Address addr1 $db \
+    -addrline1 "Address Line 1" \
+    -addrline2 "Address Line 2" \
+    -city "City Name" \
+    -country "Country Name" \
+    -postalcode "560000"
 
-puts "[emp1 cget]"
-puts "[emp2 configure]"</pre>
+# Add to database
+puts "[addr add]"
+
+# Retrieve values
+puts "[addr cget]"
+
+# Create another Address using copy-constructor
+Address addr2 $db addr1
+
+# Retrieve values
+puts "[addr2 configure]"</pre>
       </td>
     </tr>
   </tbody>
@@ -326,9 +526,35 @@ puts "[emp2 configure]"</pre>
 
 <p></p>
 
-<p style="text-align:right;margin-left:auto;margin-right:0;"><a
-href="index.html">Table Of Contents</a></p>
+<table border="1" style="width: 100%">
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
+  <col>
+  <tbody>
+    <tr>
+      <td><a href="#ClassSummary">Class Summary</a></td>
+      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
+      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
+      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
+      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
+      <td><a href="#Example">Example Application Object Class</a></td>
+    </tr>
+    <tr>
+      <td align="center" colspan="6"><a href="reference.html">Table Of
+        Contents</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<h4></h4>
 
 <p></p>
+
+<p style="font-size: 10pt">Copyright (c) 2013 by Nagarajan Chinnasamy
+&lt;nagarajanchinnasamy@gmail.com&gt;. See <a href="license.html">License</a>
+for information on usage and redistribution</p>
 </body>
 </html>

@@ -81,7 +81,7 @@ public method configure {{option ""} args} {
 public method cget {{option ""} args} {
 	# Usage: objName cget
 	# return value: -opt val -opt val ...
-	if ![string length $option] {
+	if {![string length $option]} {
 		set config [configure]
 		set result [dict create]
 		foreach opt [dict keys $config] {
@@ -95,7 +95,7 @@ public method cget {{option ""} args} {
 
 	# Usage: objName cget -opt
 	# return value: val
-	if ![llength $args] {
+	if {![llength $args]} {
 		return [dict get $config $option -cval]
 	}
 

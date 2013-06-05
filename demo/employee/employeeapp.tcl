@@ -25,8 +25,8 @@ set log [tdbo::FileLogger::init EmployeeApp debug]
 puts "log: $log"
 
 # Open SQLite Database implementation
-set db [::tdbo::SQLite #auto -location employee.db]
-$db open
+set db [::tdbo::SQLite #auto]
+$db open employee.db
 
 # Create Employee and Address instances 
 

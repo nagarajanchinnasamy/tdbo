@@ -267,11 +267,29 @@ a[href] {
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
-                      <dt>location</dt>
-                        <dd>Pathname of the file where messages are to be
-                          logged in</dd>
+                      <dt>service</dt>
+                        <dd>Name of the service. Typically, this is name of the
+                          class or namespace.</dd>
                     </dl>
                   </dd>
+                  <dd><dl>
+                      <dt>level</dt>
+                        <dd>Log level of the service.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>slaveinterp</dt>
+                        <dd>Slave interpreter for which the alias for log
+                          methods are created so that the log methods can be
+                          invoked from the slave interpreters.</dd>
+                    </dl>
+                  </dd>
+              </dl>
+            </dd>
+            <dd><dl>
+                <dt>Returns:</dt>
+                  <dd>Logging command object, using which the logging methods
+                    can be invoked.</dd>
               </dl>
             </dd>
         </dl>

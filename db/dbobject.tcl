@@ -102,12 +102,20 @@ public method add {args} {
 		set namevaluepairs [__make_namevaluepairs $args]
 	}
 
-	set result [$db insert [${clsName}::schema_name] $namevaluepairs $fields([$this info class],sqlist)]
-	lassign $result status sequence
+	if {[catch {$db insert [${clsName}::schema_name] $namevaluepairs $fields($clsName,sqlist)} result]} {
+		${log}::error $result
+		return 0
+	}
+		
+	lassign $result status sequencevalues
 
 	if {$status} {
-		if {$sequence != ""} {
-			$this configure {*}$sequence
+		if {$sequencevalues != ""} {
+			set sequencecfg [dict create]
+			dict for {fname val} $sequencevalues {
+				dict set sequencecfg -${fname} $val
+			}
+			$this configure {*}$sequencecfg
 		}
 	}
 	return $status

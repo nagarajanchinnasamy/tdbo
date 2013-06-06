@@ -1,6 +1,6 @@
 package require Tcl 8.5
+package require logger
 package require Itcl 3.4
-package require sqlite3 3.7.14.1
 
 namespace eval ::tdbo {
 	namespace export *

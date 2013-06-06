@@ -1,7 +1,6 @@
-# sqlitedb.tcl --
+# postgres.tcl --
 #
-# sqlite3 implementation module. Takes care of translating object methods
-# to corresponding sql queries and executes them.
+# PostgreSQL implementation module.
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 #
@@ -9,12 +8,12 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 # ----------------------------------------------------------------------
-# class SQLite
+# class tdbo::PostgreSQL
 #
 #
 #
 # ----------------------------------------------------------------------
-itcl::class tdbo::SQLite {
+itcl::class tdbo::PostgreSQL {
 	inherit tdbo::Database
 # ----------------------------------------------------------------------
 # constructor:
@@ -23,7 +22,7 @@ itcl::class tdbo::SQLite {
 #
 # ----------------------------------------------------------------------
 constructor {} {
-	package require sqlite3
+	package require Pgtcl
 }
 
 
@@ -48,22 +47,16 @@ destructor {
 #                 Returns the sqlite connection interface command.
 #
 # ----------------------------------------------------------------------
-public method open {location {initscript ""}} {
+public method open {dbname args} {
 	if {[info exists conn] && $conn != ""} {
 		return -code error "An opened connection already exists."
 	}
 
-	incr conncount
-	set conn sqlite_$conncount
-	if {[catch {sqlite3 $conn $location} err]} {
-		unset conn
-		return -code error $err
+	if {[catch {pg_connect $dbname {*}$args} result]} {
+		return -code error $result
 	}
 
-	if {$initscript != ""} {
-		$conn eval $initscript
-	}
-
+	set conn $result
 	return $conn
 }
 
@@ -75,13 +68,7 @@ public method open {location {initscript ""}} {
 #
 # ----------------------------------------------------------------------
 public method close {} {
-	if {![info exists conn]} {
-		return
-	}
-
-	catch {
-		$conn close
-	}
+	catch {pg_disconnect $conn}
 	unset conn
 }
 
@@ -147,22 +134,30 @@ public method mget {schema_name args} {
 # ----------------------------------------------------------------------
 public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 	set sqlscript [_prepare_insert_stmt $schema_name $namevaluepairs]
-	if {[catch {$conn eval $sqlscript} result]} {
+	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
 
-	set status [$conn changes]
-	if {$sequence_fields == ""} {
-		return $status
+	set status [pg_result $result -status]
+${log}::debug "insert status: $status"
+
+	if {$status != "PGRES_COMMAND_OK" && $status != "PGRES_TUPLES_OK"} {
+		set error [pg_result $result -error]
+		pg_result $result -clear
+		return -code error $error
 	}
 
-	set sequence_values [dict create]
-	set rowid [_last_insert_rowid]
-	foreach fname $sequence_fields {
-		dict set sequence_values $fname $rowid
+	set numrows [pg_result $result -numTuples]
+${log}::debug "insert numrows: $numrows"
+	if {$numrows} {
+		set sequencedict [pg_result $result -dict]		
+${log}::debug "insert sequencedict: $sequencedict"
+		pg_result $result -clear
+		return [list $numrows [dict get $sequencedict 0]]
 	}
 
-	return [list $status $sequence_values]
+	pg_result $result -clear
+	return 1
 }
 
 
@@ -174,11 +169,13 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 # ----------------------------------------------------------------------
 public method update {schema_name namevaluepairs {condition ""}} {
 	set sqlscript [_prepare_update_stmt $schema_name $namevaluepairs $condition]
-	if {[catch {$conn eval $sqlscript} err]} {
-		return -code error $err
+	if {[catch {pg_exec $conn $sqlscript} result]} {
+		return -code error $result
 	}
 
-	return [$conn changes]
+	set changes [pg_result $result -cmdTuples]
+	pg_result $result -clear
+	return $changes
 }
 
 
@@ -190,11 +187,13 @@ public method update {schema_name namevaluepairs {condition ""}} {
 # ----------------------------------------------------------------------
 public method delete {schema_name {condition ""}} {
 	set sqlscript [_prepare_delete_stmt $schema_name $condition]
-	if {[catch {$conn eval $sqlscript} err]} {
-		return -code error $err
+	if {[catch {pg_exec $conn $sqlscript} result]} {
+		return -code error $result
 	}
 
-	return [$conn changes]
+	set changes [pg_result $result -cmdTuples]
+	pg_result $result -clear
+	return $changes
 }
 
 
@@ -206,8 +205,11 @@ public method delete {schema_name {condition ""}} {
 #
 #
 # ----------------------------------------------------------------------
-public method begin {{lock deferred}} {
-	$conn eval begin $lock
+public method begin {{lock deferrable}} {
+	if {[catch {pg_exec $conn "begin $lock"} result]} {
+		return -code error $result
+	}
+	pg_result $result -clear
 }
 
 
@@ -218,7 +220,10 @@ public method begin {{lock deferred}} {
 #
 # ----------------------------------------------------------------------
 public method commit {} {
-	$conn eval commit
+	if {[catch {pg_exec $conn commit} result]} {
+		return -code error $result
+	}
+	pg_result $result -clear
 }
 
 
@@ -229,7 +234,10 @@ public method commit {} {
 #
 # ----------------------------------------------------------------------
 public method rollback {} {
-	$conn eval rollback
+	if {[catch {pg_exec $conn rollback} result]} {
+		return -code error $result
+	}
+	pg_result $result -clear
 }
 
 
@@ -250,29 +258,14 @@ protected variable conn
 #
 # ----------------------------------------------------------------------
 private method _select {schema_name args} {
-	set sqlscript [_prepare_select_stmt $schema_name {*}$args
-	set recordslist ""
-	if {[catch {
-		$conn eval $sqlscript record {
-			array unset record "\\*"
-			lappend recordslist [array get record]
-		}} err]} {
-		${log}::notice "Error: $err"
-		return
+	set sqlscript [_prepare_select_stmt $schema_name {*}$args]
+	if {[catch {pg_exec $conn $sqlscript} result]} {
+		return -code error $result
 	}
+	set recordslist [dict values [pg_result $result -dict]]
+	pg_result $result -clear
 
 	return $recordslist
-}
-
-
-# ----------------------------------------------------------------------
-#
-#
-#
-#
-# ----------------------------------------------------------------------
-private method _last_insert_rowid {} {
-	return [$conn last_insert_rowid]
 }
 
 

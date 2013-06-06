@@ -175,5 +175,140 @@ public method commit {args}
 public method rollback {args}
 
 
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_insert_stmt {schema_name namevaluepairs} {
+	set fnamelist [join [dict keys $namevaluepairs] ", "]
+	set valuelist [list]
+	foreach value [dict values $namevaluepairs] {
+		lappend valuelist '$value'
+	} 
+	set valuelist [join $valuelist ", "]
+
+	set stmt "INSERT INTO $schema_name ($fnamelist) VALUES ($valuelist)"
+	${log}::debug $stmt
+	return $stmt
+}
+
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_select_stmt {schema_name args} {
+	set fields "*"
+	set condition ""
+	set groupby ""
+	set orderby ""
+	foreach {opt val} $args {
+		switch $opt {
+			-fields {
+				set fields $val
+			}
+			-condition {
+				set condition $val
+			}
+			-groupby {
+				set groupby $val
+			}
+			-orderby {
+				set orderby $val
+			}
+			default {
+				return -code error "Unknown option: $opt"
+			}
+		}
+	}
+	set stmt "SELECT $fields FROM $schema_name"
+	if [string length $condition] {
+		append stmt " WHERE $condition"
+	}
+	if [string length $groupby] {
+		append stmt " GROUP BY $groupby"
+	}
+	if [string length $orderby] {
+		append stmt " ORDER BY $orderby"
+	}
+
+	${log}::debug $stmt
+	return $stmt
+}
+
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_update_stmt {schema_name namevaluepairs {condition ""}} {
+	set setlist ""
+	foreach {name val} $namevaluepairs {
+		lappend setlist "$name='$val'"
+	}
+	set setlist [join $setlist ", "]
+
+	set stmt "UPDATE $schema_name SET $setlist"
+	if [string length $condition] {
+		append stmt " WHERE [_prepare_condition $condition]"
+	}
+
+	${log}::debug $stmt
+	return $stmt
+}
+
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_delete_stmt {schema_name {condition ""}} {
+	set stmt "DELETE FROM $schema_name"
+	if {[string length $condition]} {
+		append stmt " WHERE [_prepare_condition $condition]"
+	}
+
+	${log}::debug $stmt
+	return $stmt
+}
+
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+protected method _prepare_condition {conditionlist} {
+	set sqlcondition [list]
+	foreach condition $conditionlist {
+		set complist [list]
+		foreach {fname val} $condition {
+			lappend complist "$fname='$val'"
+		}
+		if {$complist != ""} {
+			lappend sqlcondition "([join $complist " and "])"
+		}
+	}
+
+	if {$sqlcondition == ""} {
+		return
+	}
+
+	set sqlcondition [join $sqlcondition " or "]
+	return "($sqlcondition)"
+}
+
 # -------------------------END------------------------------------------
 }

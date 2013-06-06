@@ -9,9 +9,6 @@
 #
 # ----------------------------------------------------------------------
 
-package require logger
-package require sqlite3
-package require Itcl
 package require tdbo
 
 set dir [file dirname [info script]]
@@ -24,9 +21,13 @@ tdbo::FileLogger::open employee.log
 set log [tdbo::FileLogger::init EmployeeApp debug]
 puts "log: $log"
 
-# Open SQLite Database implementation
-set db [::tdbo::SQLite #auto]
-$db open employee.db
+# Open SQLite Database connection
+#set db [::tdbo::SQLite #auto]
+#$db open [file join $dir "sqlite/employee.db"]
+
+# Open PostgreSQL Database connection
+set db [::tdbo::PostgreSQL #auto]
+$db open employee -user nagu -password Welcome123
 
 # Create Employee and Address instances 
 

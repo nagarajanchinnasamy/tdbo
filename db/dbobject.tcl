@@ -44,6 +44,7 @@ constructor {db} {
 		_define_primarykey
 		_define_unique
 		_define_autoincrement
+		__prepare_getfields
 		__prepare_insertfields
 		__prepare_updatefields
 	}
@@ -173,15 +174,20 @@ public method add {args} {
 #
 # ----------------------------------------------------------------------
 public method get {args} {
-	set objcfg [dict create]
+	set fieldslist $fields($clsName,getlist)
+	if {$args != ""} {
+		set fieldslist $args
+	}
 
-	set result [$db get [${clsName}::schema_name] [__get_condition] $args]
+	if {[catch {$db get [${clsName}::schema_name] $fieldslist [__get_condition] dict} result]} {
+		return -code error $result
+	}
 	if {[llength $result] > 1} {
 		return -code error "Multiple records retrieved in get operation"
 	}
 
-	set result [lindex $result 0]
-	foreach {fname val} $result {
+	set objcfg [dict create]
+	dict for {fname val} [lindex $result 0] {
 		dict set objcfg "-$fname" "$val"
 	}
 		
@@ -255,8 +261,10 @@ public method save {args} {
 		set namevaluepairs [__make_namevaluepairs $args]
 	}
 
-	set result [$db update [${clsName}::schema_name] $namevaluepairs [__get_condition]]
-	
+	if {[catch {$db update [${clsName}::schema_name] $namevaluepairs [__get_condition]} result]} {
+		return -code error $result
+	}
+
 	return $result
 }
 
@@ -298,10 +306,14 @@ public method save {args} {
 #                   value. Non-zero value indicates success.
 # ----------------------------------------------------------------------
 public method delete {} {
-	set result [$db delete [${clsName}::schema_name] [__get_condition]]
+	if {[catch {$db delete [${clsName}::schema_name] [__get_condition]} result]} {
+		return -code error $result
+	}
+
 	if {$result} {
 		clear
 	}
+
 	return $result
 }
 
@@ -332,34 +344,23 @@ public method delete {} {
 #
 # returns : Records as defined by -format option.
 # ----------------------------------------------------------------------
-protected proc _mget {schema_name db args} {
+protected proc _mget {db schema_name fieldslist {format dict} args} {
 
 	if {$db == "" || ![$db isa tdbo::Database]} {
 		return -code error "Invalid db object type"
 	}
 
-	set format dict
-	if {[dict exists $args -format]} {
-		set format [dict get $args -format]
-		dict unset args -format
+	if {[catch {$db mget $schema_name $fieldslist $format {*}$args} result]} {
+		return -code error $result
 	}
 
-	set records [$db mget $schema_name {*}$args]
-	set result [list]
-	switch $format {
-		dict {
-			foreach record  $records {
-				set objconfig [dict create]
-				foreach {fname val} $record {
-					dict set objconfig "-$fname" "$val"
-				}
-				lappend result [dict get $objconfig]
+	if {$format == "dict"} {
+		foreach record  $records {
+			set objconfig [dict create]
+			dict for {fname val} $record {
+				dict set objconfig "-$fname" "$val"
 			}
-		}
-		list {
-			foreach record  $records {
-				lappend result {*}[dict values $record]
-			}
+			lappend result $objconfig
 		}
 	}
 
@@ -470,6 +471,22 @@ private method __get_condition {} {
 		}
 	}
 	return $condition
+}
+
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+private method __prepare_getfields {} {
+	if ![llength [array names fields -exact "$clsName,getlist"]] {
+		set getlist ""
+		foreach {opt val} [$this cget] {
+			lappend getlist [string range $opt 1 end]
+		}
+		set fields($clsName,getlist) $getlist			
+	}
 }
 
 

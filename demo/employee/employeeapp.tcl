@@ -26,7 +26,11 @@ puts "log: $log"
 #$db open [file join $dir "sqlite/employee.db"]
 
 # Open PostgreSQL Database connection
-set db [::tdbo::PostgreSQL #auto]
+#set db [::tdbo::PostgreSQL #auto]
+#$db open employee -user nagu -password Welcome123
+
+# Open MariaDB/MySQL Database connection
+set db [::tdbo::MariaDB #auto]
 $db open employee -user nagu -password Welcome123
 
 # Create Employee and Address instances 

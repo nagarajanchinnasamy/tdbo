@@ -1,6 +1,6 @@
-# postgres.tcl --
+# mariadb.tcl --
 #
-# PostgreSQL connectivity module.
+# MariaDB/MySQL connecitivity module.
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 #
@@ -8,12 +8,12 @@
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
 # ----------------------------------------------------------------------
-# class tdbo::PostgreSQL
+# class tdbo::MariaDB
 #
 #
 #
 # ----------------------------------------------------------------------
-itcl::class tdbo::PostgreSQL {
+itcl::class tdbo::MariaDB {
 	inherit tdbo::Database
 # ----------------------------------------------------------------------
 # constructor:
@@ -22,7 +22,7 @@ itcl::class tdbo::PostgreSQL {
 #
 # ----------------------------------------------------------------------
 constructor {} {
-	package require Pgtcl
+	package require mysqltcl
 }
 
 
@@ -37,8 +37,8 @@ destructor {
 
 
 # ----------------------------------------------------------------------
-#
 # method - open - Open a database connection.
+#
 #
 #
 # ----------------------------------------------------------------------
@@ -47,18 +47,24 @@ public method open {dbname args} {
 		return -code error "An opened connection already exists."
 	}
 
-	if {[catch {pg_connect $dbname {*}$args} result]} {
+	if {[catch {mysql::connect {*}$args} result]} {
 		return -code error $result
 	}
 
 	set conn $result
+	if {[catch {mysql::use $conn $dbname} result]} {
+		catch {mysql::close $conn}
+		unset conn
+		return -code error $result
+	}
+
 	return $conn
 }
 
 
 # ----------------------------------------------------------------------
-#
 # method - close - Close the database connection.
+#
 #
 #
 # ----------------------------------------------------------------------
@@ -67,7 +73,7 @@ public method close {} {
 		return
 	}
 
-	catch {pg_disconnect $conn}
+	catch {mysql::close $conn}
 	unset conn
 }
 
@@ -81,6 +87,7 @@ public method close {} {
 public method get {schema_name fieldslist condition {format "dict"}} {
 	return [_select $schema_name  $fieldslist $format -condition [_prepare_condition $condition]]
 }
+
 
 # ----------------------------------------------------------------------
 #
@@ -101,30 +108,22 @@ public method mget {schema_name fieldslist {format "dict"} args} {
 # ----------------------------------------------------------------------
 public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 	set sqlscript [_prepare_insert_stmt $schema_name $namevaluepairs]
-	if {[catch {pg_exec $conn $sqlscript} result]} {
+	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
 
-	set status [pg_result $result -status]
-${log}::debug "insert status: $status"
-
-	if {$status != "PGRES_COMMAND_OK" && $status != "PGRES_TUPLES_OK"} {
-		set error [pg_result $result -error]
-		pg_result $result -clear
-		return -code error $error
+	set status 1
+	if {$sequence_fields == ""} {
+		return $status
 	}
 
-	set numrows [pg_result $result -numTuples]
-${log}::debug "insert numrows: $numrows"
-	if {$numrows} {
-		set sequencedict [pg_result $result -dict]		
-${log}::debug "insert sequencedict: $sequencedict"
-		pg_result $result -clear
-		return [list $numrows [dict get $sequencedict 0]]
+	set sequence_values [dict create]
+	set rowid [mysql::insertid $conn]
+	foreach fname $sequence_fields {
+		dict set sequence_values $fname $rowid
 	}
 
-	pg_result $result -clear
-	return 1
+	return [list $status $sequence_values]
 }
 
 
@@ -136,13 +135,11 @@ ${log}::debug "insert sequencedict: $sequencedict"
 # ----------------------------------------------------------------------
 public method update {schema_name namevaluepairs {condition ""}} {
 	set sqlscript [_prepare_update_stmt $schema_name $namevaluepairs $condition]
-	if {[catch {pg_exec $conn $sqlscript} result]} {
+	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
 
-	set changes [pg_result $result -cmdTuples]
-	pg_result $result -clear
-	return $changes
+	return $result
 }
 
 
@@ -154,13 +151,11 @@ public method update {schema_name namevaluepairs {condition ""}} {
 # ----------------------------------------------------------------------
 public method delete {schema_name {condition ""}} {
 	set sqlscript [_prepare_delete_stmt $schema_name $condition]
-	if {[catch {pg_exec $conn $sqlscript} result]} {
+	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
 
-	set changes [pg_result $result -cmdTuples]
-	pg_result $result -clear
-	return $changes
+	return $result
 }
 
 
@@ -170,11 +165,15 @@ public method delete {schema_name {condition ""}} {
 #
 #
 # ----------------------------------------------------------------------
-public method begin {{lock deferrable}} {
-	if {[catch {pg_exec $conn "begin $lock"} result]} {
+public method begin {{isolation "repeatable read"}} {
+	set sqlscript "set transaction isolation level $isolation"
+	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
-	pg_result $result -clear
+	set sqlscript "start transaction"
+	if {[catch {mysql::exec $conn $sqlscript} result]} {
+		return -code error $result
+	}
 }
 
 
@@ -185,29 +184,29 @@ public method begin {{lock deferrable}} {
 #
 # ----------------------------------------------------------------------
 public method commit {} {
-	if {[catch {pg_exec $conn commit} result]} {
+	set sqlscript "commit;\n"
+	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
-	pg_result $result -clear
 }
 
 
 # ----------------------------------------------------------------------
-#
 # method - rollback the database transaction.
 #
+# args   - none. 
 #
 # ----------------------------------------------------------------------
 public method rollback {} {
-	if {[catch {pg_exec $conn rollback} result]} {
+	set sqlscript "rollback;\n"
+	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
-	pg_result $result -clear
 }
 
 
 # ----------------------------------------------------------------------
-# variable conn: Variable to hold database connection.
+# variable conn: Variable to hold database connection object
 #
 #
 #
@@ -223,22 +222,28 @@ protected variable conn
 # ----------------------------------------------------------------------
 private method _select {schema_name fieldslist {format "dict"} args} {
 	set sqlscript [_prepare_select_stmt $schema_name $fieldslist {*}$args]
-	if {[catch {pg_exec $conn $sqlscript} result]} {
+	if {[catch {mysql::sel $conn $sqlscript -list} result]} {
 		return -code error $result
 	}
 
 	set recordslist ""
 	switch -- $format {
 		dict {
-			set recordslist [dict values [pg_result $result -dict]]
+			foreach row $result {
+				set record ""
+				foreach field $fieldslist val $row {
+					lappend record $field $val
+				}
+				lappend recordslist $record
+			}
 		}
-		list -
 		llist {
-			set recordslist [dict values [pg_result $result -$format]]
+			set recordslist $result
+		}
+		list {
+			set recordslist [join $result]
 		}
 	}
-
-	pg_result $result -clear
 	return $recordslist
 }
 

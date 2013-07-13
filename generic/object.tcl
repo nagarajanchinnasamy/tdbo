@@ -8,6 +8,8 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
+package require logger 0.9.3
+
 # ----------------------------------------------------------------------
 # class Object
 #
@@ -27,7 +29,7 @@ constructor {} {
 		return -code error "Error: Can't create Object instances - abstract class."
 	}
 	set clsName [$this info class]
-	set log [tdbo::FileLogger::init $clsName debug]
+	set log [::logger::init $clsName]
 }
 # ----------------------------------------------------------------------
 #

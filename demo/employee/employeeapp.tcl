@@ -9,7 +9,8 @@
 #
 # ----------------------------------------------------------------------
 
-package require tdbo
+package require logger
+package require tdbo 0.1.2
 
 set dir [file dirname [info script]]
 source [file join $dir "employee.tcl"]
@@ -17,21 +18,19 @@ source [file join $dir "address.tcl"]
 source [file join $dir "saveemployee.tcl"]
 
 # Setup logging facility
-tdbo::FileLogger::open employee.log
-set log [tdbo::FileLogger::init EmployeeApp debug]
-puts "log: $log"
+set log [::logger::init EmployeeApp]
 
 # Open SQLite Database connection
-#set db [::tdbo::SQLite #auto]
-#$db open [file join $dir "sqlite/employee.db"]
+set db [::tdbo::SQLite #auto]
+$db open [file join $dir "sqlite/employee.db"]
 
 # Open PostgreSQL Database connection
 #set db [::tdbo::PostgreSQL #auto]
 #$db open employee -user nagu -password Welcome123
 
 # Open MariaDB/MySQL Database connection
-set db [::tdbo::MariaDB #auto]
-$db open employee -user nagu -password Welcome123
+#set db [::tdbo::MariaDB #auto]
+#$db open employee -user nagu -password Welcome123
 
 # Create Employee and Address instances 
 
@@ -47,7 +46,7 @@ Address addr $db \
 ${log}::debug "Address before adding: [emp cget]"
 
 # Add Employee and Address objects to database using a transaction
-if {![saveemployee $db add emp addr]} {
+if {![saveemployee $log $db add emp addr]} {
 	${log}::error "Saving Employee failed... Please delete any pre-existing records from the table"
 	$db close
 	exit

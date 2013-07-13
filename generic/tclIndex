@@ -6,9 +6,4 @@
 # element name is the name of a command and the value is
 # a script that loads the command.
 
-set auto_index(::tdbo::FileLogger) [list source [file join $dir filelogger.tcl]]
-set auto_index(::tdbo::FileLogger::open) [list source [file join $dir filelogger.tcl]]
-set auto_index(::tdbo::FileLogger::init) [list source [file join $dir filelogger.tcl]]
-set auto_index(::tdbo::FileLogger::_log_to_file) [list source [file join $dir filelogger.tcl]]
-set auto_index(::tdbo::FileLogger::_trace_to_file) [list source [file join $dir filelogger.tcl]]
 set auto_index(::tdbo::Object) [list source [file join $dir object.tcl]]

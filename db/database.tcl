@@ -1,7 +1,7 @@
 # database.tcl --
 #
 # Generic Database interface that needs to be implemented by
-# database-specific modules (eg., sqlite, mysql, oracle etc.
+# database connectivity modules (eg., sqlite, mysql, oracle etc.)
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 #
@@ -74,7 +74,7 @@ public method close {}
 # returns : a record as a dict with fieldname-value pairs
 #
 # ----------------------------------------------------------------------
-public method get {schema_name condition {fieldslist ""}}
+public method get {schema_name fieldslist condition {format "dict"}}
 
 
 # ----------------------------------------------------------------------
@@ -86,7 +86,7 @@ public method get {schema_name condition {fieldslist ""}}
 #           that can be constructed into a dict
 #
 # ----------------------------------------------------------------------
-public method mget {schema_name args}
+public method mget {schema_name fieldslist {format "dict"} args}
 
 
 # ----------------------------------------------------------------------
@@ -203,16 +203,14 @@ protected method _prepare_insert_stmt {schema_name namevaluepairs} {
 # returns :
 #
 # ----------------------------------------------------------------------
-protected method _prepare_select_stmt {schema_name args} {
-	set fields "*"
+protected method _prepare_select_stmt {schema_name fieldslist args} {
+	set fieldslist [join $fieldslist ", "]
+
 	set condition ""
 	set groupby ""
 	set orderby ""
 	foreach {opt val} $args {
 		switch $opt {
-			-fields {
-				set fields $val
-			}
 			-condition {
 				set condition $val
 			}
@@ -227,7 +225,7 @@ protected method _prepare_select_stmt {schema_name args} {
 			}
 		}
 	}
-	set stmt "SELECT $fields FROM $schema_name"
+	set stmt "SELECT $fieldslist FROM $schema_name"
 	if [string length $condition] {
 		append stmt " WHERE $condition"
 	}

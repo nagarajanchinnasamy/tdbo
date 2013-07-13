@@ -1,7 +1,6 @@
 # sqlitedb.tcl --
 #
-# sqlite3 implementation module. Takes care of translating object methods
-# to corresponding sql queries and executes them.
+# sqlite3 connectivity module.
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 #
@@ -38,14 +37,9 @@ destructor {
 
 
 # ----------------------------------------------------------------------
-# method - open - Open a database connection. It returns an error if
-#                 the connection is already open or if the location of
-#                 the database file is not defined. Upon successful
-#                 opening of the database connection, if an initscript
-#                 is defined, it evaluates the initscript containing
-#                 sqlite SQL commands.
+# method - open - Open a database connection.
 #
-#                 Returns the sqlite connection interface command.
+#
 #
 # ----------------------------------------------------------------------
 public method open {location {initscript ""}} {
@@ -79,69 +73,36 @@ public method close {} {
 		return
 	}
 
-	catch {
-		$conn close
-	}
+	catch {$conn close}
 	unset conn
 }
 
 
 # ----------------------------------------------------------------------
-# method  - get - retrieve a single record from the table/view indicated
-#                 by schema_name by performing a select query.
 #
-# args    - schema_name - table/view on which the select query is to be
-#                         performed.
-#           condition   - list of dictionaries. Every dictionary contains
-#                         name-value pairs that will be joined with an
-#                         AND operator. The list elements are joined
-#                         with an OR operator. For e.g., the list:
+# method - get - get a record from table/view
 #
-#                          {{f1 val1 f2 val2} {f1 val3 f2 val4}}
-#
-#                         is translated into:
-#
-#                          ((f1='val1' AND f2='val2') OR
-#                                (f1='val3' AND f2='va	l4'))
-#           fieldslist  - list of field names to be retrieved using
-#                         select query
-#
+# format: one of "dict", "list"
 # ----------------------------------------------------------------------
-public method get {schema_name condition {fieldslist ""}} {
-	if {$fieldslist == ""} {
-		return [_select $schema_name -condition [_prepare_condition $condition]]
-	} else {
-		return [_select $schema_name -condition [_prepare_condition $condition] -fields $fieldslist]
-	}
-}
-
-# ----------------------------------------------------------------------
-# method  - mget - retrieve multiple records from the table/view
-#                  by performing a select query.
-#
-# args    - schema_name - table/view on which the select query is to be
-#                         performed.
-#           args        - dictionary of option-value pairs. options
-#                         supported are:
-#
-#             -fields     : list of fields to be retrieved. default
-#                           value: * (for all fields)
-#             -condition  : string in SQL to be used in WHERE clause of
-#                           the select query.
-#             -groupby    : string in SQL to be used in GROUP BY clause
-#                           of the select query.
-#             -orderby    : string in SQL to be used in ORDER BY clause
-#                           of the select query.
-#
-# ----------------------------------------------------------------------
-public method mget {schema_name args} {
-	return [_select $schema_name {*}$args]
+public method get {schema_name fieldslist condition {format "dict"}} {
+	return [_select $schema_name  $fieldslist $format -condition [_prepare_condition $condition]]
 }
 
 
 # ----------------------------------------------------------------------
-# as defined by tdbo::Database::insert method
 #
+# method - mget - get multiple records from table/view
+#
+# format: one of "dict", "llist", "list" 
+# ----------------------------------------------------------------------
+public method mget {schema_name fieldslist {format "dict"} args} {
+	return [_select $schema_name $fieldslist $format {*}$args]
+}
+
+
+# ----------------------------------------------------------------------
+#
+# method - insert - insert a record into table/view
 #
 #
 # ----------------------------------------------------------------------
@@ -157,7 +118,7 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 	}
 
 	set sequence_values [dict create]
-	set rowid [_last_insert_rowid]
+	set rowid [$conn last_insert_rowid]
 	foreach fname $sequence_fields {
 		dict set sequence_values $fname $rowid
 	}
@@ -168,7 +129,7 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 
 # ----------------------------------------------------------------------
 #
-# as defined by tdbo::Database::update method
+# method - update - update record(s) of a table/view
 #
 #
 # ----------------------------------------------------------------------
@@ -184,7 +145,7 @@ public method update {schema_name namevaluepairs {condition ""}} {
 
 # ----------------------------------------------------------------------
 #
-# as defined by tdbo::Database::delete method
+# method - delete - delete record(s) from a table/view
 #
 #
 # ----------------------------------------------------------------------
@@ -199,10 +160,8 @@ public method delete {schema_name {condition ""}} {
 
 
 # ----------------------------------------------------------------------
+#
 # method - begin a database transaction.
-#
-# args   - lock - type of lock. default value deferred. 
-#
 #
 #
 # ----------------------------------------------------------------------
@@ -212,9 +171,8 @@ public method begin {{lock deferred}} {
 
 
 # ----------------------------------------------------------------------
-# method - commit the database transaction.
 #
-# args   - none. 
+# method - commit the database transaction.
 #
 # ----------------------------------------------------------------------
 public method commit {} {
@@ -223,9 +181,9 @@ public method commit {} {
 
 
 # ----------------------------------------------------------------------
+#
 # method - rollback the database transaction.
 #
-# args   - none. 
 #
 # ----------------------------------------------------------------------
 public method rollback {} {
@@ -234,8 +192,7 @@ public method rollback {} {
 
 
 # ----------------------------------------------------------------------
-# variable conn: Variable to hold sqlite database connection interface
-#                returned by sqlite's open command.
+# variable conn: Variable to hold database connection.
 #
 #
 #
@@ -245,34 +202,41 @@ protected variable conn
 
 # ----------------------------------------------------------------------
 #
-#
-#
+# format: one of "dict", "llist", "list" 
 #
 # ----------------------------------------------------------------------
-private method _select {schema_name args} {
-	set sqlscript [_prepare_select_stmt $schema_name {*}$args
+private method _select {schema_name fieldslist {format "dict"} args} {
+	set sqlscript [_prepare_select_stmt $schema_name $fieldslist {*}$args]
+
 	set recordslist ""
-	if {[catch {
-		$conn eval $sqlscript record {
-			array unset record "\\*"
-			lappend recordslist [array get record]
-		}} err]} {
-		${log}::notice "Error: $err"
-		return
+	switch -- $format {
+		dict {
+			if {[catch {
+				$conn eval $sqlscript record {
+					array unset record "\\*"
+					lappend recordslist [array get record]
+				}} err]} {
+				return -code error $err
+			}
+		}
+		llist {
+			if {[catch {
+				$conn eval $sqlscript record {
+					array unset record "\\*"
+					lappend recordslist [dict values [array get record]]
+				}} err]} {
+				return -code error $err
+			}
+		}
+		list {
+			if {[catch {$conn eval $sqlscript} result]} {
+				return -code error $result
+			}
+			set recordslist $result 
+		}
 	}
 
 	return $recordslist
-}
-
-
-# ----------------------------------------------------------------------
-#
-#
-#
-#
-# ----------------------------------------------------------------------
-private method _last_insert_rowid {} {
-	return [$conn last_insert_rowid]
 }
 
 

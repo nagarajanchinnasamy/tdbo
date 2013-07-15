@@ -317,57 +317,6 @@ public method delete {} {
 	return $result
 }
 
-
-# ----------------------------------------------------------------------
-# method : _mget - Helper routine to retrieve multiple records from a
-#                  table / view. This proc is to be invoked from within
-#                  mget proc of a class derived from DBObject.
-#
-# args   : schema_name - name of the table/view
-#          db    - Specific tdbo::Database implementation object
-#          args  - A dict of options. This proc consumes optional
-#                  -format option from this dict. Other options are
-#                  passed to db object for processing.
-#
-#                  Allowed values for -format option are:
-#                      dict - Indicates that the records retrieved are
-#                             to be returned as a list of dictionaries.
-#                             A dictionary contains field-name-value
-#                             pairs of a record.
-#
-#                      list - Indicates that the records retrieved are
-#                             to be returned as a list of lists. A list
-#                             contains only the values of the fields
-#                             in a record.
-#
-#                  The default value for -format option is: dict
-#
-# returns : Records as defined by -format option.
-# ----------------------------------------------------------------------
-protected proc _mget {db schema_name fieldslist {format dict} args} {
-
-	if {$db == "" || ![$db isa tdbo::Database]} {
-		return -code error "Invalid db object type"
-	}
-
-	if {[catch {$db mget $schema_name $fieldslist $format {*}$args} result]} {
-		return -code error $result
-	}
-
-	if {$format == "dict"} {
-		foreach record  $records {
-			set objconfig [dict create]
-			dict for {fname val} $record {
-				dict set objconfig "-$fname" "$val"
-			}
-			lappend result $objconfig
-		}
-	}
-
-	return $result
-}
-
-
 # ----------------------------------------------------------------------
 # method  : define_primarykey - method to be invoked by derived classes
 #                               from within _define_primarykey method.

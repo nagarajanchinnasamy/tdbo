@@ -186,16 +186,23 @@ public method get {args} {
 		return -code error "Multiple records retrieved in get operation"
 	}
 
-	set objcfg [dict create]
-	dict for {fname val} [lindex $result 0] {
-		dict set objcfg "-$fname" "$val"
-	}
-		
-	if {[dict size $objcfg]} {
-		$this configure {*}[dict get $objcfg]
+	set objcfg [lindex $result 0]
+	if {[llength $objcfg]} {
+		$this configure {*}$objcfg
 	}
 
 	return $objcfg
+
+	#~ set objcfg [dict create]
+	#~ dict for {fname val} [lindex $result 0] {
+		#~ dict set objcfg "-$fname" "$val"
+	#~ }
+		#~ 
+	#~ if {[dict size $objcfg]} {
+		#~ $this configure {*}[dict get $objcfg]
+	#~ }
+#~ 
+	#~ return $objcfg
 }
 
 
@@ -262,7 +269,8 @@ public method save {args} {
 	}
 
 	if {[catch {$db update [${clsName}::schema_name] $namevaluepairs [__get_condition]} result]} {
-		return -code error $result
+		${log}::error $result
+		return 0
 	}
 
 	return $result
@@ -307,7 +315,8 @@ public method save {args} {
 # ----------------------------------------------------------------------
 public method delete {} {
 	if {[catch {$db delete [${clsName}::schema_name] [__get_condition]} result]} {
-		return -code error $result
+		${log}::error $result
+		return 0
 	}
 
 	if {$result} {
@@ -325,7 +334,7 @@ public method delete {} {
 # returns : none
 # ----------------------------------------------------------------------
 protected method define_primarykey {args} {
-	set fields($clsName,pklist) [list {*}$args]
+	set fields($clsName,pklist) $args
 }
 
 
@@ -338,7 +347,7 @@ protected method define_primarykey {args} {
 # returns : none
 # ----------------------------------------------------------------------
 protected method define_unique {args} {
-	set fields($clsName,uqlist) [list {*}$args]
+	set fields($clsName,uqlist) $args
 }
 
 
@@ -352,7 +361,7 @@ protected method define_unique {args} {
 # returns : none
 # ----------------------------------------------------------------------
 protected method define_autoincrement {args} {
-	set fields($clsName,sqlist) [list {*}$args]
+	set fields($clsName,sqlist) $args
 }
 
 
@@ -497,7 +506,11 @@ private method __make_keyvaluepairs { fieldslist } {
 			if {[set val [$this cget -$field]] == "<undefined>"} {
 				return ""
 			}
-			lappend keyslist $field $val
+			if {$val == "<null>"} {
+				lappend keyslist $field "IS NULL"
+			} else {
+				lappend keyslist $field '$val'
+			}
 		}
 	}
 
@@ -516,7 +529,11 @@ private method __make_namevaluepairs { fieldslist } {
 	if [llength $fieldslist] {
 		foreach field $fieldslist {
 			if {[set val [$this cget -$field]] != "<undefined>"} {
-				lappend namevaluepairs $field $val
+				if {$val == "<null>"} {
+					lappend namevaluepairs $field NULL
+				} else {
+					lappend namevaluepairs $field '$val'
+				}
 			}
 		}
 	}

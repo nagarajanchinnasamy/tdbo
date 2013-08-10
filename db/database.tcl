@@ -86,7 +86,7 @@ public method get {schema_name fieldslist condition {format "dict"}}
 #           that can be constructed into a dict
 #
 # ----------------------------------------------------------------------
-public method mget {schema_name fieldslist {format "dict"} args}
+public method mget {schema_name args}
 
 
 # ----------------------------------------------------------------------
@@ -186,7 +186,7 @@ protected method _prepare_insert_stmt {schema_name namevaluepairs} {
 	set fnamelist [join [dict keys $namevaluepairs] ", "]
 	set valuelist [list]
 	foreach value [dict values $namevaluepairs] {
-		lappend valuelist '$value'
+		lappend valuelist $value
 	} 
 	set valuelist [join $valuelist ", "]
 
@@ -203,8 +203,8 @@ protected method _prepare_insert_stmt {schema_name namevaluepairs} {
 # returns :
 #
 # ----------------------------------------------------------------------
-protected method _prepare_select_stmt {schema_name fieldslist args} {
-	set fieldslist [join $fieldslist ", "]
+protected method _prepare_select_stmt {schema_name args} {
+	set fieldslist "*"
 
 	set condition ""
 	set groupby ""
@@ -219,6 +219,9 @@ protected method _prepare_select_stmt {schema_name fieldslist args} {
 			}
 			-orderby {
 				set orderby $val
+			}
+			-fields {
+				set fieldslist [join $val ", "]
 			}
 			default {
 				return -code error "Unknown option: $opt"
@@ -251,7 +254,7 @@ protected method _prepare_select_stmt {schema_name fieldslist args} {
 protected method _prepare_update_stmt {schema_name namevaluepairs {condition ""}} {
 	set setlist ""
 	foreach {name val} $namevaluepairs {
-		lappend setlist "$name='$val'"
+		lappend setlist "$name=$val"
 	}
 	set setlist [join $setlist ", "]
 
@@ -293,7 +296,11 @@ protected method _prepare_condition {conditionlist} {
 	foreach condition $conditionlist {
 		set complist [list]
 		foreach {fname val} $condition {
-			lappend complist "$fname='$val'"
+			if {$val == "IS NULL"} {
+				lappend complist "$fname $val"
+			} else {
+				lappend complist "$fname=$val"
+			}
 		}
 		if {$complist != ""} {
 			lappend sqlcondition "([join $complist " and "])"

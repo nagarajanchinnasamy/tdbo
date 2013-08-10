@@ -85,7 +85,7 @@ public method close {} {
 # format: one of "dict", "list"
 # ----------------------------------------------------------------------
 public method get {schema_name fieldslist condition {format "dict"}} {
-	return [_select $schema_name  $fieldslist $format -condition [_prepare_condition $condition]]
+	return [_select $schema_name -fields $fieldslist -format $format -condition [_prepare_condition $condition]]
 }
 
 
@@ -95,8 +95,8 @@ public method get {schema_name fieldslist condition {format "dict"}} {
 #
 # format: one of "dict", "llist", "list" 
 # ----------------------------------------------------------------------
-public method mget {schema_name fieldslist {format "dict"} args} {
-	return [_select $schema_name $fieldslist $format {*}$args]
+public method mget {schema_name args} {
+	return [_select $schema_name {*}$args]
 }
 
 
@@ -205,8 +205,14 @@ protected variable conn
 # format: one of "dict", "llist", "list" 
 #
 # ----------------------------------------------------------------------
-private method _select {schema_name fieldslist {format "dict"} args} {
-	set sqlscript [_prepare_select_stmt $schema_name $fieldslist {*}$args]
+private method _select {schema_name args} {
+	set format "dict"
+	if {[dict exists $args -format]} {
+		set format [dict get $args -format]
+		dict unset args -format
+	}
+
+	set sqlscript [_prepare_select_stmt $schema_name {*}$args]
 
 	set recordslist ""
 	switch -- $format {
@@ -214,7 +220,11 @@ private method _select {schema_name fieldslist {format "dict"} args} {
 			if {[catch {
 				$conn eval $sqlscript record {
 					array unset record "\\*"
-					lappend recordslist [array get record]
+					set reccfg [dict create]
+					dict for {f v} [array get record] {
+						dict set reccfg "-$f" "$v"
+					}
+					lappend recordslist [dict get $reccfg]
 				}} err]} {
 				return -code error $err
 			}

@@ -44,7 +44,7 @@ Simple steps to use this package are:
 			}
 		}
 
-3. Now in your main application, create a database implementation interface:
+3. Now in your main application, instantiate a database connectivity implementation:
 
 		set db [tdbo::SQLite #auto -location mytest/test.db]
 		$db open
@@ -70,4 +70,4 @@ Simple steps to use this package are:
 		puts [emp cget]
 
 
-For more details please visit: http://nagarajanchinnasamy.blogspot.in/
+For more details please refer to the documentation and examples in demo folder.

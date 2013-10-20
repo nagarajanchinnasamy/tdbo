@@ -70,4 +70,8 @@ Simple steps to use this package are:
 		puts [emp cget]
 
 
+<<<<<<< HEAD
 For more details please refer to the documentation and examples in demo folder.
+=======
+For more detailed examples please check demo foler.
+>>>>>>> fb682c7c6bb635707539905a017a00d659d37f80

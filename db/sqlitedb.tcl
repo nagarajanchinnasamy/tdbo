@@ -84,8 +84,8 @@ public method close {} {
 #
 # format: one of "dict", "list"
 # ----------------------------------------------------------------------
-public method get {schema_name fieldslist condition {format "dict"}} {
-	return [_select $schema_name -fields $fieldslist -format $format -condition [_prepare_condition $condition]]
+public method get {schema_name fieldslist conditionlist {format "dict"}} {
+	return [_select $schema_name -fields $fieldslist -format $format -condition [_prepare_condition $conditionlist]]
 }
 
 
@@ -133,8 +133,8 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 #
 #
 # ----------------------------------------------------------------------
-public method update {schema_name namevaluepairs {condition ""}} {
-	set sqlscript [_prepare_update_stmt $schema_name $namevaluepairs $condition]
+public method update {schema_name namevaluepairs {conditionlist ""}} {
+	set sqlscript [_prepare_update_stmt $schema_name $namevaluepairs $conditionlist]
 	if {[catch {$conn eval $sqlscript} err]} {
 		return -code error $err
 	}
@@ -149,8 +149,8 @@ public method update {schema_name namevaluepairs {condition ""}} {
 #
 #
 # ----------------------------------------------------------------------
-public method delete {schema_name {condition ""}} {
-	set sqlscript [_prepare_delete_stmt $schema_name $condition]
+public method delete {schema_name {conditionlist ""}} {
+	set sqlscript [_prepare_delete_stmt $schema_name $conditionlist]
 	if {[catch {$conn eval $sqlscript} err]} {
 		return -code error $err
 	}

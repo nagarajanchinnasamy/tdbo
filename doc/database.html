@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+      "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <title>database</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>tdbo::SQLite</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css" title="Amaya theme">
 /* Modern style for Amaya Editor Lite */
 
@@ -160,82 +159,117 @@ a[href] {
     text-decoration: underline;
    }
 
+hr {
+  border: 0;
+  width: 100%;
+  color: #f00;
+  background-color: #f00;
+  height: 1px;
+}
+
+th {
+  background-color: #CCCCFF;
+  text-align: left;
+}
+
+td {
+  vertical-align: top;
+}
+
 /* end */
   </style>
 </head>
 
 <body>
+<h1><a href="index.html">TDBO</a> - Tcl DataBase Object</h1>
+<br>
+<br>
 
-<table border="1" style="width: 100%">
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
+
+<table border="0" style="width: 100%">
+  <col>
   <tbody>
     <tr>
-      <td align="center" colspan="6"><a href="reference.html">Table Of
+      <td align="center" colspan="1"><a href="reference.html">Table Of
         Contents</a></td>
     </tr>
-    <tr>
-      <td><a href="#ClassSummary">Class Summary</a></td>
-      <td><a href="#Inheritance">Inheritance</a></td>
-      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
-      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
-      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
-      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
-    </tr>
   </tbody>
 </table>
+<br>
+<br>
+<a id="Sections"></a> 
 
-<p></p>
+<h3>Sections</h3>
+<dl>
+    <dd><a href="#ClassSummary">Class Summary</a></dd>
+    <dd><a href="#Inheritance">Inheritance</a></dd>
+    <dd><a href="#ConstructorSummary">Constructor Summary</a></dd>
+    <dd><a href="#ProcMethodsSummary">Proc/Methods Summary</a></dd>
+    <dd><a href="#ConstructorDetail">Constructor Detail</a></dd>
+    <dd><a href="#ProcMethodDetail">Proc/Method Detail</a></dd>
+</dl>
+<br>
+<br>
 
-<table border="1" style="width: 100%">
-  <col />
-  <tbody>
-    <tr>
-      <td colspan="1"><strong><a id="ClassSummary"></a>Class:
-        tdbo::Database</strong></td>
-    </tr>
-    <tr>
-      <td>Generic Database Connectivity Interface that needs to be implemented
-        by specific <a href="reference.html">Database Connectivity
-        Implementations</a> such as <a href="sqlite.html">SQLite</a>, MySQL
-        etc. This class defines interfaces that must be adhered to by database
-        connectivity implementations such as SQLite, MySQL etc. This is an
-        abstract class and cannot be instantiated directly.</td>
-    </tr>
-  </tbody>
-</table>
-
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
   <tbody>
     <tr>
-      <td colspan="1"><strong><a id="Inheritance"></a>Inherits:
-        tdbo::Object</strong></td>
+      <th><strong><a id="ClassSummary"></a>Class: tdbo::Database</strong></th>
     </tr>
     <tr>
-      <td>Methods: cget, clear, configure 
+      <td><p>Generic Database Connectivity Interface that gets implemented by
+        specific Database Connectivity Implementations such as <a
+        href="sqlite.html">tdbo::SQLite</a>, <a
+        href="mariadb.html">tdbo::MariaDB</a>, <a
+        href="postgresql.html">tdbo::PostgreSQL</a> etc. For e.g., if you would
+        like to extend tdbo to support ODBC, then you would write tdbo::ODBC
+        class that inhertis this class and implement the interfaces defined in
+        this class. To extend tdbo, you can use one of the existing
+        implementation classes as a starting point and alter the code specific
+        to your database driver implementation. This is an abstract class and
+        cannot be instantiated directly.</p>
 
-        <p>Variables: clsName, log</p>
+        <p><strong>NOTE: </strong>As this class is meant for developers of
+        Database Connectivity Implementations, DAO developers can skip this
+        documentation and refer to the documentation of specific database
+        connectivity implementation.</p>
       </td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
-  <col />
   <tbody>
     <tr>
-      <td colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
-        Summary</strong></td>
+      <th><strong><a id="Inheritance"></a>Inherits: <a
+        href="object.html">tdbo::Object</a></strong></th>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td>Methods: <a href="object.html#cget">cget</a>, <a
+        href="object.html#clear">clear</a>, <a
+        href="object.html#configure">configure</a> 
+
+        <p>Variables: <a href="object.html#clsName">clsName</a>, <a
+        href="object.html#log">log</a></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr>
+      <th colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
+        Summary</strong></th>
     </tr>
     <tr>
       <td><a href="#constructor">constructor {}</a></td>
@@ -243,49 +277,99 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
   <tbody>
     <tr>
-      <td colspan="2"><strong><a id="ProcMethodsSummary"></a>Procs/Methods
-        Summary</strong></td>
+      <th colspan="2"><strong><a id="ProcMethodsSummary"></a>Procs/Methods
+        Summary</strong></th>
     </tr>
     <tr>
-      <td align="right"><code>public method</code> </td>
-      <td><code><a href="#open">open {args}</a></code> 
+      <td nowrap="nowrap" align="right"><code>protected method</code> </td>
+      <td><code><a href="#pcondition">_prepare_condition
+        {conditionlist}</a></code> 
 
-        <p>Establish connection to the database. Pure virtual function to be
-        implemented by derived classes.</p>
+        <p>Prepare the condition to be used in WHERE clause of an SQL
+        statement.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#pdelete">_prepare_delete_stmt {schema_name {condition
+        ""}}</a></code> 
+
+        <p>Prepare DELETE statement.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#pinsert">_prepare_insert_stmt {schema_name
+        namevaluepairs}</a></code> 
+
+        <p>Prepare INSERT statement.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#pselect">_prepare_select_stmt {schema_name
+        args}</a></code> 
+
+        <p>Prepare SELECT statement.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>protected method</code> </td>
+      <td><code><a href="#pupdate">_prepare_update_stmt {schema_name
+        namevaluepairs {condition ""}}</a></code> 
+
+        <p>Prepare UPDATE statement.</p>
+      </td>
+    </tr>
+    <tr>
+      <td nowrap="nowrap" align="right"><code>public method</code> </td>
+      <td><code><a href="#begin">begin {args} </a></code> 
+
+        <p>Begin a database transaction. Pure virtual function / interface to
+        be implemented by derived classes.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
       <td><code><a href="#close">close {}</a></code> 
 
-        <p>Close the database connection. Pure virtual function to be
-        implemented by derived classes.</p>
+        <p>Close the database connection. Pure virtual function / interface to
+        be implemented by derived classes.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#get">get {schema_name condition {fieldslist
-        ""}}</a></code> 
+      <td><code><a href="#commit">commit {args} </a></code> 
+
+        <p>Commit the currently active database transaction. Pure virtual
+        function / interface to be implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#delete">delete {schema_name {conditionlist ""}}
+        </a></code> 
+
+        <p>Delete one or more records that meet the <code>condition</code> from
+        the table/view indicated by <code>schema_name</code>. Pure virtual
+        function / interface to be implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#get">get {schema_name fieldslist conditionlist
+        {format "dict"}}</a></code> 
 
         <p>Retrieve a record, that meets the <code>condition</code>, from a
         table/view indicated by <code>schema_name</code>. Pure virtual function
-        to be implemented by derived classes.</p>
-      </td>
-    </tr>
-    <tr>
-      <td align="right"><code>public method</code> </td>
-      <td><code><a href="#get">mget {schema_name args} </a></code> 
-
-        <p>Retrieve multiple records from a table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
+        / interface to be implemented by derived classes.</p>
       </td>
     </tr>
     <tr>
@@ -293,55 +377,44 @@ a[href] {
       <td><code><a href="#insert">insert {schema_name namevaluepairs
         {sequence_fields ""}}</a></code> 
 
-        <p>Insert a new record into the table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
-      </td>
-    </tr>
-    <tr>
-      <td align="right"><code>public method</code> </td>
-      <td><code><a href="#update">update {schema_name namevaluepairs {condition
-        ""}} </a></code> 
-
-        <p>Update one or more existing records, that meet the
-        <code>condition</code>, of the table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
-      </td>
-    </tr>
-    <tr>
-      <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">delete {schema_name {condition ""}}
-        </a></code> 
-
-        <p>Delete one or more existing records, that meet the
-        <code>condition</code>, from the table/view indicated by
-        <code>schema_name</code>. Pure virtual function to be implemented by
-        derived classes.</p>
-      </td>
-    </tr>
-    <tr>
-      <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">begin {args} </a></code> 
-
-        <p>Begin a database transaction. Pure virtual function to be
+        <p>Insert a new record into the table / view indicated by
+        <code>schema_name</code>. Pure virtual function / interface to be
         implemented by derived classes.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">commit {args} </a></code> 
+      <td><code><a href="#mget">mget {schema_name args} </a></code> 
 
-        <p>Commit the currently active database transaction. Pure virtual
-        function to be implemented by derived classes.</p>
+        <p>Retrieve multiple records from a table / view indicated by
+        <code>schema_name</code>. Pure virtual function / interface to be
+        implemented by derived classes.</p>
       </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#delete">rollback {args} </a></code> 
+      <td><code><a href="#open">open {args}</a></code> 
 
-        <p>Rollback the currently active database transaction. Pure virtual
-        function to be implemented by derived classes.</p>
+        <p>Establish connection to the database. Pure virtual function /
+        interface to be implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#rollback">rollback {args} </a></code> 
+
+        <p>Rollback currently active database transaction. Pure virtual
+        function / interface to be implemented by derived classes.</p>
+      </td>
+    </tr>
+    <tr>
+      <td align="right"><code>public method</code> </td>
+      <td><code><a href="#update">update {schema_name namevaluepairs
+        {conditionlist ""}} </a></code> 
+
+        <p>Update one or more records, that meet the <code>condition</code>, of
+        the table / view indicated by <code>schema_name</code>. Pure virtual
+        function / interface to be implemented by derived classes.</p>
       </td>
     </tr>
   </tbody>
@@ -350,10 +423,9 @@ a[href] {
 <p></p>
 
 <table border="1" style="width: 100%">
-  <col />
   <tbody>
     <tr>
-      <td><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></td>
+      <th><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></th>
     </tr>
     <tr>
       <td><dl>
@@ -371,40 +443,209 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
   <tbody>
     <tr>
-      <td><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></td>
+      <th><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></th>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><strong><a id="pcondition">protected method
+          _prepare_condition {conditionlist}</a></strong></code> </dt>
+            <dd><p>Prepares the condition to be used in WHERE clause of an SQL
+              statement. Implementations mostly invoke this helper method from
+              <a href="#get">get</a> method. When supplied with a list of
+              dictionaries where each dictionary containing fieldname-value
+              pairs (For e.g., <code>{{f1 val1 f2 val2} {f1 val3 f3
+              val4}}</code>) it places an = between fieldname and value and
+              quotes the value (e.g., f1='val1'), then joins the pairs with AND
+              (e.g., f1='val1' AND f2='val2') and then joins the dictionaries
+              with an OR (e.g., ((f1='val1' AND f2='val2') OR (f1='val3' AND
+              f3='val4'))). A value of IS NULL is treated specially by only
+              separating the fieldname and value by space (e.g., f1 IS
+              NULL).</p>
+            </dd>
+            <dd></dd>
+            <dd><dl>
+                <dt>Parameters:</dt>
+                  <dd><dl>
+                      <dt>conditionlist</dt>
+                        <dd>List of dictionaries where each dictionary
+                          containing fieldname-value pairs (For e.g.,
+                          <code>{{f1 val1 f2 val2} {f1 val3 f3
+                        val4}}</code>).</dd>
+                    </dl>
+                  </dd>
+                <dt>Returns:</dt>
+                  <dd>The condition to be used in WHERE clause. </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><strong><a id="pdelete">protected method
+          _prepare_delete_stmt {schema_name {conditionlist
+          ""}}</a></strong></code> </dt>
+            <dd>Prepares DELETE statement. Implementations invoke this helper
+              method from within <a href="#delete">delete</a> method.</dd>
+            <dd><dl>
+                <dt>Parameters:</dt>
+                  <dd><dl>
+                      <dt>schema_name</dt>
+                        <dd>Name of the table / view.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>conditionlist</dt>
+                        <dd>List of dictionaries where each dictionary
+                          containing fieldname-value pairs (For e.g.,
+                          <code>{{f1 val1 f2 val2} {f1 val3 f3 val4}}</code>).
+                          This argument is passed to <a
+                          href="#pcondition">_prepare_condition</a> method to
+                          prepare the condition to be used in WHERE clause.</dd>
+                    </dl>
+                  </dd>
+                <dt>Returns:</dt>
+                  <dd>DELETE statement. </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><strong><a id="pinsert">protected method
+          _prepare_insert_stmt {schema_name namevaluepairs}</a></strong></code>
+          </dt>
+            <dd>Prepares INSERT statement. Implementations invoke this helper
+              method from within <a href="#insert">insert</a> method.</dd>
+            <dd><dl>
+                <dt>Parameters:</dt>
+                  <dd><dl>
+                      <dt>schema_name</dt>
+                        <dd>Name of the table / view.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>namevaluepairs</dt>
+                        <dd>A dictionary of fieldname-value pairs (For e.g.,
+                          <code>{f1 val1 f2 val2}</code>) representing the
+                          fields and their respective values to be inserted
+                          into the table.</dd>
+                    </dl>
+                  </dd>
+                <dt>Returns:</dt>
+                  <dd>INSERT statement. </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><strong><a id="pselect">protected method
+          _prepare_select_stmt {schema_name args}</a></strong></code> </dt>
+            <dd>Prepares SELECT statement. Implementations invoke this helper
+              method from within <a href="#get">get</a> and <a
+              href="#mget">mget</a> methods.</dd>
+            <dd><dl>
+                <dt>Parameters:</dt>
+                  <dd><dl>
+                      <dt>schema_name</dt>
+                        <dd>Name of the table / view.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>args</dt>
+                        <dd>A dictionary of option-value pairs. Supported
+                          options are: -condition, -groupby, -orderby and
+                          -fields. Value for -condition option is a string
+                          containing the condition to be used in WHERE clause.
+                          Implementations invoke <a
+                          href="#pcondition">_prepare_condition</a> method to
+                          form the condition string. Value for -groupby should
+                          be a string with valid GROUP BY term. Value for
+                          -orderby should be a string with valid ORDER BY
+                        term.</dd>
+                    </dl>
+                  </dd>
+                <dt>Returns:</dt>
+                  <dd>SELECT statement. </dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
+    </tr>
+    <tr>
+      <td><dl>
+          <dt><code><strong><a id="pupdate">protected method
+          _prepare_update_stmt {schema_name namevaluepairs {conditionlist
+          ""}}</a></strong></code> </dt>
+            <dd>Prepares UPDATE statement. Implementations invoke this helper
+              method from within update method.</dd>
+            <dd><dl>
+                <dt>Parameters:</dt>
+                  <dd><dl>
+                      <dt>schema_name</dt>
+                        <dd>Name of the table / view.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>namevaluepairs</dt>
+                        <dd>A dictionary of fieldname-value pairs (For e.g.,
+                          <code>{f1 val1 f2 val2}</code>) representing the
+                          fields and their respective values to be inserted
+                          into the table.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>conditionlist</dt>
+                        <dd>List of dictionaries where each dictionary
+                          containing fieldname-value pairs (For e.g.,
+                          <code>{{f1 val1 f2 val2} {f1 val3 f3 val4}}</code>).
+                          This argument is passed to <a
+                          href="#pcondition">_prepare_condition</a> method to
+                          prepare the condition to be used in WHERE clause.</dd>
+                    </dl>
+                  </dd>
+                <dt>Returns:</dt>
+                  <dd>UPDATE statement.</dd>
+              </dl>
+            </dd>
+        </dl>
+      </td>
     </tr>
     <tr>
       <td><dl>
           <dt><code><strong><a id="open">public method open
           {args}</a></strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes. The
-              implementation (such as SQLite etc.) is expected to obtain
-              parameters that are necessary to establish connection to the
-              database.</dd>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Establishes a connection to the database.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
                       <dt>args</dt>
                         <dd>Implementation specific. Implementations (such as
-                          SQLite etc.) are expected to obtain necessary
-                          parameters to establish connection to the
-                        database.</dd>
+                          SQLite etc.) are expected to obtain from users
+                          necessary parameters to establish connection to the
+                          database.</dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
-                  <dd>The connection object on successfully establishing the
-                    connection to database. Empty string to indicate a failure.
-                  </dd>
+                  <dd>Implementations to return the connection object upon
+                    successfully establishing the connection to database. </dd>
               </dl>
               <dl>
                 <dt>Throws:</dt>
-                  <dd>Error if an opened connection already exists.</dd>
+                  <dd>Implementations to throw an error if establishing
+                    connection to database fails or an opened connection
+                    already exists.</dd>
               </dl>
             </dd>
         </dl>
@@ -414,9 +655,9 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="close"></a>public method close
           {}</strong></code></dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Implementations (such as SQLite etc.) are expected to close the
-              database connection. When attempted to close a non-existent
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Implementations are expected to close the database
+              connection. When an attempt is made to close an already closed
               connection, it is suggested not to throw any error.</dd>
         </dl>
       </td>
@@ -424,43 +665,55 @@ a[href] {
     <tr>
       <td><dl>
           <dt><code><strong><a id="get"></a>public method get {schema_name
-          condition {fieldslist ""}}</strong></code></dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Retrieves a record, that meets the <code>condition</code>, from a
-              table/view indicated by <code>schema_name</code>.</dd>
+          fieldslist conditionlist {format "dict"}}</strong></code></dt>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Retrieves a record, that is uniquely identified by the
+              <code>condition</code>, from a table / view indicated by
+              <code>schema_name</code>. Implementations invoke <a
+              href="#pselect">_prepare_select_stmt</a> helper method to prepare
+              the SELECT statement.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
                       <dt>schema_name</dt>
-                        <dd>name of the table/view from where the record is to
-                          be retrieved from the database.</dd>
-                    </dl>
-                  </dd>
-                  <dd><dl>
-                      <dt>condition</dt>
-                        <dd>list of dictionaries. Every dictionary contains
-                          fieldname-value pairs that will be joined with an AND
-                          operator. The list elements are joined with an OR
-                          operator. For e.g., the list of dictionaries
-                          <code>{{f1 val1 f2 val2} {f1 val3 f2 val4}}</code> is
-                          translated into <code>((f1='val1' AND f2='val2') OR
-                          (f1='val3' AND f2='val4'))</code> that will be used
-                          in <code>WHERE</code> clause of <code>SELECT</code>
-                          query to retrieve a record.</dd>
+                        <dd>Name of the table / view. To be passed to <a
+                          href="#pselect">_prepare_select_stmt</a> helper
+                          method.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
                       <dt>fieldslist</dt>
-                        <dd>optional list of field names of the record that
-                          needs to be retrieved. If this argument is not
-                          provided, all fields of the record will be
-                        retrieved.</dd>
+                        <dd>List of field names of the record that needs to be
+                          retrieved. To be passed to <a
+                          href="#pselect">_prepare_select_stmt</a> helper
+                          method as the value for -fields option.</dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>conditionlist</dt>
+                        <dd>List of dictionaries with each dictionary
+                          containing fieldname-value pairs (e.g., {{f1 val1 f2
+                          val2} {f1 val3 f3 val4}}). Implementations invoke <a
+                          href="#pcondition">_prepare_condition</a> method to
+                          prepare the condition that in turn to be passed to <a
+                          href="#pselect">_prepare_select_stmt</a> helper
+                          method as the value for -condition option. </dd>
+                    </dl>
+                  </dd>
+                  <dd><dl>
+                      <dt>format</dt>
+                        <dd>Specifies the format in which the result is to be
+                          returned. The value for this option can be either
+                          dict or list. Default value is dict. Implementations
+                          are expected to format the result accordingly and
+                          return as a result of this method. </dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
-                  <dd>fieldname-value pairs retrieved from database as a Tcl
-                    dictionary. If the retrieval does not return any record
-                    from database, then the result will be an empty string.</dd>
+                  <dd>Implementations to return fieldname-value pairs or a list
+                    of values as indicated by format argument. If the execution
+                    of SELECT statement does not return any record from
+                    database, then an empty string should be returned.</dd>
               </dl>
             </dd>
         </dl>
@@ -470,32 +723,39 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="mget"></a>public method mget {schema_name
           args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Retrieve multiple records from a table/view indicated by
-              <code>schema_name</code>. </dd>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Retrieves multiple records from a table / view indicated
+              by <code>schema_name</code>. Implementations invoke <a
+              href="#pselect">_prepare_select_stmt</a> helper method to prepare
+              the SELECT statement.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
                       <dt>schema_name</dt>
-                        <dd>name of the table/view from where the record is to
-                          be retrieved from the database.</dd>
+                        <dd>Name of the table / view. To be passed to <a
+                          href="#pselect">_prepare_select_stmt</a> helper
+                          method.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
                       <dt>args</dt>
-                        <dd>Implementation specific. Implementations (such as
-                          SQLite etc.) are expected to obtain necessary
-                          parameters to support various features of SELECT
-                          statement in SQL. Suggested parameters are:
-                          <code>-fields</code>, <code>-condition</code>,
-                          <code>-orderby</code> and <code>-groupby</code>.</dd>
+                        <dd>Optional dictionary of option-value pairs.
+                          Implementations are expected to support -condition,
+                          -groupby, -orderby, -fields and -format options.
+                          Implementations can pass these options (except
+                          -format) to <a
+                          href="#pselect">_prepare_select_stmt</a> method to
+                          form the SELECT statement. -format option is expected
+                          take any one of dict, list, llist as its value. dict
+                          is the default value for -format option. In addition
+                          to these options, implementations can choose to
+                          support other options.</dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
-                  <dd>list of dictionaries where each dictionary represents a
-                    record with fieldname-value pairs. If the retrieval does
-                    not return any record from database, then the result will
-                    be an empty string.</dd>
+                  <dd>Result set in the format indicated by -format option. An
+                    empty string should be returned if the SELECT statement
+                    does not return any record.</dd>
               </dl>
             </dd>
         </dl>
@@ -506,35 +766,42 @@ a[href] {
           <dt><code><strong><a id="insert"></a>public method insert
           {schema_name namevaluepairs {sequence_fields ""}}</strong></code>
           </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Insert a new record into the table/view indicated by
-              <code>schema_name</code>.</dd>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Inserts a new record into the table / view indicated by
+              <code>schema_name</code>. Implementations invoke <a
+              href="#pinsert">_prepare_insert_stmt</a> helper method to prepare
+              the INSERT statement.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
                       <dt>schema_name</dt>
-                        <dd>name of the table/view into which the record is to
-                          be inserted.</dd>
+                        <dd>Name of the table / view. To be passed to <a
+                          href="#pinsert">_prepare_insert_stmt</a> method. </dd>
                     </dl>
                   </dd>
                   <dd><dl>
                       <dt>namevaluepairs</dt>
-                        <dd>A dictionary containing fieldname-value pairs.</dd>
+                        <dd>A dictionary of fieldname-value pairs (For e.g.,
+                          <code>{f1 val1 f2 val2}</code>) representing the
+                          fields and their respective values to be inserted
+                          into the table. To be passed to <a
+                          href="#pinsert">_prepare_insert_stmt</a> method.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
                       <dt>sequence_fields</dt>
-                        <dd>optional list of field names that are
-                          sequence/auto-increment fields. Upon successful
-                          insertion of the record, this method returns the new
-                          sequence values of these fields as part of the
-                        result.</dd>
+                        <dd>Optional list of field names that are sequence /
+                          auto-increment fields. Upon successful insertion of
+                          the record, implementations are expected to return
+                          the new sequence values of these fields as a
+                          dictionary of sequence_fieldname-value pairs as part
+                          of the result.</dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
                   <dd>The status of insert operation. A value greater than zero
                     indicates success. When <code>sequence_fields</code> is
-                    non-empty, the return value will be a list containing two
+                    non-empty, the return value should be a list containing two
                     elements: First element is the status of insert operation
                     and the second is a dictionary of sequence_fieldname-value
                     pairs.</dd>
@@ -546,39 +813,42 @@ a[href] {
     <tr>
       <td><dl>
           <dt><code><strong><a id="update"></a>public method update
-          {schema_name namevaluepairs {condition ""}}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Update one or more existing records, that meet the
-              <code>condition</code>, of the table/view indicated by
-              <code>schema_name</code>.</dd>
+          {schema_name namevaluepairs {conditionlist ""}}</strong></code> </dt>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Updates one or more existing records, that meet the
+              <code>condition</code>, in the table / view indicated by
+              <code>schema_name</code>. Implementations invoke <a
+              href="#pupdate">_prepare_update_stmt</a> helper method to prepare
+              the UPDATE statement.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
                       <dt>schema_name</dt>
-                        <dd>name of the table/view into which the record is to
-                          be inserted.</dd>
+                        <dd>Name of the table / view. To be passed to <a
+                          href="#pupdate">_prepare_update_stmt</a> method.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
                       <dt>namevaluepairs</dt>
-                        <dd>A dictionary containing fieldname-value pairs.</dd>
+                        <dd>A dictionary of fieldname-value pairs (For e.g.,
+                          <code>{f1 val1 f2 val2}</code>) representing the
+                          fields and their respective values to be updated in
+                          the table. To be passed to <a
+                          href="#pupdate">_prepare_update_stmt</a> method.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>condition</dt>
+                      <dt>conditionlist</dt>
                         <dd>Optional list of dictionaries where each dictionary
-                          contains fieldname-value pairs that will be joined
-                          with an AND operator. The list elements are joined
-                          with an OR operator. For e.g., the list of
-                          dictionaries <code>{{f1 val1 f2 val2} {f1 val3 f2
-                          val4}}</code> is translated into <code>((f1='val1'
-                          AND f2='val2') OR (f1='val3' AND f2='val4'))</code>
-                          that will be used in <code>WHERE</code> clause of
-                          <code>UPDATE</code> query to update the records.</dd>
+                          containing fieldname-value pairs (For e.g.,
+                          <code>{{f1 val1 f2 val2} {f1 val3 f3 val4}}</code>).
+                          To be passed to <a
+                          href="#pupdate">_prepare_update_stmt</a> method. </dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
-                  <dd>Number of records that are updated.</dd>
+                  <dd>Implementations are expected to return number of records
+                    that are updated.</dd>
               </dl>
             </dd>
         </dl>
@@ -587,34 +857,33 @@ a[href] {
     <tr>
       <td><dl>
           <dt><code><strong><a id="delete"></a>public method delete
-          {schema_name {condition ""}}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Delete one or more existing records, that meet the
-              <code>condition</code>, from the table/view indicated by
-              <code>schema_name</code>. </dd>
+          {schema_name {conditionlist ""}}</strong></code> </dt>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Deletes one or more existing records, that meet the
+              <code>condition</code>, from the table / view indicated by
+              <code>schema_name</code>. Implementations invoke <a
+              href="#pdelete">_prepare_delete_stmt</a> helper method to prepare
+              the UPDATE statement.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
                       <dt>schema_name</dt>
-                        <dd>name of the table/view into which the record is to
-                          be inserted.</dd>
+                        <dd>Name of the table / view. To be passed to <a
+                          href="#pdelete">_prepare_delete_stmt</a> method.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>condition</dt>
-                        <dd>Optional list of dictionaries. Every dictionary
-                          contains fieldname-value pairs that will be joined
-                          with an AND operator. The list elements are joined
-                          with an OR operator. For e.g., the list of
-                          dictionaries <code>{{f1 val1 f2 val2} {f1 val3 f2
-                          val4}}</code> is translated into <code>((f1='val1'
-                          AND f2='val2') OR (f1='val3' AND f2='val4'))</code>
-                          that will be used in <code>WHERE</code> clause of
-                          <code>DELETE</code> query to delete the records.</dd>
+                      <dt>conditionlist</dt>
+                        <dd>Optional list of dictionaries where each dictionary
+                          containing fieldname-value pairs (For e.g.,
+                          <code>{{f1 val1 f2 val2} {f1 val3 f3 val4}}</code>).
+                          To be passed to <a
+                          href="#pdelete">_prepare_delete_stmt</a> method. </dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
-                  <dd>Number of records that are deleted.</dd>
+                  <dd>Implementations are expected to return number of records
+                    that are deleted.</dd>
               </dl>
             </dd>
         </dl>
@@ -624,8 +893,8 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="begin"></a>public method begin
           {args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Begin a database transaction.</dd>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Begins a database transaction.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
@@ -643,8 +912,8 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="commit"></a>public method commit
           {args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Commit the currently active database transaction.</dd>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Commits the currently active database transaction.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
@@ -662,8 +931,9 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="rollback"></a>public method rollback
           {args}</strong></code> </dt>
-            <dd>Pure virtual function to be implemented by derived classes.
-              Rollback the currently active database transaction. </dd>
+            <dd>Pure virtual function / interface to be implemented by derived
+              classes. Rolls back the currently active database transaction.
+            </dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
@@ -679,37 +949,25 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
-<table border="1" style="width: 100%">
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
+<table border="0" style="width: 100%">
   <tbody>
     <tr>
-      <td><a href="#ClassSummary">Class Summary</a></td>
-      <td><a href="#Inheritance">Inheritance</a></td>
-      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
-      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
-      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
-      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
-    </tr>
-    <tr>
-      <td align="center" colspan="6"><a href="reference.html">Table Of
-        Contents</a></td>
+      <td align="center"><a href="#Sections">Sections</a></td>
+      <td align="center"><a href="reference.html">Table Of Contents</a></td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
+<br>
 
-<p></p>
+<hr>
 
-<p></p>
-
-<p style="font-size: 10pt">Copyright (c) 2013 by Nagarajan Chinnasamy
+<p>Copyright (c) 2013 by Nagarajan Chinnasamy
 &lt;nagarajanchinnasamy@gmail.com&gt;. See <a href="license.html">License</a>
 for information on usage and redistribution</p>
 </body>

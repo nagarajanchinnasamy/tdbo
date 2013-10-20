@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>tdbo::SQLite</title>
+  <title>tdbo::MariaDB</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css" title="Amaya theme">
 /* Modern style for Amaya Editor Lite */
@@ -215,12 +215,12 @@ td {
 <table border="1" style="width: 100%">
   <tbody>
     <tr>
-      <th><strong><a id="ClassSummary"></a>Class: tdbo::SQLite</strong></th>
+      <th><strong><a id="ClassSummary"></a>Class: tdbo::MariaDB</strong></th>
     </tr>
     <tr>
-      <td><p>SQLite 3 Database Connectivity Implementation. Instantiate this
-        class and invoke <code><a href="#open">open</a></code> method to
-        establish a connection to sqlite3 database. This class provides
+      <td><p>MariaDB / MySQL Database Connectivity Implementation. Instantiate
+        this class and invoke <code><a href="#open">open</a></code> method to
+        establish a connection to PostgreSQL database. This class provides
         <code><a href="#insert">insert</a></code>, <code><a
         href="#get">get</a></code>, <code><a href="#update">update</a></code>
         and <code><a href="#delete">delete</a></code> methods to manipulate
@@ -285,7 +285,7 @@ td {
     </tr>
     <tr>
       <td><a href="#constructor">constructor {}</a></td>
-      <td>Constructor. Loads sqlite3 package.</td>
+      <td>Constructor. Loads mysqltcl package.</td>
     </tr>
   </tbody>
 </table>
@@ -301,7 +301,8 @@ td {
     </tr>
     <tr>
       <td nowrap="nowrap" align="right"><code>public method</code> </td>
-      <td><code><a href="#begin">begin {{lock deferred}}</a></code> 
+      <td><code><a href="#begin">begin {{isolation "repeatable
+        read"}}</a></code> 
 
         <p>Begin a database transaction.</p>
       </td>
@@ -357,7 +358,7 @@ td {
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#open">open {location {initscript ""}}</a></code> 
+      <td><code><a href="#open">open {dbname args}</a></code> 
 
         <p>Establish a connection to database.</p>
       </td>
@@ -393,8 +394,7 @@ td {
           <dt><code><strong><a id="constructor"></a>constructor
           {}</strong></code> </dt>
             <dd>Constructor. Loads <a
-              href="http://www.sqlite.org/tclsqlite.html">sqlite3 tcl
-              package</a>. </dd>
+              href="http://www.xdobry.de/mysqltcl/">mysqltcl</a> package. </dd>
         </dl>
       </td>
     </tr>
@@ -411,30 +411,30 @@ td {
     </tr>
     <tr>
       <td><dl>
-          <dt><code><strong><a id="open">public method open {location
-          {initscript ""}}</a></strong></code> </dt>
+          <dt><code><strong><a id="open">public method open {dbname
+          args}</a></strong></code> </dt>
             <dd>After creating an instance of this class, invoke this method on
               the instance to establishe a connection to the database.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
-                      <dt>location</dt>
-                        <dd>Specifies the path of the sqlite database file.</dd>
+                      <dt>dbname</dt>
+                        <dd>Name of the database to connect.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>initscript</dt>
-                        <dd>SQL script to be executed upon successful
-                          establishment of the connection. This script
-                          typically contains PRAGMA statements to configure the
-                          database parameters.</dd>
+                      <dt>args</dt>
+                        <dd>Connection parameters as a list containing
+                          switch-value pairs (E.g., <code>-host hostName -user
+                          user)</code>. Please refer to mysqltcl package
+                          documentation for supported options. </dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
-                  <dd>The connection command object as returned by sqlite3
-                    package. As this is internally stored and used for further
-                    method invocations, tdbo does not expect applications to
-                    store and use this command object directly.</dd>
+                  <dd>The connection handle as returned by mysqltcl package. As
+                    this is internally stored and used for further method
+                    invocations, tdbo does not expect applications to store and
+                    use this handle directly.</dd>
               </dl>
               <dl>
                 <dt>Throws:</dt>
@@ -585,8 +585,8 @@ td {
                         <dd>Optional list of field names that are sequence /
                           auto-increment fields. Upon successful insertion of
                           the record, these fields are populated with the value
-                          returned by last_insert_rowid command of the sqlite3
-                          package.</dd>
+                          returned by insertid command of the mysqltcl
+                        package</dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
@@ -687,17 +687,17 @@ td {
     </tr>
     <tr>
       <td><dl>
-          <dt><code><strong><a id="begin"></a>public method begin {{lock
-          deferred}}</strong></code> </dt>
-            <dd>Begins a database transaction.</dd>
+          <dt><code><strong><a id="begin"></a>public method begin {{isolation
+          "repeatable read"}}</strong></code> </dt>
+            <dd>Sets the transaction isolation level and starts a database
+              transaction.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
-                      <dt>lock</dt>
-                        <dd>Indicates the type of lock that needs to be
-                          acquired by sqlite3. Pls. refer to sqlite3
-                          documentation for accepted values. The default value
-                          is deferred.</dd>
+                      <dt>isolation</dt>
+                        <dd>Transaction isolation level. Please refer to
+                          MariaDB / MySQL documentation for supported values.
+                          The default value is: repeatable read.</dd>
                     </dl>
                   </dd>
               </dl>

@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+      "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <title>dbobject</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>tdbo::DBObject</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css" title="Amaya theme">
 /* Modern style for Amaya Editor Lite */
 
@@ -160,88 +159,110 @@ a[href] {
     text-decoration: underline;
    }
 
+hr {
+  border: 0;
+  width: 100%;
+  color: #f00;
+  background-color: #f00;
+  height: 1px;
+}
+
+th {
+  background-color: #CCCCFF;
+  text-align: left;
+}
+
+td {
+  vertical-align: top;
+}
+
 /* end */
   </style>
 </head>
 
 <body>
+<h1><a href="index.html">TDBO</a> - Tcl DataBase Object</h1>
+<br>
+<br>
 
-<table border="1" style="width: 100%">
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
+
+<table border="0" style="width: 100%">
+  <col>
   <tbody>
     <tr>
-      <td align="center" colspan="6"><a href="reference.html">Table Of
+      <td align="center" colspan="1"><a href="reference.html">Table Of
         Contents</a></td>
-    </tr>
-    <tr>
-      <td><a href="#ClassSummary">Class Summary</a></td>
-      <td><a href="#Inheritance">Inheritance</a></td>
-      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
-      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
-      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
-      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
-    </tr>
-    <tr>
-      <td><a href="#ORMapping">Object To Database Record Mapping</a></td>
-      <td><a href="#Example">Example Application Object Class</a></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
+<a id="Sections"></a> 
 
-<p></p>
+<h3>Sections</h3>
+<dl>
+    <dd><a href="#ClassSummary">Class Summary</a></dd>
+    <dd><a href="#Inheritance">Inheritance</a></dd>
+    <dd><a href="#ConstructorSummary">Constructor Summary</a></dd>
+    <dd><a href="#ProcMethodsSummary">Proc/Methods Summary</a></dd>
+    <dd><a href="#ConstructorDetail">Constructor Detail</a></dd>
+    <dd><a href="#ProcMethodDetail">Proc/Method Detail</a></dd>
+    <dd><a href="#ORMapping">Object To Database Record Mapping</a></dd>
+    <dd><a href="#Example">Example DBObject Class</a></dd>
+</dl>
+<br>
+<br>
+
 
 <table border="1" style="width: 100%">
-  <col />
   <tbody>
     <tr>
-      <td colspan="1"><strong><a id="ClassSummary"></a>Class:
-        tdbo::DBObject</strong></td>
+      <th><strong><a id="ClassSummary"></a>Class: tdbo::DBObject</strong></th>
     </tr>
+  </tbody>
+  <tbody>
     <tr>
-      <td>Data Object Interface that needs to be inherited by
+      <td>Data Access Object class that needs to be inherited by
         application-specific object classes (eg., Employee, PurchaseItem etc.).
         This class cannot be instantiated directly.</td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
   <tbody>
     <tr>
-      <td colspan="1"><strong><a id="Inheritance"></a>Inherits:
-        tdbo::Object</strong></td>
+      <th><strong><a id="Inheritance"></a>Inherits: <a
+        href="object.html">tdbo::Object</a></strong></th>
     </tr>
+  </tbody>
+  <tbody>
     <tr>
-      <td>Methods: cget, clear, configure 
+      <td>Methods: <a href="object.html#cget">cget</a>, <a
+        href="object.html#clear">clear</a>, <a
+        href="object.html#configure">configure</a> 
 
-        <p>Variables: clsName, log</p>
+        <p>Variables: <a href="object.html#clsName">clsName</a>, <a
+        href="object.html#log">log</a></p>
       </td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
-  <col />
   <tbody>
     <tr>
-      <td colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
-        Summary</strong></td>
+      <th colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
+        Summary</strong></th>
     </tr>
+  </tbody>
+  <tbody>
     <tr>
       <td><a href="#constructor">constructor {db}</a></td>
       <td>Stores the definition of primary keys, unique fields and sequence /
@@ -254,15 +275,24 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
   <tbody>
     <tr>
-      <td colspan="2"><strong><a id="ProcMethodsSummary"></a>Proc/Methods
-        Summary</strong></td>
+      <th colspan="2"><strong><a id="ProcMethodsSummary"></a>Proc/Methods
+        Summary</strong></th>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td nowrap="nowrap" align="right"><code>public proc</code> </td>
+      <td><code><a href="#schema_name">schema_name {}</a></code> 
+
+        <p>Returns name of the table / view that this class represents.</p>
+      </td>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
@@ -298,9 +328,8 @@ a[href] {
       <td><code><a href="#define_autoincrement">define_autoincrement
         {args}</a></code> 
 
-        <p>Define a list of public variable names that are auto-incremented
-        (also known as sequence fields) whenever a new record is inserted into
-        the database .</p>
+        <p>Define a list of public variable names that map to auto-incremented
+        (also known as sequence) fields.</p>
       </td>
     </tr>
     <tr>
@@ -308,8 +337,8 @@ a[href] {
       <td><code><a href="#define_primarykey">define_primarykey
         {args}</a></code> 
 
-        <p>Define a list of public variable names that map to the primary key
-        fields of the associated table/view in the database.</p>
+        <p>Define a list of public variable names that map to primary key
+        fields.</p>
       </td>
     </tr>
     <tr>
@@ -317,8 +346,7 @@ a[href] {
       <td><code><a href="#define_unique">define_unique {args}</a></code> 
 
         <p>Define a list of list of public variable names with each list
-        mapping to a set of fields that help uniquely identify a record in the
-        associated table/view.</p>
+        mapping to a set of fields that help uniquely identify a record.</p>
       </td>
     </tr>
     <tr>
@@ -335,8 +363,7 @@ a[href] {
     </tr>
     <tr>
       <td align="right"><code>protected method</code> </td>
-      <td><code><a href="#_define_primarykey">_define_primarykey
-        {args}</a></code> 
+      <td><code><a href="#_define_primarykey">_define_primarykey {}</a></code> 
 
         <p>Provides a default implementation by invoking
         <code>define_primarykey</code> with an empty list. Override this method
@@ -347,7 +374,7 @@ a[href] {
     </tr>
     <tr>
       <td align="right"><code>protected method</code> </td>
-      <td><code><a href="#_define_unique">_define_unique {args}</a></code> 
+      <td><code><a href="#_define_unique">_define_unique {}</a></code> 
 
         <p>Provides a default implementation by invoking
         <code>define_unique</code> with an empty list. Override this method to
@@ -355,28 +382,19 @@ a[href] {
         your own list of list of public variable names.</p>
       </td>
     </tr>
-    <tr>
-      <td align="right"><code>protected proc</code> </td>
-      <td><code><a href="#_mget">_mget {schema_name db args}</a></code> 
-
-        <p>Helper routine to retrieve multiple records from a table / view.
-        This proc is meant to be invoked from within <code>mget</code> proc of
-        a derived class.</p>
-      </td>
-    </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
-
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
   <tbody>
     <tr>
-      <td><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></td>
+      <th><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></th>
     </tr>
+  </tbody>
+  <tbody>
     <tr>
       <td><dl>
           <dt><a id="constructor"></a><code><strong>constructor
@@ -392,8 +410,8 @@ a[href] {
               update operations. 
               <dl>
                 <dt><strong>Parameters:</strong></dt>
-                  <dd>db - instance of a specific Database Connectivity
-                    implementation such as SQLite.</dd>
+                  <dd>db - instance of one of the Database Connectivity classes
+                    tdbo::SQLite, tdbo::MariaDB and tdbo::PostgreSQL.</dd>
               </dl>
             </dd>
         </dl>
@@ -401,14 +419,17 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
   <tbody>
     <tr>
-      <td><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></td>
+      <th><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></th>
     </tr>
+  </tbody>
+  <tbody>
     <tr>
       <td><dl>
           <dt><code><strong><a id="add"></a>public method add
@@ -420,28 +441,31 @@ a[href] {
               those field names in the args-list in preparing the name-value
               pairs. While preparing the name-value pairs, it includes only
               those member variables that are initialized with a value other
-              than &lt;undefined&gt;. In Itcl, Member variables that are
-              uninitialized are internally identified with the value
-              &lt;undefined&gt;. Instead of an empty string, we make use of
-              this state of a member variable to indicate the absense of a
-              field in the insert operation (thus resulting in NULL or default
-              value in the database). Upon successful completion of add
-              operation, the new values of sequence / auto-incremented fields
-              are populated back into the object.</dd>
+              than "&lt;undefined&gt;". In Itcl, Member variables that are
+              uninitialized or unset are internally identified with the value
+              "&lt;undefined&gt;". We make use of this state of a member
+              variable to omit a field in the insert operation. To set a
+              particular field's value to NULL, you need to set the value of
+              the corresponding public member variable to "&lt;null&gt;". Upon
+              successful completion of add operation, the new values of
+              sequence / auto-incremented fields are populated back into the
+              object.</dd>
             <dd><dl>
                 <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
                       <dt><strong>args</strong></dt>
-                        <dd>optional list of public member variable names that
+                        <dd>Optional list of public member variable names that
                           represent the fields in the database record that
-                          needs to be inserted. If this argument is not
-                          provided, all public member variable names are used
-                          as list of field names to be inserted.</dd>
+                          needs to be inserted. When provided, only the fields
+                          in this list are used in insert operation. Otherwise,
+                          by default, all public member variable names are used
+                          as list of field names in the insert operation.</dd>
                     </dl>
                   </dd>
                 <dt><strong>Returns:</strong></dt>
                   <dd>Returns the status of add operation as a numerical value.
-                    A value greater than zero indicates success </dd>
+                    A value greater than zero indicates success. Upon failure,
+                    logs the error message and returns 0.</dd>
               </dl>
             </dd>
         </dl>
@@ -458,7 +482,8 @@ a[href] {
             <dd><dl>
                 <dt><strong>Returns:</strong></dt>
                   <dd>Returns the status of add operation as a numerical value.
-                    A value greater than zero indicates success.</dd>
+                    A value greater than zero indicates success. Upon failure,
+                    logs the error message and returns 0.</dd>
               </dl>
             </dd>
         </dl>
@@ -482,18 +507,22 @@ a[href] {
                 <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
                       <dt><strong>args</strong></dt>
-                        <dd>optional list of public member variable names that
+                        <dd>Optional list of public member variable names that
                           represent the fields in the database record that
-                          needs to be retrieved. If this argument is not
-                          provided, all public member variable names are used
-                          as the fields of the record to be retrieved from the
-                          database.</dd>
+                          needs to be retrieved. When provided, only the fields
+                          in this list are used in getting values from
+                          database. Otherwise, by default, all public member
+                          variable names are used as list of field names to get
+                          values from database.</dd>
                     </dl>
                   </dd>
                 <dt><strong>Returns:</strong></dt>
                   <dd>fieldname-value pairs retrieved from database as a Tcl
                     dictionary. If the retrieval does not return any record
                     from database, then the result will be an empty string.</dd>
+                <dt><strong>Throws:</strong></dt>
+                  <dd>an error if the retrieval resulted in getting more than
+                    one record.</dd>
               </dl>
             </dd>
         </dl>
@@ -503,7 +532,7 @@ a[href] {
       <td><dl>
           <dt><code><strong><a id="save"></a>public method save
           {args}</strong></code> </dt>
-            <dd>Save the object by updating the corresponding record into the
+            <dd>Save the object by updating the corresponding record in the
               database. The record to be updated in the database is identified
               based on the description provided in <a href="#ORMapping">Object
               To Database Record Mapping</a>. In preparing the record to save,
@@ -513,26 +542,29 @@ a[href] {
               args-list in preparing the name-value pairs. While preparing the
               name-value pairs, it includes only those member variables that
               are initialized with a value other than &lt;undefined&gt;. In
-              Itcl, member variables that are not initialized are internally
-              identified with the value &lt;undefined&gt;. Instead of an empty
-              string, we make use of this state of a member variable to
-              indicate the absense of a field in the update operation (thus not
-              affecting those fields in the database). </dd>
+              Itcl, member variables that are not initialized or unset are
+              internally identified with the value &lt;undefined&gt;. We make
+              use of this state of a member variable to omit a field in the
+              update operation. To set a particular field's value to NULL, you
+              need to set the value of the corresponding public member variable
+              to "&lt;null&gt;". </dd>
             <dd><dl>
                 <dt><strong>Parameters:</strong></dt>
                   <dd><dl>
                       <dt><strong>args</strong></dt>
-                        <dd>optional list of public member variable names that
+                        <dd>Optional list of public member variable names that
                           represent the fields in the database record that
-                          needs to be updated. If this argument is not
-                          provided, all public member variable names are used
-                          as the list of fields to be updated in the
-                        record.</dd>
+                          needs to be updated. When provided, only the fields
+                          in this list are used in update operation. Otherwise,
+                          by default, all public member variable names are used
+                          as list of field names to update their values in the
+                          database.</dd>
                     </dl>
                   </dd>
                 <dt><strong>Returns:</strong></dt>
                   <dd>the status of save operation as a numerical value. A
-                    value greater than zero indicates success.</dd>
+                    value greater than zero indicates success. Upon failure,
+                    logs the error and returns 0.</dd>
               </dl>
             </dd>
         </dl>
@@ -669,69 +701,18 @@ a[href] {
         </dl>
       </td>
     </tr>
-    <tr>
-      <td><dl>
-          <dt><code><strong><a id="_mget"></a>protected proc _mget {schema_name
-          db args}</strong></code> </dt>
-            <dd>Helper routine to retrieve multiple records from a table view.
-              This proc is to be invoked from within <code>mget</code> proc of
-              a class derived from DBObject. </dd>
-            <dd><dl>
-                <dt><strong>Parameters:</strong></dt>
-                  <dd><dl>
-                      <dt><strong>schema_name</strong></dt>
-                        <dd>name of the table/view</dd>
-                    </dl>
-                  </dd>
-                  <dd><dl>
-                      <dt><strong>db</strong></dt>
-                        <dd>instance of a specific database access class such
-                          as SQLite</dd>
-                    </dl>
-                  </dd>
-                  <dd><dl>
-                      <dt><strong>args</strong></dt>
-                        <dd>A dictionary of options. This proc consumes
-                          optional -format option from this dict. Other options
-                          are passed to db object for processing. Allowed
-                          values for -format option are: </dd>
-                        <dd><dl>
-                            <dt>dict</dt>
-                              <dd>Indicates that the records retrieved are to
-                                be returned as a list of dictionaries. A
-                                dictionary contains fieldname-value pairs of a
-                                record. </dd>
-                            <dt>list</dt>
-                              <dd>Indicates that the records retrieved are to
-                                be returned as a list of lists. A list contains
-                                only the values of the fields in a record. </dd>
-                          </dl>
-                        </dd>
-                        <dd>The default value for -format option is: dict </dd>
-                    </dl>
-                  </dd>
-              </dl>
-            </dd>
-            <dd><dl>
-                <dt><strong>Returns:</strong></dt>
-                  <dd>List of records in the format defined by -format option.
-                  </dd>
-              </dl>
-            </dd>
-        </dl>
-      </td>
-    </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
+  <col>
   <tbody>
     <tr>
-      <td><strong><a id="ORMapping"></a>Object To Database Record
-        Mapping</strong></td>
+      <th><strong><a id="ORMapping"></a>Object To Database Record
+        Mapping</strong></th>
     </tr>
     <tr>
       <td>The record to be retrieved/saved/deleted in the database is uniquely
@@ -761,24 +742,25 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
-  <col />
+  <col>
   <tbody>
     <tr>
-      <td><strong><a id="Example"></a>An Example Application Object
-        Class</strong></td>
+      <th><strong><a id="Example"></a>An Example Application Object
+        Class</strong></th>
     </tr>
     <tr>
-      <td><pre>package require logger
-package require sqlite3
-package require Itcl
+      <td><pre># Step-1: Load tdbo package
+
 package require tdbo
 
-# For this example to work, we assume that you already have
-# setup address.db with address table defined
+# Step-2: Define Data Access Object class
+# Before this step, we assume that you already have
+# setup address.db with a table named address is defined.
 
 itcl::class Address {
     inherit tdbo::DBObject
@@ -808,15 +790,15 @@ itcl::class Address {
     }
 }
 
-# Setup logging facility
-tdbo::FileLogger::open address.log
-
-# Open SQLite Database implementation 
+# Step-3: Instantiate SQLite Database Connectivity Implementation class
 set db [::tdbo::SQLite #auto -location address.db]
+
+# Step-4: Open Database Connection
 $db open
 
-# Instantiate Address
+# Step-5: Instantiate DAO and invoke CRUD methods
 Address addr $db \
+    -id -1 \
     -addrline1 "Address Line 1" \
     -addrline2 "Address Line 2" \
     -city "City Name" \
@@ -824,54 +806,51 @@ Address addr $db \
     -postalcode "560000"
 
 # Add to database
-puts "[addr add]"
+puts "Add: [addr add]"
 
 # Retrieve values
-puts "[addr cget]"
+set id [addr cget -id]
+addr clear
+addr configure -id $id
+puts "Get: [addr get]"
+
+# Modify values and save
+addr configure -city "My New City" -postalcode "987656"
+puts "[addr save city postalcode]"
+puts "Modified Values: [addr cget]"
+
+# Delete
+puts [addr delete]
+puts "After Delete: [addr cget]"
+
+# Step-6: Close the database connection
+$db close
+
+# End
         </pre>
       </td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
-<table border="1" style="width: 100%">
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
-  <col />
+<table border="0" style="width: 100%">
   <tbody>
     <tr>
-      <td><a href="#ClassSummary">Class Summary</a></td>
-      <td><a href="#Inheritance">Inheritance</a></td>
-      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
-      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
-      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
-      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
-    </tr>
-    <tr>
-      <td><a href="#ORMapping">Object To Database Record Mapping</a></td>
-      <td><a href="#Example">Example Application Object Class</a></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-    </tr>
-    <tr>
-      <td align="center" colspan="6"><a href="reference.html">Table Of
-        Contents</a></td>
+      <td align="center"><a href="#Sections">Sections</a></td>
+      <td align="center"><a href="reference.html">Table Of Contents</a></td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
+<br>
 
-<p></p>
+<hr>
 
-<p></p>
-
-<p style="font-size: 10pt">Copyright (c) 2013 by Nagarajan Chinnasamy
+<p>Copyright (c) 2013 by Nagarajan Chinnasamy
 &lt;nagarajanchinnasamy@gmail.com&gt;. See <a href="license.html">License</a>
 for information on usage and redistribution</p>
 </body>

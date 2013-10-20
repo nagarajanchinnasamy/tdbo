@@ -1,11 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN"
-      "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+      "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-  <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-  <title>index</title>
-  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/" />
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>TDBO</title>
+  <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css" title="Amaya theme">
 /* Modern style for Amaya Editor Lite */
 
@@ -160,6 +159,23 @@ a[href] {
     text-decoration: underline;
    }
 
+hr {
+  border: 0;
+  width: 100%;
+  color: #f00;
+  background-color: #f00;
+  height: 1px;
+}
+
+th {
+  background-color: #CCCCFF;
+  text-align: left;
+}
+
+td {
+  vertical-align: top;
+}
+
 /* end */
   </style>
 </head>
@@ -167,51 +183,78 @@ a[href] {
 <body>
 <h1>TDBO - Tcl DataBase Object</h1>
 
-<p>TDBO is a Tcl language based package, named <strong>tdbo</strong>, that
-provides an <strong>object oriented access to records (or tuples) in a
-table/view of a Relational Database Management Systems</strong>. It provides a
-framework to abstract schema definition of a table/view in a data-access-object
-class (e.g., Employee, PurchaseItem etc.). At any given point in time, a
-data-access-object instance maps to a record in a table. Data-access-objects
-can make use of <code>add</code>, <code>get</code>, <code>save</code> and
-<code>delete</code> methods to perform CRUD operations on records of a
-table/view.</p>
+<p>TDBO is a Tcl package, named <strong>tdbo</strong>, that provides an
+<strong>object oriented access to records (or tuples) in a table/view of a
+Relational Database Management Systems</strong>. It provides a framework to
+abstract schema definition of a table/view in a data-access-object class (e.g.,
+Employee, PurchaseItem etc.). At any given point in time, a data-access-object
+instance maps to a record in a table. Data-access-objects can make use of
+<code>add</code>, <code>get</code>, <code>save</code> and <code>delete</code>
+methods to perform CRUD operations on records of a table/view.</p>
 
 <p></p>
 
-<p>TDBO currently supports connectivity to SQLite database. However, it is
-designed to plugin support for other database systems easily. Support for other
-databases will be added in<span
+<p>TDBO supports connectivity to <a href="http://www.sqlite.org/">SQLite</a>,
+<a href="http://www.mysql.com/">MySQL</a> / <a
+href="https://mariadb.org/">MariaDB</a> and <a
+href="http://www.postgresql.org/">PostgreSQL</a> database systems. However, it
+is designed to plugin support for other database systems easily. Support for
+other databases will be added in<span
 style="font-family: Courier New,Courier,monospace"><span
 style="font-family: Arial,Helvetica,sans-serif"><span
-style="font-family: Times New Roman,Times,serif"></span></span></span> future.
+style="font-family: Times New Roman,Times,serif"></span></span></span>
+future.</p>
+
+<p></p>
+
+<p>TDBO package can be obtained from GitHub: <a
+href="https://github.com/nagarajanchinnasamy/tdbo">https://github.com/nagarajanchinnasamy/tdbo</a>.
 If you would like to contribute by adding support to a new database, please
-email to: nagarajanchinnasamy@gmail.com</p>
+send in your pull request.</p>
+
+<h3>Dependency</h3>
 
 <p></p>
 
 <p>TDBO is based on IncrTcl, an object oriented extension of Tcl. TDBO depends
 on installation of following Tcl packages:</p>
 <ul>
-  <li>logger (part of Tcllib)</li>
-  <li>Itcl</li>
-  <li>sqlite3 (for SQLite database connectivity)</li>
+  <li><a href="http://www.tcl.tk/">Tcl</a> 8.5 or later</li>
+  <li>logger (part of <a
+    href="http://sourceforge.net/projects/tcllib/">Tcllib</a>)</li>
+  <li><a href="http://sourceforge.net/projects/incrtcl/">Itcl</a></li>
+  <li><a href="http://www.sqlite.org/">SQLite 3</a> and sqlite3 Tcl package
+    (for SQLite database connectivity) </li>
+  <li><a href="http://www.mysql.com/">MySQL</a> / <a
+    href="https://mariadb.org/">MariaDB</a> and <a
+    href="http://www.xdobry.de/mysqltcl/">mysqltcl</a> (for MySQL / MariaDB
+    database connectivity)</li>
+  <li><a href="http://www.postgresql.org/">PostgreSQL</a> and <a
+    href="http://flightaware.github.io/Pgtcl/">Pgtcl</a> package (for
+    PostgreSQL database connectivity)</li>
 </ul>
 
-<p>To use <code>tdbo</code> package, you will need to include the following
-command in your application:</p>
-
-<p><code>package require tdbo</code></p>
-
 <p></p>
+
+<h3>Getting Started</h3>
+
+<p><a href="dbobject.html#Example">Click here to view a simple tdbo
+application</a></p>
+
+<h3>Documentation</h3>
 
 <p><a href="reference.html">Click here to access the reference manual</a></p>
 
 <p></p>
 
 <p></p>
+<br>
+<br>
+<br>
 
-<p style="font-size: 10pt">Copyright (c) 2013 by Nagarajan Chinnasamy
+<hr>
+
+<p>Copyright (c) 2013 by Nagarajan Chinnasamy
 &lt;nagarajanchinnasamy@gmail.com&gt;. See <a href="license.html">License</a>
 for information on usage and redistribution</p>
 </body>

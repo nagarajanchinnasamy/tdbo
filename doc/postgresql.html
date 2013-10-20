@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>tdbo::SQLite</title>
+  <title>tdbo::PostgreSQL</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css" title="Amaya theme">
 /* Modern style for Amaya Editor Lite */
@@ -215,12 +215,12 @@ td {
 <table border="1" style="width: 100%">
   <tbody>
     <tr>
-      <th><strong><a id="ClassSummary"></a>Class: tdbo::SQLite</strong></th>
+      <th><strong><a id="ClassSummary"></a>Class: tdbo::PostgreSQL</strong></th>
     </tr>
     <tr>
-      <td><p>SQLite 3 Database Connectivity Implementation. Instantiate this
+      <td><p>PostgreSQL Database Connectivity Implementation. Instantiate this
         class and invoke <code><a href="#open">open</a></code> method to
-        establish a connection to sqlite3 database. This class provides
+        establish a connection to PostgreSQL database. This class provides
         <code><a href="#insert">insert</a></code>, <code><a
         href="#get">get</a></code>, <code><a href="#update">update</a></code>
         and <code><a href="#delete">delete</a></code> methods to manipulate
@@ -285,7 +285,7 @@ td {
     </tr>
     <tr>
       <td><a href="#constructor">constructor {}</a></td>
-      <td>Constructor. Loads sqlite3 package.</td>
+      <td>Constructor. Loads Pgtcl package.</td>
     </tr>
   </tbody>
 </table>
@@ -301,7 +301,7 @@ td {
     </tr>
     <tr>
       <td nowrap="nowrap" align="right"><code>public method</code> </td>
-      <td><code><a href="#begin">begin {{lock deferred}}</a></code> 
+      <td><code><a href="#begin">begin {{lock deferrable}}</a></code> 
 
         <p>Begin a database transaction.</p>
       </td>
@@ -357,7 +357,7 @@ td {
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
-      <td><code><a href="#open">open {location {initscript ""}}</a></code> 
+      <td><code><a href="#open">open {dbname args}</a></code> 
 
         <p>Establish a connection to database.</p>
       </td>
@@ -393,8 +393,8 @@ td {
           <dt><code><strong><a id="constructor"></a>constructor
           {}</strong></code> </dt>
             <dd>Constructor. Loads <a
-              href="http://www.sqlite.org/tclsqlite.html">sqlite3 tcl
-              package</a>. </dd>
+              href="http://flightaware.github.io/Pgtcl/">Pgtcl</a> package.
+            </dd>
         </dl>
       </td>
     </tr>
@@ -411,27 +411,27 @@ td {
     </tr>
     <tr>
       <td><dl>
-          <dt><code><strong><a id="open">public method open {location
-          {initscript ""}}</a></strong></code> </dt>
+          <dt><code><strong><a id="open">public method open {dbname
+          args}</a></strong></code> </dt>
             <dd>After creating an instance of this class, invoke this method on
               the instance to establishe a connection to the database.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
-                      <dt>location</dt>
-                        <dd>Specifies the path of the sqlite database file.</dd>
+                      <dt>dbname</dt>
+                        <dd>Name of the database to connect.</dd>
                     </dl>
                   </dd>
                   <dd><dl>
-                      <dt>initscript</dt>
-                        <dd>SQL script to be executed upon successful
-                          establishment of the connection. This script
-                          typically contains PRAGMA statements to configure the
-                          database parameters.</dd>
+                      <dt>args</dt>
+                        <dd>Connection parameters as a list containing
+                          switch-value pairs. Supported options are:
+                          <code>-host hostName -port portNumber -tty tty
+                          -options serverOptions</code>.</dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
-                  <dd>The connection command object as returned by sqlite3
+                  <dd>The connection command object as returned by Pgtcl
                     package. As this is internally stored and used for further
                     method invocations, tdbo does not expect applications to
                     store and use this command object directly.</dd>
@@ -583,10 +583,7 @@ td {
                   <dd><dl>
                       <dt>sequence_fields</dt>
                         <dd>Optional list of field names that are sequence /
-                          auto-increment fields. Upon successful insertion of
-                          the record, these fields are populated with the value
-                          returned by last_insert_rowid command of the sqlite3
-                          package.</dd>
+                          auto-increment fields.</dd>
                     </dl>
                   </dd>
                 <dt>Returns:</dt>
@@ -594,8 +591,9 @@ td {
                     indicates success. When <code>sequence_fields</code> is
                     non-empty, the return value is a list containing two
                     elements: First element is the status of insert operation
-                    and the second is a dictionary of sequence_fieldname-value
-                    pairs.</dd>
+                    and the second is a dictionary of fieldname-value pairs of
+                    the record that may include new values generated for
+                    sequence fields.</dd>
               </dl>
             </dd>
         </dl>
@@ -688,16 +686,16 @@ td {
     <tr>
       <td><dl>
           <dt><code><strong><a id="begin"></a>public method begin {{lock
-          deferred}}</strong></code> </dt>
+          deferrable}}</strong></code> </dt>
             <dd>Begins a database transaction.</dd>
             <dd><dl>
                 <dt>Parameters:</dt>
                   <dd><dl>
                       <dt>lock</dt>
                         <dd>Indicates the type of lock that needs to be
-                          acquired by sqlite3. Pls. refer to sqlite3
+                          acquired by the database. Pls. refer to PostgreSQL
                           documentation for accepted values. The default value
-                          is deferred.</dd>
+                          is deferrable.</dd>
                     </dl>
                   </dd>
               </dl>

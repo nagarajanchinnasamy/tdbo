@@ -58,6 +58,7 @@ public method close {}
 # ----------------------------------------------------------------------
 # method  : get - Retrieve a single record from a table/view          
 # args    : schema_name - name of the table/view
+#           fieldslist  - optional list of fields to be retrieved
 #           condition   - list of dictionaries. Every dictionary contains
 #                         name-value pairs that will be joined with an
 #                         AND operator. The list elements are joined
@@ -69,12 +70,11 @@ public method close {}
 #
 #                          ((f1='val1' AND f2='val2') OR
 #                                (f1='val3' AND f2='va	l4'))
-#           fieldslist  - optional list of fields to be retrieved
-#
+#           format      - one of "dict" or "list"
 # returns : a record as a dict with fieldname-value pairs
 #
 # ----------------------------------------------------------------------
-public method get {schema_name fieldslist condition {format "dict"}}
+public method get {schema_name fieldslist conditionlist {format "dict"}}
 
 
 # ----------------------------------------------------------------------
@@ -122,7 +122,7 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}}
 # returns : status of the update operation.
 #
 # ----------------------------------------------------------------------
-public method update {schema_name namevaluepairs {condition ""}}
+public method update {schema_name namevaluepairs {conditionlist ""}}
 
 
 # ----------------------------------------------------------------------
@@ -142,7 +142,7 @@ public method update {schema_name namevaluepairs {condition ""}}
 # returns : status of delete operation.
 #
 # ----------------------------------------------------------------------
-public method delete {schema_name {condition ""}}
+public method delete {schema_name {conditionlist ""}}
 
 
 # ----------------------------------------------------------------------
@@ -251,7 +251,7 @@ protected method _prepare_select_stmt {schema_name args} {
 # returns :
 #
 # ----------------------------------------------------------------------
-protected method _prepare_update_stmt {schema_name namevaluepairs {condition ""}} {
+protected method _prepare_update_stmt {schema_name namevaluepairs {conditionlist ""}} {
 	set setlist ""
 	foreach {name val} $namevaluepairs {
 		lappend setlist "$name=$val"
@@ -259,8 +259,8 @@ protected method _prepare_update_stmt {schema_name namevaluepairs {condition ""}
 	set setlist [join $setlist ", "]
 
 	set stmt "UPDATE $schema_name SET $setlist"
-	if [string length $condition] {
-		append stmt " WHERE [_prepare_condition $condition]"
+	if [llength $conditionlist] {
+		append stmt " WHERE [_prepare_condition $conditionlist]"
 	}
 
 	${log}::debug $stmt
@@ -275,10 +275,10 @@ protected method _prepare_update_stmt {schema_name namevaluepairs {condition ""}
 # returns :
 #
 # ----------------------------------------------------------------------
-protected method _prepare_delete_stmt {schema_name {condition ""}} {
+protected method _prepare_delete_stmt {schema_name {conditionlist ""}} {
 	set stmt "DELETE FROM $schema_name"
-	if {[string length $condition]} {
-		append stmt " WHERE [_prepare_condition $condition]"
+	if {[llength $conditionlist]} {
+		append stmt " WHERE [_prepare_condition $conditionlist]"
 	}
 
 	${log}::debug $stmt
@@ -303,7 +303,7 @@ protected method _prepare_condition {conditionlist} {
 			}
 		}
 		if {$complist != ""} {
-			lappend sqlcondition "([join $complist " and "])"
+			lappend sqlcondition "([join $complist " AND "])"
 		}
 	}
 
@@ -311,7 +311,7 @@ protected method _prepare_condition {conditionlist} {
 		return
 	}
 
-	set sqlcondition [join $sqlcondition " or "]
+	set sqlcondition [join $sqlcondition " OR "]
 	return "($sqlcondition)"
 }
 

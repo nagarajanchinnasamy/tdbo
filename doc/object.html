@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-  <title>object</title>
+  <title>tdbo::Object</title>
   <meta name="generator" content="Amaya, see http://www.w3.org/Amaya/">
   <style type="text/css" title="Amaya theme">
 /* Modern style for Amaya Editor Lite */
@@ -159,64 +159,90 @@ a[href] {
     text-decoration: underline;
    }
 
+hr {
+  border: 0;
+  width: 100%;
+  color: #f00;
+  background-color: #f00;
+  height: 1px;
+}
+
+th {
+  background-color: #CCCCFF;
+  text-align: left;
+}
+
+td {
+  vertical-align: top;
+}
+
 /* end */
   </style>
 </head>
 
 <body>
+<h1><a href="index.html">TDBO</a> - Tcl DataBase Object</h1>
+<br>
+<br>
 
-<table border="1" style="width: 100%">
-  <col>
-  <col>
-  <col>
-  <col>
-  <col>
+
+<table border="0" style="width: 100%">
   <col>
   <tbody>
     <tr>
-      <td align="center" colspan="6"><a href="reference.html">Table Of
+      <td align="center" colspan="1"><a href="reference.html">Table Of
         Contents</a></td>
-    </tr>
-    <tr>
-      <td><a href="#ClassSummary">Class Summary</a></td>
-      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
-      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
-      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
-      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
-      <td><a href="#Example">Example Application Object Class</a></td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
+<a id="Sections"></a> 
 
-<p></p>
+<h3>Sections</h3>
+<dl>
+    <dd><a href="#ClassSummary">Class Summary</a></dd>
+    <dd><a href="#ConstructorSummary">Constructor Summary</a></dd>
+    <dd><a href="#ProcMethodsSummary">Proc/Methods Summary</a></dd>
+    <dd><a href="#VariablesDetail">Variables Detail</a></dd>
+    <dd><a href="#ConstructorDetail">Constructor Detail</a></dd>
+    <dd><a href="#ProcMethodDetail">Proc/Method Detail</a></dd>
+    <dd><a href="#Example">Example Application Object Class</a></dd>
+</dl>
+<br>
+<br>
+
 
 <table border="1" style="width: 100%">
   <tbody>
     <tr>
-      <td colspan="1"><a id="ClassSummary"></a><strong>Class:
-        tdbo::Object</strong></td>
+      <th colspan="1"><a id="ClassSummary"></a><strong>Class:
+        tdbo::Object</strong></th>
     </tr>
     <tr>
       <td>Generic Object Interface that enhances <code>configure</code>,
         <code>cget</code> methods of IncrTcl's objects. Also, it adds
         copy-constructor mechanism, a method (<code>clear</code>) to reset
-        public variables and logging facility through TclLib's logger object.
+        public variables and logging facility through TclLib's logger package.
         Application object classes are expected to be derived from this class.
         See <a href="#Example">Example Application Object Class</a>. This class
-        cannot be instantiated directly.</td>
+        cannot be instantiated directly. It does not provide any database
+        access. Please refer to <a href="dbobject.html">DBObject</a> for
+        defining application object classes with database access.</td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
   <col>
   <col>
   <tbody>
     <tr>
-      <td colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
-        Summary</strong></td>
+      <th colspan="2"><strong><a id="ConstructorSummary"></a>Constructor
+        Summary</strong></th>
     </tr>
     <tr>
       <td><a href="#constructor">constructor {}</a></td>
@@ -225,14 +251,15 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
   <tbody>
     <tr>
-      <td colspan="2"><strong><a id="ProcMethodsSummary"></a>Proc/Methods
-        Summary</strong></td>
+      <th colspan="2"><strong><a id="ProcMethodsSummary"></a>Proc/Methods
+        Summary</strong></th>
     </tr>
     <tr>
       <td align="right"><code>public method</code> </td>
@@ -314,14 +341,36 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
+
+<table border="1" style="width: 100%">
+  <tbody>
+    <tr>
+      <th colspan="2"><strong><a id="VariablesDetail"></a>Variables
+        Detail</strong></th>
+    </tr>
+    <tr>
+      <td align="right"><code><a id="log"></a>protected log</code> </td>
+      <td>logger object command to invoke logging commands such as
+        <code>${log}::info "message"</code></td>
+    </tr>
+    <tr>
+      <td align="right"><code><a id="clsName"></a>protected clsName</code></td>
+      <td>Name of this class as returned by <code>[$this info class]</code></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+<br>
+
 
 <table border="1" style="width: 100%">
   <col>
   <tbody>
     <tr>
-      <td><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></td>
+      <th><strong><a id="ConstructorDetail"></a>Constructor Detail</strong></th>
     </tr>
     <tr>
       <td><dl>
@@ -334,13 +383,14 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
   <tbody>
     <tr>
-      <td><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></td>
+      <th><strong><a id="ProcMethodDetail"></a>Proc/Method Detail</strong></th>
     </tr>
     <tr>
       <td><dl>
@@ -446,36 +496,26 @@ a[href] {
     </tr>
   </tbody>
 </table>
+<br>
+<br>
 
-<p></p>
 
 <table border="1" style="width: 100%">
   <col>
   <tbody>
     <tr>
-      <td><strong><a id="Example"></a>An Example Application Object
-        Class</strong></td>
+      <th><strong><a id="Example"></a>An Example Application Object
+        Class</strong></th>
     </tr>
     <tr>
-      <td><pre>package require logger
-package require sqlite3
-package require Itcl
-package require tdbo
-
-# For this example to work, we assume that you already have
-# setup address.db with address table defined
+      <td><pre>package require tdbo
 
 itcl::class Address {
-    inherit tdbo::DBObject
+    inherit tdbo::Object
 
-    constructor {db args} {tdbo::DBObject::constructor $db} {
-        configure {*}$args
+    constructor {} {
     }
     destructor {
-    }
-
-    public proc schema_name {} {
-        return "address"
     }
 
     public variable id
@@ -484,76 +524,61 @@ itcl::class Address {
     public variable city
     public variable postalcode
     public variable country
-
-    protected method _define_primarykey {} {
-        define_primarykey id
-    }
-    protected method _define_autoincrement {} {
-        define_autoincrement id
-    }
 }
 
-# Setup logging facility
-tdbo::FileLogger::open address.log
-
-# Open SQLite Database implementation 
-set db [::tdbo::SQLite #auto -location address.db]
-$db open
-
 # Instantiate Address
-Address addr1 $db \
+Address addr1 \
     -addrline1 "Address Line 1" \
     -addrline2 "Address Line 2" \
     -city "City Name" \
     -country "Country Name" \
     -postalcode "560000"
 
-# Add to database
-puts "[addr add]"
+# Get all attributes
+puts "[addr1 cget]"
+puts "[addr1 configure]
 
-# Retrieve values
-puts "[addr cget]"
+# Get only city
+puts "City: [addr1 cget -city]
+
+# Get city and postalcode into variables
+addr1 cget -city city -postalcode postalcode
+puts "City: $city PostalCode: $postalcode"
 
 # Create another Address using copy-constructor
-Address addr2 $db addr1
+Address addr2 addr1
 
-# Retrieve values
-puts "[addr2 configure]"</pre>
+# Retrieve addr2 values
+puts "[addr2 cget]"
+
+# Modify city and postalcode
+addr1 configure -city "MyNewCity" -postalcode "999999"
+puts "[addr1 cget]
+
+# Reset values
+addr1 clear
+puts "[addr1 cget]"</pre>
       </td>
     </tr>
   </tbody>
 </table>
-
-<p></p>
-
-<table border="1" style="width: 100%">
-  <col>
-  <col>
-  <col>
-  <col>
-  <col>
-  <col>
+<br>
+<br>
+<table border="0" style="width: 100%">
   <tbody>
     <tr>
-      <td><a href="#ClassSummary">Class Summary</a></td>
-      <td><a href="#ConstructorSummary">Constructor Summary</a></td>
-      <td><a href="#ProcMethodsSummary">Proc/Methods Summary</a></td>
-      <td><a href="#ConstructorDetail">Constructor Detail</a></td>
-      <td><a href="#ProcMethodDetail">Proc/Method Detail</a></td>
-      <td><a href="#Example">Example Application Object Class</a></td>
-    </tr>
-    <tr>
-      <td align="center" colspan="6"><a href="reference.html">Table Of
-        Contents</a></td>
+      <td align="center"><a href="#Sections">Sections</a></td>
+      <td align="center"><a href="reference.html">Table Of Contents</a></td>
     </tr>
   </tbody>
 </table>
+<br>
+<br>
+<br>
 
-<h4></h4>
+<hr>
 
-<p></p>
-
-<p style="font-size: 10pt">Copyright (c) 2013 by Nagarajan Chinnasamy
+<p>Copyright (c) 2013 by Nagarajan Chinnasamy
 &lt;nagarajanchinnasamy@gmail.com&gt;. See <a href="license.html">License</a>
 for information on usage and redistribution</p>
 </body>

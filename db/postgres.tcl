@@ -78,8 +78,8 @@ public method close {} {
 #
 # format: one of "dict", "list"
 # ----------------------------------------------------------------------
-public method get {schema_name fieldslist condition {format "dict"}} {
-	return [_select $schema_name -fields $fieldslist -format $format -condition [_prepare_condition $condition]]
+public method get {schema_name fieldslist conditionlist {format "dict"}} {
+	return [_select $schema_name -fields $fieldslist -format $format -condition [_prepare_condition $conditionlist]]
 }
 
 # ----------------------------------------------------------------------
@@ -106,7 +106,6 @@ public method insert {schema_name namevaluepairs {sequence_fields ""}} {
 	}
 
 	set status [pg_result $result -status]
-${log}::debug "insert status: $status"
 
 	if {$status != "PGRES_COMMAND_OK" && $status != "PGRES_TUPLES_OK"} {
 		set error [pg_result $result -error]
@@ -115,10 +114,8 @@ ${log}::debug "insert status: $status"
 	}
 
 	set numrows [pg_result $result -numTuples]
-${log}::debug "insert numrows: $numrows"
 	if {$numrows} {
 		set sequencedict [pg_result $result -dict]		
-${log}::debug "insert sequencedict: $sequencedict"
 		pg_result $result -clear
 		return [list $numrows [dict get $sequencedict 0]]
 	}
@@ -134,8 +131,8 @@ ${log}::debug "insert sequencedict: $sequencedict"
 #
 #
 # ----------------------------------------------------------------------
-public method update {schema_name namevaluepairs {condition ""}} {
-	set sqlscript [_prepare_update_stmt $schema_name $namevaluepairs $condition]
+public method update {schema_name namevaluepairs {conditionlist ""}} {
+	set sqlscript [_prepare_update_stmt $schema_name $namevaluepairs $conditionlist]
 	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
@@ -152,8 +149,8 @@ public method update {schema_name namevaluepairs {condition ""}} {
 #
 #
 # ----------------------------------------------------------------------
-public method delete {schema_name {condition ""}} {
-	set sqlscript [_prepare_delete_stmt $schema_name $condition]
+public method delete {schema_name {conditionlist ""}} {
+	set sqlscript [_prepare_delete_stmt $schema_name $conditionlist]
 	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
 	}

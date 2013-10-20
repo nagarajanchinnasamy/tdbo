@@ -192,17 +192,6 @@ public method get {args} {
 	}
 
 	return $objcfg
-
-	#~ set objcfg [dict create]
-	#~ dict for {fname val} [lindex $result 0] {
-		#~ dict set objcfg "-$fname" "$val"
-	#~ }
-		#~ 
-	#~ if {[dict size $objcfg]} {
-		#~ $this configure {*}[dict get $objcfg]
-	#~ }
-#~ 
-	#~ return $objcfg
 }
 
 

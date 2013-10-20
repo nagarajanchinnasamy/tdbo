@@ -1,7 +1,7 @@
 tdbo - Tcl DataBase Object
 ==========================
 
-Tcl DataBase Object (tdbo) provides a simple object oriented interface to database layer of an application. It is written based on incrTcl extension of Tcl. Currently it supports sqlite3 database. However, tdbo package is written in a generic way to plugin support for other databases. We will add support for other databases such as MySQL, Oracle etc., in future releases.
+Tcl DataBase Object (tdbo) provides a simple object oriented interface to database layer of an application. It is written based on incrTcl extension of Tcl. Currently it supports connectivity to SQLite3, PostgreSQL and MySQL / MariaDB database systems. However, tdbo package is written in a generic way to plugin support for other databases. We will add support for other databases Oracle etc., in future releases.
 
 Simple steps to use this package are:
 

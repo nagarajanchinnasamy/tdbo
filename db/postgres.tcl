@@ -77,6 +77,17 @@ public method close {} {
 
 # ----------------------------------------------------------------------
 #
+# method - quote - Quote/Escape a string
+#
+#
+# ----------------------------------------------------------------------
+public method quote {val} {
+	return [pg_quote $val]
+}
+
+
+# ----------------------------------------------------------------------
+#
 # method - get - get a record from table/view
 #
 # format: one of "dict", "list"

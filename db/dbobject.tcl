@@ -34,7 +34,7 @@ itcl::class tdbo::DBObject {
 # ----------------------------------------------------------------------
 constructor {db} {
 	if {[namespace tail [info class]] == "DBObject"} {
-		return -code error "Error: Can't create DBObject objects - abstract class."
+		return -code error "Error: Can't instantiate DBObject - abstract class."
 	}
 	if {$db == "" || ![$db isa tdbo::Database]} {
 		return -code error "Invalid db object type"
@@ -72,29 +72,12 @@ public proc schema_name {}
 
 
 # ----------------------------------------------------------------------
-# method : add - Insert the object into database. In preparing the record
-#                to insert, this method prepares a list of name-value
-#                pairs, by default, from the public member variables of
-#                the object. However, if the argument args is passed, it
-#                uses only those field names in the args-list in
-#                preparing the name-value pairs.
-#
-#                While preparing the name-value pairs, it includes only
-#                those member variables that are initialized with a
-#                value other than <undefined>. In Itcl, Member variables
-#                that are not initialized are internally identified with
-#                the value <undefined>. Instead of an empty string, we
-#                make use of this state of a member variable to
-#                indicate the absense of a field in the insert
-#                operation (thus resulting in NULL value in the
-#                database).
+# method : add - Insert the object into database.
 #
 #                Upon successful completion of add The new values of
 #                sequence / auto incremented fields are updated back
 #                into the object.
 #
-#                Returns the status of add operation as a numerical
-#                value. Non-zero value indicates success.
 # ----------------------------------------------------------------------
 public method add {args} {
 	if {$args == ""} {
@@ -134,36 +117,7 @@ public method add {args} {
 #                public member variables) then only those fields are
 #                retrieved and populated into the object.
 #
-#                The record to be retrieved is identified by the values
-#                of primary key or unique member variables of the
-#                object. For e.g., if the primary key was defined as
-#                {pk1 pk2} and unique fields are defined as
-#                {{uq1} {uq2 uq3}} then the condition to identify the
-#                record to retrieve will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or (uq1=uq1value) or
-#                        (uq2=uq2value and uq3=uq3value))
-#
-#                If any of the key field in the primary key or unique
-#                fields is uninitialized, then those fields are not
-#                included in the condition. For e.g., if pk1 is
-#                uninitialized (i.e., having the value <undefined>),
-#                then the condition will be:
-#
-#                   ((uq1=uq1value) or (uq2=uq2value and uq3=uq3value))
-#
-#                Or, for e.g., if uq2 is uninitialized, then the
-#                condition will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or (uq1=uq1value))
-#
-#                Or, for e.g., if uq1 is uninitialized, then the
-#                condition will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or
-#                        (uq2=uq2value and uq3=uq3value))
-#
-#                If the condition results into a retrieval of more than
+#                If the retrieval contains more than
 #                one record, then this method returns an error.
 #
 #                Upon successful execution, in addition to populating
@@ -196,56 +150,8 @@ public method get {args} {
 
 
 # ----------------------------------------------------------------------
-# method : save - save the object into database. In preparing the record
-#                 to save, this method prepares a list of name-value
-#                 pairs, by default, from the public member variables of
-#                 the object. However, if the argument args is passed,
-#                 it uses only those field names in the args-list in
-#                 preparing the name-value pairs.
+# method : save - save the object into database.
 #
-#                 While preparing the name-value pairs, it includes only
-#                 those member variables that are initialized with a
-#                 value other than <undefined>. In Itcl, Member
-#                 variables that are not initialized are internally
-#                 identified with the value <undefined>. Instead of an
-#                 empty string, we make use of this state of a member
-#                 variable to indicate the absense of a field in the
-#                 update operation (thus not affecting those fields in
-#                 the database).
-#
-#                 The record to be updated in the database is identified
-#                 by the values of primary key or unique member
-#                 variables of the object. For e.g., if the primary key
-#                 was defined as {pk1 pk2} and unique fields are defined
-#                 as {{uq1} {uq2 uq3}} then the condition to identify
-#                 the record to retrieve will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or (uq1=uq1value) or
-#                        (uq2=uq2value and uq3=uq3value))
-#
-#                 If any of the key field in the primary key or unique
-#                 fields is uninitialized, then those fields are not
-#                 included in the condition. For e.g., if pk1 is
-#                 uninitialized (i.e., having the value <undefined>),
-#                 then the condition will be:
-#
-#                   ((uq1=uq1value) or (uq2=uq2value and uq3=uq3value))
-#
-#                 Or, for e.g., if uq2 is uninitialized, then the
-#                 condition will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or (uq1=uq1value))
-#
-#                 Or, for e.g., if uq1 is uninitialized, then the
-#                 condition will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or
-#                        (uq2=uq2value and uq3=uq3value))
-#
-#
-#                 Upon successful completion of add The new values of
-#                 sequence / auto incremented fields are updated back
-#                 into the object.
 #
 #                Returns the status of add operation as a numerical
 #                value. Non-zero value indicates success.
@@ -270,37 +176,9 @@ public method save {args} {
 # method : delete - delete the record represented by the object in
 #                   database and reset the object values.
 #
-#                   The record to be deleted in the database is
-#                   identified by the values of primary key or unique
-#                   member variables of the object. For e.g., if the
-#                   primary key was defined as {pk1 pk2} and unique
-#                   fields are defined as {{uq1} {uq2 uq3}} then the
-#                   condition to identify the record to delete will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or (uq1=uq1value) or
-#                        (uq2=uq2value and uq3=uq3value))
-#
-#                   If any of the key field in the primary key or unique
-#                   fields is uninitialized, then those fields are not
-#                   included in the condition. For e.g., if pk1 is
-#                   uninitialized (i.e., having the value <undefined>),
-#                   then the condition will be:
-#
-#                   ((uq1=uq1value) or (uq2=uq2value and uq3=uq3value))
-#
-#                   Or, for e.g., if uq2 is uninitialized, then the
-#                   condition will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or (uq1=uq1value))
-#
-#                   Or, for e.g., if uq1 is uninitialized, then the
-#                   condition will be:
-#
-#                   ((pk1=pk1value and pk2=pk2vaue) or
-#                        (uq2=uq2value and uq3=uq3value))
-#
 #                   Returns the status of delete operation as a numerical
 #                   value. Non-zero value indicates success.
+#
 # ----------------------------------------------------------------------
 public method delete {} {
 	if {[catch {$db delete [${clsName}::schema_name] [__get_condition]} result]} {
@@ -498,7 +376,7 @@ private method __make_keyvaluepairs { fieldslist } {
 			if {$val == "<null>"} {
 				lappend keyslist $field "IS NULL"
 			} else {
-				lappend keyslist $field '$val'
+				lappend keyslist $field $val
 			}
 		}
 	}
@@ -521,7 +399,7 @@ private method __make_namevaluepairs { fieldslist } {
 				if {$val == "<null>"} {
 					lappend namevaluepairs $field NULL
 				} else {
-					lappend namevaluepairs $field '$val'
+					lappend namevaluepairs $field $val
 				}
 			}
 		}

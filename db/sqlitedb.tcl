@@ -61,6 +61,10 @@ public method open {location {initscript ""}} {
 		$conn eval $initscript
 	}
 
+	namespace eval ${clsName}::${conn} {}
+
+${log}::debug "${clsName}::${conn}"
+
 	return $conn
 }
 
@@ -80,6 +84,16 @@ public method close {} {
 	unset conn
 }
 
+
+# ----------------------------------------------------------------------
+# method - close - Close the database connection.
+#
+#
+#
+# ----------------------------------------------------------------------
+public method quote {value} {
+	return -code error "Method quote is not supported by $clsName"
+}
 
 # ----------------------------------------------------------------------
 #
@@ -201,7 +215,171 @@ public method rollback {} {
 #
 # ----------------------------------------------------------------------
 protected variable conn
+protected common conncount 0
 
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _nsvar {varname} {
+	return "${clsName}::${conn}::${varname}"
+}
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_insert_stmt {schema_name namevaluepairs} {
+	set fnames [dict keys $namevaluepairs]
+
+${log}::debug "$schema_name  $namevaluepairs"
+
+	dict for {fname val} $namevaluepairs {
+		set nsname [_nsvar $fname]
+		set $nsname $val
+		lappend valuelist ":$nsname"
+	}
+
+	set stmt "INSERT INTO $schema_name ([join $fnames ", "]) VALUES ([join $valuelist ", "])"
+	${log}::debug $stmt
+	return $stmt
+}
+
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_select_stmt {schema_name args} {
+	set fieldslist "*"
+
+	set condition ""
+	set groupby ""
+	set orderby ""
+	foreach {opt val} $args {
+		switch $opt {
+			-condition {
+				set condition $val
+			}
+			-groupby {
+				set groupby $val
+			}
+			-orderby {
+				set orderby $val
+			}
+			-fields {
+				set fieldslist [join $val ", "]
+			}
+			default {
+				return -code error "Unknown option: $opt"
+			}
+		}
+	}
+
+	set stmt "SELECT $fieldslist FROM $schema_name"
+	if [string length $condition] {
+		append stmt " WHERE $condition"
+	}
+	if [string length $groupby] {
+		append stmt " GROUP BY $groupby"
+	}
+	if [string length $orderby] {
+		append stmt " ORDER BY $orderby"
+	}
+
+	${log}::debug $stmt
+	return $stmt
+}
+
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_update_stmt {schema_name namevaluepairs {conditionlist ""}} {
+	${log}::debug "$schema_name $namevaluepairs $conditionlist"
+
+	dict for {fname val} $namevaluepairs {
+		set nsname [_nsvar $fname] 
+		set $nsname $val
+		lappend setlist "$fname=:$nsname"
+	}
+
+	${log}::debug "$setlist"
+
+	set setlist [join $setlist ", "]
+
+	set stmt "UPDATE $schema_name SET $setlist"
+	if [llength $conditionlist] {
+		append stmt " WHERE [_prepare_condition $conditionlist]"
+	}
+
+	${log}::debug $stmt
+	return $stmt
+}
+
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_delete_stmt {schema_name {conditionlist ""}} {
+	set stmt "DELETE FROM $schema_name"
+	if {[llength $conditionlist]} {
+		append stmt " WHERE [_prepare_condition $conditionlist]"
+	}
+
+	${log}::debug $stmt
+	return $stmt
+}
+
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+protected method _prepare_condition {conditionlist} {
+	set sqlcondition [list]
+	foreach condition $conditionlist {
+		set complist [list]
+		foreach {fname val} $condition {
+			if {$val == "IS NULL"} {
+				lappend complist "$fname IS NULL"
+			} else {
+				set nsname [_nsvar $fname]
+				set $nsname $val
+				lappend complist "$fname=:$nsname"
+			}
+		}
+		if {$complist != ""} {
+			lappend sqlcondition "([join $complist " AND "])"
+		}
+	}
+
+	if {$sqlcondition == ""} {
+		return
+	}
+
+	set sqlcondition [join $sqlcondition " OR "]
+	return "($sqlcondition)"
+}
 
 # ----------------------------------------------------------------------
 #

@@ -182,11 +182,20 @@ public method rollback {args}
 # returns :
 #
 # ----------------------------------------------------------------------
+protected method quote {val}
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
 protected method _prepare_insert_stmt {schema_name namevaluepairs} {
 	set fnamelist [join [dict keys $namevaluepairs] ", "]
 	set valuelist [list]
 	foreach value [dict values $namevaluepairs] {
-		lappend valuelist $value
+		lappend valuelist [quote $value]
 	} 
 	set valuelist [join $valuelist ", "]
 
@@ -254,7 +263,7 @@ protected method _prepare_select_stmt {schema_name args} {
 protected method _prepare_update_stmt {schema_name namevaluepairs {conditionlist ""}} {
 	set setlist ""
 	foreach {name val} $namevaluepairs {
-		lappend setlist "$name=$val"
+		lappend setlist "$name=[quote $val]"
 	}
 	set setlist [join $setlist ", "]
 
@@ -297,9 +306,9 @@ protected method _prepare_condition {conditionlist} {
 		set complist [list]
 		foreach {fname val} $condition {
 			if {$val == "IS NULL"} {
-				lappend complist "$fname $val"
+				lappend complist "$fname IS NULL"
 			} else {
-				lappend complist "$fname=$val"
+				lappend complist "$fname=[quote $val]"
 			}
 		}
 		if {$complist != ""} {

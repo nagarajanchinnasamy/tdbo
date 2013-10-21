@@ -9,4 +9,5 @@ namespace eval ::tdbo {
 	variable library [file dirname [info script]]
 }
 
+lappend ::auto_path [file normalize [file dirname [info script]]]
 package provide tdbo $tdbo::version

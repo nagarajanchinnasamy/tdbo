@@ -63,8 +63,6 @@ public method open {location {initscript ""}} {
 
 	namespace eval ${clsName}::${conn} {}
 
-${log}::debug "${clsName}::${conn}"
-
 	return $conn
 }
 
@@ -239,8 +237,6 @@ protected method _nsvar {varname} {
 protected method _prepare_insert_stmt {schema_name namevaluepairs} {
 	set fnames [dict keys $namevaluepairs]
 
-${log}::debug "$schema_name  $namevaluepairs"
-
 	dict for {fname val} $namevaluepairs {
 		set nsname [_nsvar $fname]
 		set $nsname $val
@@ -251,7 +247,6 @@ ${log}::debug "$schema_name  $namevaluepairs"
 	${log}::debug $stmt
 	return $stmt
 }
-
 
 # ----------------------------------------------------------------------
 # method  : 
@@ -310,15 +305,11 @@ protected method _prepare_select_stmt {schema_name args} {
 #
 # ----------------------------------------------------------------------
 protected method _prepare_update_stmt {schema_name namevaluepairs {conditionlist ""}} {
-	${log}::debug "$schema_name $namevaluepairs $conditionlist"
-
 	dict for {fname val} $namevaluepairs {
 		set nsname [_nsvar $fname] 
 		set $nsname $val
 		lappend setlist "$fname=:$nsname"
 	}
-
-	${log}::debug "$setlist"
 
 	set setlist [join $setlist ", "]
 

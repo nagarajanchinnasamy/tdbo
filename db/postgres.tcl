@@ -114,7 +114,7 @@ public method mget {schema_name args} {
 #
 # ----------------------------------------------------------------------
 public method insert {schema_name namevaluepairs {sequence_fields ""}} {
-	set sqlscript [_prepare_insert_stmt $schema_name $namevaluepairs]
+	set sqlscript [_prepare_insert_stmt $schema_name $namevaluepairs $sequence_fields]
 	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
@@ -224,6 +224,31 @@ public method rollback {} {
 #
 # ----------------------------------------------------------------------
 protected variable conn
+
+# ----------------------------------------------------------------------
+# method  : 
+# args    : 
+# 
+# returns :
+#
+# ----------------------------------------------------------------------
+protected method _prepare_insert_stmt {schema_name namevaluepairs sequencefields} {
+	set fnamelist [join [dict keys $namevaluepairs] ", "]
+	set valuelist [list]
+	foreach value [dict values $namevaluepairs] {
+		lappend valuelist [quote $value]
+	} 
+	set valuelist [join $valuelist ", "]
+
+	set stmt "INSERT INTO $schema_name ($fnamelist) VALUES ($valuelist)"
+	if {$sequencefields != ""} {
+		set sequencefields [join sequencefields ", "]
+		appent stmt " RETURNING $sequencefields"
+	}
+
+	${log}::debug $stmt
+	return $stmt
+}
 
 
 # ----------------------------------------------------------------------

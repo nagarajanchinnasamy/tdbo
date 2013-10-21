@@ -5,7 +5,7 @@ package require Itcl 3.4
 namespace eval ::tdbo {
 	namespace export *
 
-	variable version 0.1.2
+	variable version 0.1.3
 	variable library [file dirname [info script]]
 }
 

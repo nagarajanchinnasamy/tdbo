@@ -10,7 +10,7 @@
 # ----------------------------------------------------------------------
 
 package require logger
-package require tdbo 0.1.2
+package require tdbo
 
 set dir [file dirname [info script]]
 source [file join $dir "employee.tcl"]
@@ -69,3 +69,6 @@ addr clear
 addr configure -id [emp cget -address_id]
 addr get
 ${log}::debug "Modified address: [addr cget]"
+
+# Close the db connection
+$db close

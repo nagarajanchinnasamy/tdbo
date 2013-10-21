@@ -33,6 +33,9 @@ constructor {} {
 #
 # ----------------------------------------------------------------------
 destructor {
+	if {[info exists conn] && $conn != ""} {
+		catch {$conn close}
+	}
 }
 
 

@@ -1,7 +1,9 @@
-itcl::class Address {
-	inherit tdbo::DBObject
+package require tdbo::Itcl
 
-	constructor {db args} {tdbo::DBObject::constructor $db} {
+itcl::class Address {
+	inherit tdbo::Itcl::DBObject
+
+	constructor {db args} {tdbo::Itcl::DBObject::constructor $db} {
 		configure {*}$args
 	}
 	destructor {

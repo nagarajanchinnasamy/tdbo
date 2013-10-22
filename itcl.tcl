@@ -8,14 +8,160 @@
 # See the file "license.terms" for information on usage and redistribution
 # of this file, and for a DISCLAIMER OF ALL WARRANTIES.
 
+package require logger
+package require Itcl
+
+# ----------------------------------------------------------------------
+# class Object
+#
+#
+#
+# ----------------------------------------------------------------------
+itcl::class tdbo::Itcl::Object {
+
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+constructor {} {
+	if {[namespace tail [info class]] == "Object"} {
+		return -code error "Error: Can't create Object instances - abstract class."
+	}
+	set clsName [$this info class]
+	set log [::logger::init $clsName]
+}
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+destructor {
+}
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+public method configure {{option ""} args} {
+	# Usage: objName configure
+	# return value: -opt {-ival val -cval val} -opt {-ival val -cval val} ...
+	if {![string length $option]} {
+		set result [dict create]
+		foreach optcfg [_itcl_configure] {
+			lassign $optcfg optname ival cval
+			dict set result $optname [list -ival $ival -cval $cval]
+		}
+		return $result
+	}
+
+	# Usage: objName configure objName1
+	# Usage (Copy constructor): className objName objName1
+	# return value: ""
+	if {![llength $args]} {
+		if {[catch {uplevel $option isa [$this info class]} err]} {
+			_itcl_configure $option {*}$args
+			return
+		}
+		_itcl_configure {*}[uplevel $option cget]
+		return
+	}
+	
+	# Usage: objName configure -opt val -opt val ...
+	# return value: ""
+	_itcl_configure $option {*}$args
+	return
+}
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+public method cget {{option ""} args} {
+	# Usage: objName cget
+	# return value: -opt val -opt val ...
+	if {![string length $option]} {
+		set config [configure]
+		set result [dict create]
+		foreach opt [dict keys $config] {
+			dict set result $opt [dict get $config $opt -cval]
+		}
+
+		return $result
+	}
+
+	set config [configure]
+
+	# Usage: objName cget -opt
+	# return value: val
+	if {![llength $args]} {
+		return [dict get $config $option -cval]
+	}
+
+	# Usage: objName cget -opt vName -opt vName ...
+	# return value: ""
+	# return value: values for opt is stored in corresponding vName
+	set args [linsert $args 0 $option]
+	foreach {opt vname} $args {
+		upvar $vname var
+		set var [dict get $config $opt -cval]
+	}
+}
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+public method clear {} {
+	set config [configure]
+	foreach opt [dict keys $config] {
+		configure $opt [dict get $config $opt -ival]
+	}
+}
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+protected variable clsName
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+protected variable log
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+private method _itcl_configure {{option ""} args} @itcl-builtin-configure
+# ----------------------------------------------------------------------
+#
+#
+#
+#
+# ----------------------------------------------------------------------
+private method _itcl_cget {{option ""} args} @itcl-builtin-cget
+
+}
+
 # ----------------------------------------------------------------------
 # class DBObject
 #
 #
 #
 # ----------------------------------------------------------------------
-itcl::class tdbo::DBObject {
-	inherit tdbo::Object
+itcl::class tdbo::Itcl::DBObject {
+	inherit tdbo::Itcl::Object
 
 # ----------------------------------------------------------------------
 # method - constructor - Stores the definition of primary keys, unique
@@ -28,18 +174,16 @@ itcl::class tdbo::DBObject {
 #                        Also prepares list of fieldnames to be used by
 #                        insert and update operations later.
 #                        
-# args   - db - instance of a specific Database implementation
+# args   - conn - instance of a specific Database implementation
 #               such as SQLite
 #
 # ----------------------------------------------------------------------
-constructor {db} {
+constructor {conn} {
 	if {[namespace tail [info class]] == "DBObject"} {
 		return -code error "Error: Can't instantiate DBObject - abstract class."
 	}
-	if {$db == "" || ![$db isa tdbo::Database]} {
-		return -code error "Invalid db object type"
-	}
-	set [itcl::scope db] $db
+
+	set [itcl::scope conn] $conn
 	if ![llength [array names fields -glob "$clsName,*"]] {
 		_define_primarykey
 		_define_unique
@@ -86,7 +230,7 @@ public method add {args} {
 		set namevaluepairs [__make_namevaluepairs $args]
 	}
 
-	if {[catch {$db insert [${clsName}::schema_name] $namevaluepairs $fields($clsName,sqlist)} result]} {
+	if {[catch {$conn insert [${clsName}::schema_name] $namevaluepairs $fields($clsName,sqlist)} result]} {
 		${log}::error $result
 		return 0
 	}
@@ -133,7 +277,7 @@ public method get {args} {
 		set fieldslist $args
 	}
 
-	if {[catch {$db get [${clsName}::schema_name] $fieldslist [__get_condition] dict} result]} {
+	if {[catch {$conn get [${clsName}::schema_name] $fieldslist [__get_condition] dict} result]} {
 		return -code error $result
 	}
 	if {[llength $result] > 1} {
@@ -163,7 +307,7 @@ public method save {args} {
 		set namevaluepairs [__make_namevaluepairs $args]
 	}
 
-	if {[catch {$db update [${clsName}::schema_name] $namevaluepairs [__get_condition]} result]} {
+	if {[catch {$conn update [${clsName}::schema_name] $namevaluepairs [__get_condition]} result]} {
 		${log}::error $result
 		return 0
 	}
@@ -181,7 +325,7 @@ public method save {args} {
 #
 # ----------------------------------------------------------------------
 public method delete {} {
-	if {[catch {$db delete [${clsName}::schema_name] [__get_condition]} result]} {
+	if {[catch {$conn delete [${clsName}::schema_name] [__get_condition]} result]} {
 		${log}::error $result
 		return 0
 	}
@@ -274,7 +418,7 @@ private common fields; array set fields {}
 #
 #
 # ----------------------------------------------------------------------
-private variable db
+private variable conn
 
 
 # ----------------------------------------------------------------------
@@ -408,5 +552,7 @@ private method __make_namevaluepairs { fieldslist } {
 	return $namevaluepairs
 }
 
-# -------------------------------END------------------------------------
 }
+
+package provide tdbo::Itcl 0.1.0
+

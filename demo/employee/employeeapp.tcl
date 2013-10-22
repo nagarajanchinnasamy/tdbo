@@ -9,20 +9,21 @@
 #
 # ----------------------------------------------------------------------
 
-package require logger
 package require tdbo
+namespace import -force tdbo::dbc::dbc
 
+set oosystem itcl
 set dir [file dirname [info script]]
-source [file join $dir "employee.tcl"]
-source [file join $dir "address.tcl"]
+source [file join $dir "$oosystem/employee.tcl"]
+source [file join $dir "$oosystem/address.tcl"]
 source [file join $dir "saveemployee.tcl"]
 
 # Setup logging facility
 set log [::logger::init EmployeeApp]
 
 # Open SQLite Database connection
-set db [::tdbo::SQLite #auto]
-$db open [file join $dir "sqlite/employee.db"]
+set db [dbc load sqlite]
+set conn [$db open [file normalize "sqlite/employee.db"]]
 
 # Open PostgreSQL Database connection
 #set db [::tdbo::PostgreSQL #auto]
@@ -34,10 +35,10 @@ $db open [file join $dir "sqlite/employee.db"]
 
 # Create Employee and Address instances 
 
-Employee emp $db -name "Employee Name1" -rollno "INBNG0001"
+Employee emp $conn -name "Employee Name1" -rollno "INBNG0001"
 ${log}::debug "Employee before adding: [emp cget]"
 
-Address addr $db \
+Address addr $conn \
 	-addrline1 "Address Line 1" \
 	-addrline2 "Address Line 2" \
 	-city "City Name" \
@@ -46,9 +47,9 @@ Address addr $db \
 ${log}::debug "Address before adding: [emp cget]"
 
 # Add Employee and Address objects to database using a transaction
-if {![saveemployee $log $db add emp addr]} {
+if {![saveemployee $log $conn add emp addr]} {
 	${log}::error "Saving Employee failed... Please delete any pre-existing records from the table"
-	$db close
+	$conn close
 	exit
 }
 
@@ -70,5 +71,11 @@ addr configure -id [emp cget -address_id]
 addr get
 ${log}::debug "Modified address: [addr cget]"
 
+# Delete the record
+addr delete
+${log}::debug "Address After deleting: [addr cget]"
+emp delete
+${log}::debug "Employee After deleting: [emp cget]"
+
 # Close the db connection
-$db close
+$conn close

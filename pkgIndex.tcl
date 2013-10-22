@@ -8,4 +8,9 @@
 # script is sourced, the variable $dir must contain the
 # full path name of this file's directory.
 
-package ifneeded tdbo 0.1.3 [list source [file join $dir tdbo.tcl]]
+package ifneeded tdbo 0.1.4 [list source [file join $dir tdbo.tcl]]
+package ifneeded tdbo::Itcl 0.1.0 [list source [file join $dir itcl.tcl]]
+package ifneeded tdbo::dbc 0.1.2 [list source [file join $dir dbc.tcl]]
+package ifneeded tdbo::dbc::mariadb 0.1.1 [list source [file join $dir mariadb.tcl]]
+package ifneeded tdbo::dbc::postgresql 0.1.1 [list source [file join $dir postgresql.tcl]]
+package ifneeded tdbo::dbc::sqlite 0.1.1 [list source [file join $dir sqlite.tcl]]

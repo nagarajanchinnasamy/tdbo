@@ -78,6 +78,8 @@ public method close {} {
 		return
 	}
 
+	catch {namespace delete ${clsName}::${conn}}
+
 	catch {$conn close}
 	unset conn
 }

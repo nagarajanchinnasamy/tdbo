@@ -9,8 +9,11 @@
 #
 # ----------------------------------------------------------------------
 
+lappend ::auto_path /usr/share/tcltk/tdbo0.1.4
+
 package require tdbo
 namespace import -force tdbo::dbc::dbc
+
 
 set oosystem itcl
 set dir [file dirname [info script]]
@@ -22,7 +25,7 @@ source [file join $dir "saveemployee.tcl"]
 set log [::logger::init EmployeeApp]
 
 # Open SQLite Database connection
-set db [dbc load sqlite]
+set db [dbc load tdbc::sqlite3]
 set conn [$db open [file normalize "sqlite/employee.db"]]
 
 # Open PostgreSQL Database connection

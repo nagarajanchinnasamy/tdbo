@@ -9,70 +9,47 @@
 
 package require logger
 
-namespace eval ::tdbo::dbc::sqlite {
+namespace eval ::tdbo::sqlite {
 	variable log [::logger::init [namespace current]]
 	variable count 0
-	variable use_tdbc 0
 	variable ns
 	array set ns {}
 }
 
-proc ::tdbo::dbc::sqlite::Load {{_use_tdbc 0}} {
-	variable use_tdbc
-
-	switch -- $_use_tdbc {
-		yes - 1 - true - on {
-		}
-		no - 0 - false - off {
-			package require sqlite3
-		}
-	}
+proc ::tdbo::sqlite::Load {} {
+	package require sqlite3
 }
 
-proc ::tdbo::dbc::sqlite::open {location {initscript ""}} {
+proc ::tdbo::sqlite::open {location {initscript ""}} {
 	variable count
-	variable use_tdbc
 	variable ns
 	
 	incr count
-	set conn [format "%s%s%s" [namespace current] "___conn" $count]
+	set conn [format "%s%s%s" [namespace current] "conn" $count]
 
-	switch -- $use_tdbc {
-		yes - 1 - true - on {
-		}
-		no - 0 - false - off {
-			if {[catch {sqlite3 $conn $location} err]} {
-				return -code error $err
-			}
-			if {$initscript != ""} {
-				uplevel 1 $conn eval $initscript
-			}
-		}
+	if {[catch {sqlite3 $conn $location} err]} {
+		return -code error $err
+	}
+	if {$initscript != ""} {
+		uplevel 1 $conn eval $initscript
 	}
 
-	set _ns [format "%s%s%s" [namespace current] "::___ns" $count]
+	set _ns [format "%s%s%s" [namespace current] "::ns" $count]
 	set ns($conn) ${_ns}
 	namespace eval ${_ns} {}
 
 	return $conn
 }
 
-proc ::tdbo::dbc::sqlite::close {conn} {
-	variable use_tdbc
+proc ::tdbo::sqlite::close {conn} {
 	variable ns
 
-	switch -- $use_tdbc {
-		yes - 1 - true - on {
-		}
-		no - 0 - false - off {
-			catch {$conn close}
-			catch {namespace delete $ns($conn)}
-			array unset ns $conn
-		}
-	}
+	catch {$conn close}
+	catch {namespace delete $ns($conn)}
+	array unset ns $conn
 }
 
-proc ::tdbo::dbc::sqlite::get {conn schema_name fieldslist conditionlist {format "dict"}} {
+proc ::tdbo::sqlite::get {conn schema_name fieldslist conditionlist {format "dict"}} {
 	return [
 		_select \
 			$conn \
@@ -83,11 +60,11 @@ proc ::tdbo::dbc::sqlite::get {conn schema_name fieldslist conditionlist {format
 	]
 }
 
-proc ::tdbo::dbc::sqlite::mget {conn schema_name args} {
+proc ::tdbo::sqlite::mget {conn schema_name args} {
 	return [_select $conn $schema_name {*}$args]
 }
 
-proc ::tdbo::dbc::sqlite::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
+proc ::tdbo::sqlite::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
 	set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs]
 	if {[catch {$conn eval $sqlscript} result]} {
 		return -code error $result
@@ -107,7 +84,7 @@ proc ::tdbo::dbc::sqlite::insert {conn schema_name namevaluepairs {sequence_fiel
 	return [list $status $sequence_values]
 }
 
-proc ::tdbo::dbc::sqlite::update {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::sqlite::update {conn schema_name namevaluepairs {conditionlist ""}} {
 	set sqlscript [_prepare_update_stmt $conn $schema_name $namevaluepairs $conditionlist]
 	if {[catch {$conn eval $sqlscript} err]} {
 		return -code error $err
@@ -116,7 +93,7 @@ proc ::tdbo::dbc::sqlite::update {conn schema_name namevaluepairs {conditionlist
 	return [$conn changes]
 }
 
-proc ::tdbo::dbc::sqlite::delete {conn schema_name {conditionlist ""}} {
+proc ::tdbo::sqlite::delete {conn schema_name {conditionlist ""}} {
 	set sqlscript [_prepare_delete_stmt $conn $schema_name $conditionlist]
 	if {[catch {$conn eval $sqlscript} err]} {
 		return -code error $err
@@ -125,15 +102,15 @@ proc ::tdbo::dbc::sqlite::delete {conn schema_name {conditionlist ""}} {
 	return [$conn changes]
 }
 
-proc ::tdbo::dbc::sqlite::begin {conn {lock deferred}} {
+proc ::tdbo::sqlite::begin {conn {lock deferred}} {
 	$conn eval begin $lock
 }
 
-proc ::tdbo::dbc::sqlite::commit {conn} {
+proc ::tdbo::sqlite::commit {conn} {
 	$conn eval commit
 }
 
-proc ::tdbo::dbc::sqlite::rollback {conn} {
+proc ::tdbo::sqlite::rollback {conn} {
 	$conn eval rollback
 }
 
@@ -144,7 +121,7 @@ proc ::tdbo::dbc::sqlite::rollback {conn} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::dbc::sqlite::_nsvar {conn varname} {
+proc ::tdbo::sqlite::_nsvar {conn varname} {
 	variable ns
 	return [format "%s%s%s" $ns($conn) "::" $varname]
 }
@@ -155,7 +132,7 @@ proc ::tdbo::dbc::sqlite::_nsvar {conn varname} {
 #
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::dbc::sqlite::_prepare_condition {conn conditionlist} {
+proc ::tdbo::sqlite::_prepare_condition {conn conditionlist} {
 	set sqlcondition [list]
 	foreach condition $conditionlist {
 		set complist [list]
@@ -188,7 +165,7 @@ proc ::tdbo::dbc::sqlite::_prepare_condition {conn conditionlist} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::dbc::sqlite::_prepare_insert_stmt {conn schema_name namevaluepairs} {
+proc ::tdbo::sqlite::_prepare_insert_stmt {conn schema_name namevaluepairs} {
 	variable log
 
 	set fnames [dict keys $namevaluepairs]
@@ -211,7 +188,7 @@ proc ::tdbo::dbc::sqlite::_prepare_insert_stmt {conn schema_name namevaluepairs}
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::dbc::sqlite::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::sqlite::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
 	variable log
 
 	dict for {fname val} $namevaluepairs {
@@ -239,7 +216,7 @@ proc ::tdbo::dbc::sqlite::_prepare_update_stmt {conn schema_name namevaluepairs 
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::dbc::sqlite::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
+proc ::tdbo::sqlite::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
 	variable log
 
 	set stmt "DELETE FROM $schema_name"
@@ -258,7 +235,7 @@ proc ::tdbo::dbc::sqlite::_prepare_delete_stmt {conn schema_name {conditionlist 
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::dbc::sqlite::_prepare_select_stmt {schema_name args} {
+proc ::tdbo::sqlite::_prepare_select_stmt {schema_name args} {
 	variable log
 
 	set fieldslist "*"
@@ -306,7 +283,7 @@ proc ::tdbo::dbc::sqlite::_prepare_select_stmt {schema_name args} {
 # format: one of "dict", "llist", "list" 
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::dbc::sqlite::_select {conn schema_name args} {
+proc ::tdbo::sqlite::_select {conn schema_name args} {
 	set format "dict"
 	if {[dict exists $args -format]} {
 		set format [dict get $args -format]
@@ -350,4 +327,4 @@ proc ::tdbo::dbc::sqlite::_select {conn schema_name args} {
 	return $recordslist
 }
 
-package provide tdbo::dbc::sqlite 0.1.1
+package provide tdbo::sqlite 0.1.1

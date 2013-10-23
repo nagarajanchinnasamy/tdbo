@@ -10,6 +10,7 @@
 namespace eval ::tdbo {}
 
 namespace eval ::tdbo::dbc {
+
 	variable commands
 	set commands [list load]
 
@@ -46,15 +47,15 @@ proc ::tdbo::dbc::Load {driver {version ""}} {
 		return [dict get $dbms $driver -cmd]
 	}
 
-	if {[catch {package require tdbo::dbc::${driver} {*}$version} err]} {
-		return -code error "Unable to load dbc driver $driver.\nError: $err"
+	if {[catch {package require tdbo::${driver} {*}$version} err]} {
+		return -code error "Unable to load tdbo driver $driver.\nError: $err"
 	}
 	
-	if {[catch {[namespace current]::${driver}::Load} err]} {
-		return -code error "Unable to load dbc driver $driver.\nError: $err"
+	if {[catch {::tdbo::${driver}::Load} err]} {
+		return -code error "Unable to load tdbo driver $driver.\nError: $err"
 	}
 
-	set driver_cmd [format "%s%s%s" [namespace current] "___" $driver]
+	set driver_cmd [format "%s%s%s" [namespace current] "_" $driver]
     uplevel #0 [list interp alias {} $driver_cmd {} [namespace current]::DriverCmd $driver]
 
 	dict set drivers $driver -cmd $driver_cmd 
@@ -77,18 +78,16 @@ proc ::tdbo::dbc::open {driver args} {
 	variable connections
 
 	if {![dict exists $drivers $driver]} {
-		return -code error "DBC driver $driver not loaded"
+		return -code error "tdbo driver $driver not loaded"
 	}
 
-
-	dict incr connections -count
-	set conn_cmd [format "%s%s" "::tdbo::dbc::conncmd" [dict get $connections -count]]
-
-
-	if {[catch {uplevel 1 [namespace current]::${driver}::open $args} result]} {
+	if {[catch {uplevel 1 ::tdbo::${driver}::open $args} result]} {
 		return -code error $result
 	}
 	set conn $result
+
+	dict incr connections -count
+	set conn_cmd [format "%s%s%s" [namespace current] "::conncmd" [dict get $connections -count]]
 
     uplevel #0 [list interp alias {} $conn_cmd {} [namespace current]::ConnCmd $conn_cmd]
 
@@ -123,7 +122,7 @@ proc ::tdbo::dbc::ConnCmd {conn_cmd cmd args} {
 proc ::tdbo::dbc::close {conn_cmd driver conn} {
 	variable connections
 
-	if {[catch {uplevel 1 [namespace current]::${driver}::close $conn} err]} {
+	if {[catch {uplevel 1 ::tdbo::${driver}::close $conn} err]} {
 		return -code error $err
 	}
 
@@ -133,7 +132,7 @@ proc ::tdbo::dbc::close {conn_cmd driver conn} {
 }
 
 proc ::tdbo::dbc::get {driver conn schema_name fieldslist conditionlist {format "dict"}} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::get $conn $schema_name $fieldslist $conditionlist $format]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::get $conn $schema_name $fieldslist $conditionlist $format]} result]} {
 		return -code error $result
 	}
 
@@ -141,7 +140,7 @@ proc ::tdbo::dbc::get {driver conn schema_name fieldslist conditionlist {format 
 }
 
 proc ::tdbo::dbc::mget {driver conn schema_name args} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::mget $conn $schema_name $args]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::mget $conn $schema_name $args]} result]} {
 		return -code error $result
 	}
 
@@ -149,7 +148,7 @@ proc ::tdbo::dbc::mget {driver conn schema_name args} {
 }
 
 proc ::tdbo::dbc::insert {driver conn schema_name namevaluepairs {sequence_fields ""}} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::insert $conn $schema_name $namevaluepairs $sequence_fields]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::insert $conn $schema_name $namevaluepairs $sequence_fields]} result]} {
 		return -code error $result
 	}
 
@@ -157,7 +156,7 @@ proc ::tdbo::dbc::insert {driver conn schema_name namevaluepairs {sequence_field
 }
 
 proc ::tdbo::dbc::update {driver conn schema_name namevaluepairs {conditionlist ""}} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::update $conn $schema_name $namevaluepairs $conditionlist]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::update $conn $schema_name $namevaluepairs $conditionlist]} result]} {
 		return -code error $result
 	}
 
@@ -165,7 +164,7 @@ proc ::tdbo::dbc::update {driver conn schema_name namevaluepairs {conditionlist 
 }
 
 proc ::tdbo::dbc::delete {driver conn schema_name {conditionlist ""}} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::delete $conn $schema_name $conditionlist]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::delete $conn $schema_name $conditionlist]} result]} {
 		return -code error $result
 	}
 
@@ -173,7 +172,7 @@ proc ::tdbo::dbc::delete {driver conn schema_name {conditionlist ""}} {
 }
 
 proc ::tdbo::dbc::begin {driver conn args} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::begin $conn {*}$args]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::begin $conn {*}$args]} result]} {
 		return -code error $result
 	}
 
@@ -181,7 +180,7 @@ proc ::tdbo::dbc::begin {driver conn args} {
 }
 
 proc ::tdbo::dbc::commit {driver conn args} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::commit $conn {*}$args]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::commit $conn {*}$args]} result]} {
 		return -code error $result
 	}
 
@@ -189,7 +188,7 @@ proc ::tdbo::dbc::commit {driver conn args} {
 }
 
 proc ::tdbo::dbc::rollback {driver conn args} {
-	if {[catch {uplevel 1 [list [namespace current]::${driver}::rollback $conn {*}$args]} result]} {
+	if {[catch {uplevel 1 [list ::tdbo::${driver}::rollback $conn {*}$args]} result]} {
 		return -code error $result
 	}
 

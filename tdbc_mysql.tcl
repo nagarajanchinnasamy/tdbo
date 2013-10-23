@@ -1,6 +1,6 @@
-# tdbc_sqlite.tcl --
+# tdbc_mysql.tcl --
 #
-# tdbc sqlite3 connectivity module.
+# tdbc mysql connectivity module.
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 #
@@ -9,35 +9,24 @@
 
 package require tdbo::tdbc
 
-itcl::class ::tdbo::tdbc::sqlite3 {
+itcl::class ::tdbo::tdbc::mysql {
 	inherit ::tdbo::tdbc
 
 	constructor {} {
-		if {[namespace tail [info class]] == "sqlite3"} {
-			return -code error "Error: Can't instantiate tdbc::sqlite3"
+		if {[namespace tail [info class]] == "mysql"} {
+			return -code error "Error: Can't instantiate tdbc::mysql"
 		}
 	}
 
 	public proc Load {} {
 		chain
-		package require tdbc::sqlite3
+		package require tdbc::mysql
 	}
 
-	public proc open {location {initscript ""}} {
+	public proc open {dbname args} {
 		set conn [chain]
-		if {[catch {tdbc::sqlite3::connection create $conn $location} err]} {
+		if {[catch {tdbc::mysql::connection create $conn -database $dbname {*}$args} err]} {
 			return -code error $err
-		}
-
-		if {$initscript != ""} {
-			if {[catch {$conn prepare $initscript} stmt]} {
-				return -code error $stmt
-			}
-			if {[catch {$stmt execute} resultset]} {
-				$stmt close
-				return -code error $resultset
-			}
-			$stmt close
 		}
 
 		return $conn
@@ -74,7 +63,7 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 		}
 
 		set sequence_values [dict create]
-		if {[catch {$conn prepare "select last_insert_rowid\(\)"} stmt]} {
+		if {[catch {$conn prepare "select last_insert_id\(\)"} stmt]} {
 			return -code error $stmt
 		}
 		if {[catch {$stmt execute} resultset]} {
@@ -99,13 +88,19 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 		return [chain $conn $schema_name $conditionlist]
 	}
 
-	public proc begin {conn {lock deferred}} {
-		set stmt [$conn prepare "begin $lock"]
-		if {[catch {$stmt execute} err]} {
+	public proc begin {conn {isolation ""}} {
+		if {$isolation != ""} {
+			set stmt [$conn prepare "set transaction isolation level $isolation"]
+			if {[catch {$stmt execute} err]} {
+				$stmt close
+				return -code error $err
+			}
 			$stmt close
+		}
+
+		if {[catch {$conn begintransaction} err]} {
 			return -code error $err
 		}
-		$stmt close
 	}
 
 	public proc commit {conn} {
@@ -115,7 +110,6 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 	public proc rollback {conn} {
 		chain $conn
 	}
-
 }
 
-package provide tdbo::tdbc::sqlite3 0.1.0
+package provide tdbo::tdbc::mysql 0.1.0

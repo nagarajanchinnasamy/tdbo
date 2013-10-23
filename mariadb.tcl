@@ -90,10 +90,12 @@ proc ::tdbo::mariadb::delete {conn schema_name {conditionlist ""}} {
 	return $result
 }
 
-proc ::tdbo::mariadb::begin {conn {isolation "repeatable read"}} {
-	set sqlscript "set transaction isolation level $isolation"
-	if {[catch {mysql::exec $conn $sqlscript} result]} {
-		return -code error $result
+proc ::tdbo::mariadb::begin {conn {isolation ""}} {
+	if {$isolation != ""} {
+		set sqlscript "set transaction isolation level $isolation"
+		if {[catch {mysql::exec $conn $sqlscript} result]} {
+			return -code error $result
+		}
 	}
 	set sqlscript "start transaction"
 	if {[catch {mysql::exec $conn $sqlscript} result]} {

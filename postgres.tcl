@@ -1,4 +1,4 @@
-# postgresql.tcl --
+# postgres.tcl --
 #
 # PostgreSQL connectivity module.
 #
@@ -9,15 +9,15 @@
 
 package require logger
 
-namespace eval ::tdbo::postgresql {
+namespace eval ::tdbo::postgres {
 	variable log [::logger::init [namespace current]]
 }
 
-proc ::tdbo::postgresql::Load {{_use_tdbc 0}} {
+proc ::tdbo::postgres::Load {{_use_tdbc 0}} {
 	package require Pgtcl
 }
 
-proc ::tdbo::postgresql::open {dbname args} {
+proc ::tdbo::postgres::open {dbname args} {
 	if {[catch {pg_connect $dbname {*}$args} result]} {
 		return -code error $result
 	}
@@ -27,11 +27,11 @@ proc ::tdbo::postgresql::open {dbname args} {
 }
 
 
-proc ::tdbo::postgresql::close {conn} {
+proc ::tdbo::postgres::close {conn} {
 	catch {pg_disconnect $conn}
 }
 
-proc ::tdbo::postgresql::get {conn schema_name fieldslist conditionlist {format "dict"}} {
+proc ::tdbo::postgres::get {conn schema_name fieldslist conditionlist {format "dict"}} {
 	return [
 		_select \
 			$conn \
@@ -42,11 +42,11 @@ proc ::tdbo::postgresql::get {conn schema_name fieldslist conditionlist {format 
 	]
 }
 
-proc ::tdbo::postgresql::mget {conn schema_name args} {
+proc ::tdbo::postgres::mget {conn schema_name args} {
 	return [_select $conn $schema_name {*}$args]
 }
 
-proc ::tdbo::postgresql::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
+proc ::tdbo::postgres::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
 	set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs]
 
 	if {[catch {pg_exec $conn $sqlscript} result]} {
@@ -72,7 +72,7 @@ proc ::tdbo::postgresql::insert {conn schema_name namevaluepairs {sequence_field
 	return 1
 }
 
-proc ::tdbo::postgresql::update {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::postgres::update {conn schema_name namevaluepairs {conditionlist ""}} {
 	set sqlscript [_prepare_update_stmt $conn $schema_name $namevaluepairs $conditionlist]
 	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
@@ -83,7 +83,7 @@ proc ::tdbo::postgresql::update {conn schema_name namevaluepairs {conditionlist 
 	return $changes
 }
 
-proc ::tdbo::postgresql::delete {conn schema_name {conditionlist ""}} {
+proc ::tdbo::postgres::delete {conn schema_name {conditionlist ""}} {
 	set sqlscript [_prepare_delete_stmt $conn $schema_name $conditionlist]
 	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
@@ -94,21 +94,21 @@ proc ::tdbo::postgresql::delete {conn schema_name {conditionlist ""}} {
 	return $changes
 }
 
-proc ::tdbo::postgresql::begin {conn {lock deferrable}} {
+proc ::tdbo::postgres::begin {conn {lock deferrable}} {
 	if {[catch {pg_exec $conn "begin $lock"} result]} {
 		return -code error $result
 	}
 	pg_result $result -clear
 }
 
-proc ::tdbo::postgresql::commit {conn} {
+proc ::tdbo::postgres::commit {conn} {
 	if {[catch {pg_exec $conn commit} result]} {
 		return -code error $result
 	}
 	pg_result $result -clear
 }
 
-proc ::tdbo::postgresql::rollback {conn} {
+proc ::tdbo::postgres::rollback {conn} {
 	if {[catch {pg_exec $conn rollback} result]} {
 		return -code error $result
 	}
@@ -121,7 +121,7 @@ proc ::tdbo::postgresql::rollback {conn} {
 #
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::postgresql::_prepare_condition {conn conditionlist} {
+proc ::tdbo::postgres::_prepare_condition {conn conditionlist} {
 	set sqlcondition [list]
 	foreach condition $conditionlist {
 		set complist [list]
@@ -152,7 +152,7 @@ proc ::tdbo::postgresql::_prepare_condition {conn conditionlist} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::postgresql::_prepare_insert_stmt {conn schema_name namevaluepairs} {
+proc ::tdbo::postgres::_prepare_insert_stmt {conn schema_name namevaluepairs} {
 	variable log
 
 	set fnamelist [join [dict keys $namevaluepairs] ", "]
@@ -180,7 +180,7 @@ proc ::tdbo::postgresql::_prepare_insert_stmt {conn schema_name namevaluepairs} 
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::postgresql::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::postgres::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
 	variable log
 
 	dict for {fname val} $namevaluepairs {
@@ -206,7 +206,7 @@ proc ::tdbo::postgresql::_prepare_update_stmt {conn schema_name namevaluepairs {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::postgresql::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
+proc ::tdbo::postgres::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
 	variable log
 
 	set stmt "DELETE FROM $schema_name"
@@ -225,7 +225,7 @@ proc ::tdbo::postgresql::_prepare_delete_stmt {conn schema_name {conditionlist "
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::postgresql::_prepare_select_stmt {schema_name args} {
+proc ::tdbo::postgres::_prepare_select_stmt {schema_name args} {
 	variable log
 
 	set fieldslist "*"
@@ -274,7 +274,7 @@ proc ::tdbo::postgresql::_prepare_select_stmt {schema_name args} {
 # format: one of "dict", "llist", "list" 
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::postgresql::_select {conn schema_name args} {
+proc ::tdbo::postgres::_select {conn schema_name args} {
 	set format "dict"
 	if {[dict exists $args -format]} {
 		set format [dict get $args -format]
@@ -301,4 +301,4 @@ proc ::tdbo::postgresql::_select {conn schema_name args} {
 	return $recordslist
 }
 
-package provide tdbo::postgresql 0.1.1
+package provide tdbo::postgres 0.1.1

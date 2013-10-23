@@ -1,6 +1,6 @@
-# tdbc_sqlite.tcl --
+# tdbc_postgres.tcl --
 #
-# tdbc sqlite3 connectivity module.
+# tdbc postgres connectivity module.
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 #
@@ -9,35 +9,24 @@
 
 package require tdbo::tdbc
 
-itcl::class ::tdbo::tdbc::sqlite3 {
+itcl::class ::tdbo::tdbc::postgres {
 	inherit ::tdbo::tdbc
 
 	constructor {} {
-		if {[namespace tail [info class]] == "sqlite3"} {
-			return -code error "Error: Can't instantiate tdbc::sqlite3"
+		if {[namespace tail [info class]] == "postgres"} {
+			return -code error "Error: Can't instantiate tdbc::postgres"
 		}
 	}
 
 	public proc Load {} {
 		chain
-		package require tdbc::sqlite3
+		package require tdbc::postgres
 	}
 
-	public proc open {location {initscript ""}} {
+	public proc open {dbname args} {
 		set conn [chain]
-		if {[catch {tdbc::sqlite3::connection create $conn $location} err]} {
+		if {[catch {tdbc::postgres::connection create $conn -database $dbname {*}$args} err]} {
 			return -code error $err
-		}
-
-		if {$initscript != ""} {
-			if {[catch {$conn prepare $initscript} stmt]} {
-				return -code error $stmt
-			}
-			if {[catch {$stmt execute} resultset]} {
-				$stmt close
-				return -code error $resultset
-			}
-			$stmt close
 		}
 
 		return $conn
@@ -67,27 +56,14 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 		}
 		
 		set status [$resultset rowcount]
-		$stmt close
 		
 		if {$sequence_fields == ""} {
+			$stmt close
 			return $status
 		}
 
-		set sequence_values [dict create]
-		if {[catch {$conn prepare "select last_insert_rowid\(\)"} stmt]} {
-			return -code error $stmt
-		}
-		if {[catch {$stmt execute} resultset]} {
-			$stmt close
-			return -code error $resultset
-		}
-		$resultset nextlist rowid
-		$stmt close
-
-		foreach fname $sequence_fields {
-			dict set sequence_values $fname $rowid
-		}
-
+		$resultset nextdict sequence_values
+		
 		return [list $status $sequence_values]
 	}
 
@@ -99,7 +75,7 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 		return [chain $conn $schema_name $conditionlist]
 	}
 
-	public proc begin {conn {lock deferred}} {
+	public proc begin {conn {lock deferrable}} {
 		set stmt [$conn prepare "begin $lock"]
 		if {[catch {$stmt execute} err]} {
 			$stmt close
@@ -116,6 +92,24 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 		chain $conn
 	}
 
+	protected proc _prepare_insert_stmt {conn schema_name namevaluepairs} {
+		set fnames [dict keys $namevaluepairs]
+
+		dict for {fname val} $namevaluepairs {
+			set nsname [_nsvar $conn $fname]
+			set $nsname $val
+			lappend valuelist ":$nsname"
+		}
+
+		set stmt "INSERT INTO $schema_name ([join $fnames ", "]) VALUES ([join $valuelist ", "])"
+		if {$sequencefields != ""} {
+			set sequencefields [join sequencefields ", "]
+			append stmt " RETURNING $sequencefields"
+		}
+
+		$log($conn)::debug $stmt
+		return $stmt
+	}
 }
 
-package provide tdbo::tdbc::sqlite3 0.1.0
+package provide tdbo::tdbc::postgres 0.1.0

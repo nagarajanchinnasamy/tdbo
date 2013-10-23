@@ -10,6 +10,7 @@
 # ----------------------------------------------------------------------
 
 lappend ::auto_path /usr/share/tcltk/tdbo0.1.4
+lappend ::auto_path /usr/lib/tcltk/mysqltcl-3.051
 
 package require tdbo
 namespace import -force tdbo::dbc::dbc
@@ -25,16 +26,16 @@ source [file join $dir "saveemployee.tcl"]
 set log [::logger::init EmployeeApp]
 
 # Open SQLite Database connection
-set db [dbc load tdbc::sqlite3]
-set conn [$db open [file normalize "sqlite/employee.db"]]
+# set db [dbc load tdbc::sqlite3]
+# set conn [$db open [file normalize "sqlite/employee.db"]]
 
 # Open PostgreSQL Database connection
 #set db [::tdbo::PostgreSQL #auto]
 #$db open employee -user nagu -password Welcome123
 
 # Open MariaDB/MySQL Database connection
-#set db [::tdbo::MariaDB #auto]
-#$db open employee -user nagu -password Welcome123
+set db [dbc load tdbc::mysql]
+set conn [$db open employee -user nagu -password Welcome123]
 
 # Create Employee and Address instances 
 

@@ -47,7 +47,7 @@ proc ::tdbo::postgres::mget {conn schema_name args} {
 }
 
 proc ::tdbo::postgres::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
-	set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs]
+	set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs $sequence_fields]
 
 	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
@@ -91,7 +91,12 @@ proc ::tdbo::postgres::delete {conn schema_name {conditionlist ""}} {
 
 	set changes [pg_result $result -cmdTuples]
 	pg_result $result -clear
-	return $changes
+
+	if {[string is integer -strict $changes]} {
+		return $changes
+	}
+
+	return 0
 }
 
 proc ::tdbo::postgres::begin {conn {lock deferrable}} {
@@ -152,7 +157,7 @@ proc ::tdbo::postgres::_prepare_condition {conn conditionlist} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::postgres::_prepare_insert_stmt {conn schema_name namevaluepairs} {
+proc ::tdbo::postgres::_prepare_insert_stmt {conn schema_name namevaluepairs {sequencefields ""}} {
 	variable log
 
 	set fnamelist [join [dict keys $namevaluepairs] ", "]
@@ -164,7 +169,7 @@ proc ::tdbo::postgres::_prepare_insert_stmt {conn schema_name namevaluepairs} {
 
 	set stmt "INSERT INTO $schema_name ($fnamelist) VALUES ($valuelist)"
 	if {$sequencefields != ""} {
-		set sequencefields [join sequencefields ", "]
+		set sequencefields [join $sequencefields ", "]
 		append stmt " RETURNING $sequencefields"
 	}
 
@@ -275,6 +280,8 @@ proc ::tdbo::postgres::_prepare_select_stmt {schema_name args} {
 #
 # ----------------------------------------------------------------------
 proc ::tdbo::postgres::_select {conn schema_name args} {
+	variable log
+
 	set format "dict"
 	if {[dict exists $args -format]} {
 		set format [dict get $args -format]
@@ -289,7 +296,13 @@ proc ::tdbo::postgres::_select {conn schema_name args} {
 	set recordslist ""
 	switch -- $format {
 		dict {
-			set recordslist [dict values [pg_result $result -dict]]
+			foreach row [dict values [pg_result $result -dict]] {
+				set record ""
+				foreach {field val} $row {
+					lappend record "-$field" $val
+				}
+				lappend recordslist $record
+			}
 		}
 		list -
 		llist {

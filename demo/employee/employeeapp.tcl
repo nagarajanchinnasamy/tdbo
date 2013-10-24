@@ -11,10 +11,10 @@
 
 lappend ::auto_path /usr/share/tcltk/tdbo0.1.4
 lappend ::auto_path /usr/lib/tcltk/mysqltcl-3.051
+lappend ::auto_path /usr/local/lib/pgtcl1.9
 
 package require tdbo
-namespace import -force tdbo::dbc::dbc
-
+namespace import tdbo::tdbo
 
 set oosystem itcl
 set dir [file dirname [info script]]
@@ -26,16 +26,16 @@ source [file join $dir "saveemployee.tcl"]
 set log [::logger::init EmployeeApp]
 
 # Open SQLite Database connection
-# set db [dbc load tdbc::sqlite3]
-# set conn [$db open [file normalize "sqlite/employee.db"]]
+#set db [tdbo load tdbc::sqlite]
+#set conn [$db open [file normalize "sqlite/employee.db"]]
 
 # Open PostgreSQL Database connection
-#set db [::tdbo::PostgreSQL #auto]
-#$db open employee -user nagu -password Welcome123
+set db [tdbo load postgres]
+set conn [$db open employee -user nagu -password Welcome123]
 
 # Open MariaDB/MySQL Database connection
-set db [dbc load tdbc::mysql]
-set conn [$db open employee -user nagu -password Welcome123]
+#set db [tdbo load mariadb]
+#set conn [$db open employee -user nagu -password Welcome123]
 
 # Create Employee and Address instances 
 
@@ -76,10 +76,10 @@ addr get
 ${log}::debug "Modified address: [addr cget]"
 
 # Delete the record
-addr delete
-${log}::debug "Address After deleting: [addr cget]"
 emp delete
 ${log}::debug "Employee After deleting: [emp cget]"
+addr delete
+${log}::debug "Address After deleting: [addr cget]"
 
 # Close the db connection
 $conn close

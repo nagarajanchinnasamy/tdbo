@@ -131,7 +131,7 @@ proc ::tdbo::mariadb::_prepare_condition {conn conditionlist} {
 			if {$val == "IS NULL"} {
 				lappend complist "$fname IS NULL"
 			} else {
-				lappend complist "$fname=[mysql::escape $conn $val]"
+				lappend complist "$fname='[mysql::escape $conn $val]'"
 			}
 		}
 		if {$complist != ""} {
@@ -160,7 +160,7 @@ proc ::tdbo::mariadb::_prepare_insert_stmt {conn schema_name namevaluepairs} {
 	set fnamelist [join [dict keys $namevaluepairs] ", "]
 	set valuelist [list]
 	foreach value [dict values $namevaluepairs] {
-		lappend valuelist [mysql::escape $conn $value]
+		lappend valuelist "'[mysql::escape $conn $value]'"
 	} 
 	set valuelist [join $valuelist ", "]
 
@@ -181,7 +181,7 @@ proc ::tdbo::mariadb::_prepare_update_stmt {conn schema_name namevaluepairs {con
 	variable log
 
 	dict for {fname val} $namevaluepairs {
-		lappend setlist "$fname=[mysql::escape $conn $val]"
+		lappend setlist "$fname='[mysql::escape $conn $val]'"
 	}
 
 	set setlist [join $setlist ", "]
@@ -284,19 +284,22 @@ proc ::tdbo::mariadb::_select {conn schema_name args} {
 	set recordslist ""
 	switch -- $format {
 		dict {
+			set fieldslist [dict get $args -fields]
 			foreach row $result {
 				set record ""
 				foreach field $fieldslist val $row {
-					lappend record $field $val
+					lappend record "-$field" $val
 				}
 				lappend recordslist $record
 			}
 		}
 		llist {
-			set recordslist $result
+			foreach row $result {
+				lappend recordslist [dict values $row]
+			}
 		}
 		list {
-			set recordslist [join $result]
+			lappend recordslist {*}[dict values $row]
 		}
 	}
 	return $recordslist

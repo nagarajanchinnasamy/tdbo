@@ -1,22 +1,24 @@
 tdbo - Tcl DataBase Object
 ==========================
 
-Tcl DataBase Object (tdbo) provides a simple object oriented interface to database layer of an application. It is written based on incrTcl extension of Tcl. Currently it supports connectivity to SQLite3, PostgreSQL and MySQL / MariaDB database systems. However, tdbo package is written in a generic way to plugin support for other databases. We will add support for other databases such as Oracle, ODBC etc., in future releases.
+Tcl DataBase Object (tdbo) provides a simple object oriented interface to database layer of an application. It supports connectivity to SQLite3, PostgreSQL and MySQL / MariaDB database systems. However, tdbo package is written in a generic way to plugin support for other databases. We will add support for other databases such as Oracle etc., in future releases.
 
 Simple steps to use this package are:
 
 1. Load tdbo package using:
 		package require tdbo
+		package require tdbo::Itcl
+		namespace import tdbo::tdbo
 
 2. Define your application object by inheriting tdbo::DBObject
 
 		# Employee Definition
 
 		itcl::class Employee {
-			inherit tdbo::DBObject
+			inherit tdbo::Itcl::DBObject
 
 			# db argument is an instance of tdbo::SQLite class
-			constructor {db args} {tdbo::DBObject::constructor $db} {
+			constructor {db args} {tdbo::Itcl::DBObject::constructor $db} {
 				configure {*}$args
 			}
 
@@ -44,14 +46,14 @@ Simple steps to use this package are:
 			}
 		}
 
-3. Now in your main application, instantiate a database connectivity implementation:
+3. Now in your application, load a database driver and open a connection:
 
-		set db [tdbo::SQLite #auto -location mytest/test.db]
-		$db open
+		set db [tdbo load tdbc::sqlite3]
+		set conn [$db open [file normalize "sqlite/employee.db"]]
 
 4. Create instances of Employee and start using it transparently:
 
-		Employee emp $db -name "new employee" -rollno "MK12345" 
+		Employee emp $conn -name "new employee" -rollno "MK12345"
 	
 		# insert the record. After addition the id is automatically populated.
 		emp1 add

@@ -1,0 +1,316 @@
+[comment {-*- tcl -*-}]
+[manpage_begin tdbo n 0.1.4]
+[copyright {2013, Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>}]
+[moddesc   {Tcl DataBase Objects}]
+[titledesc {Framework that provides Object Oriented Access to a Data Store}]
+[category  {Database}]
+[require tdbo]
+[description]
+
+[para]
+The [cmd tdbo] package provides an object oriented mechanism to access
+data in data stores. A tdbo object instance provides [cmd add],
+[cmd get], [cmd save] and [cmd delete] methods to manipulate data in
+the data store. In addition, they provide [cmd configure] and [cmd cget]
+methods to access data members of an instance in a standard tcl-ish
+style.
+
+[para]
+A data-store-driver is the one that implements necessary connectivity
+mechanism and procedures to access the data store. [cmd tdbo::load]
+method is used to load a specific data-store-driver instance. Using
+[cmd open] method of a data-store-driver instance, an application
+obtains one or many connection handles to the data store. During the
+instantiation of a tdbo object, a connection handle is passed on to it
+to make use of the connection handle to perform [cmd add], [cmd get],
+[cmd save] and [cmd delete] methods on the data store.
+
+[para]
+A data-store-driver, may also provide other methods to 1) retrieve /
+manipulate multiple insances of data objects based on filtering
+conditions, sorting and grouping criteria 2) perform atomic and
+concurrent transactions 3) etc... Applications can make use of the
+connection handle to perform such operations and create instances of
+tdbo objects from resulting data.
+
+[para]
+Currently, tdbo supports [const sqlite3], [const mysqltcl],
+[const Pgtcl], [const tdbc::sqlite3], [const tdbc::mysql] and
+[const tdbc::postgres] drivers. Note that sqlite3, mysqltcl and
+Pgtcl drivers are functional in both Tcl 8.5 and Tcl 8.6
+environments while tdbc is available only on Tcl 8.6 and above.
+
+[para]
+tdbo objects can be defined in various ways based on the OO-system that
+is used by the application. For e.g., tdbo object can be defined in
+Itcl by inheriting [cmd tdbo::Itcl::DBObject] class. Similarly ....
+
+[para]
+[section {TDBO Commands}]
+
+[list_begin definitions]
+
+[call [cmd {tdbo load}] [arg driver]]
+
+Loads a data-store-driver and returns a handle to the driver instance.
+[arg driver] can be one of [const sqlite3], [const mysqltcl],
+[const Pgtcl], [const tdbc::sqlite3], [const tdbc::mysql] and
+[const tdbc::postgres]
+
+[list_end]
+
+[para]
+[section {TDBO Driver Commands}]
+[list_begin definitions]
+
+[call [arg db] [cmd open] [arg args]]
+
+Where [arg db] is the data-store-driver instance handle returned by
+[cmd {tdbo load}] command. This command establishes a new connection to
+the database and returns the connection handle. Arguments are driver
+dependent. Please refer to the documentation of respective driver.
+
+[list_end]
+[para]
+[section {TDBO Connection Commands}]
+[para]
+
+[list_begin definitions]
+
+[call [arg conn] [cmd close]]
+
+Definition...
+
+[call [arg conn] [cmd conn]]
+
+Definition...
+
+[list_end]
+[para]
+Driver may provide other commands to perform....
+
+[para]
+[section {TDBO Object Commands}]
+[para]
+Instantiate a tdbo object based on the OO-system....
+
+[list_begin definitions]
+
+[call [arg obj] [cmd {add}] [arg memberslist]]
+
+Definition...
+
+[call [arg obj] [cmd {delete}]]
+
+Definition...
+
+[call [arg obj] [cmd {get}] [arg memberslist]]
+
+Definition...
+
+[call [arg obj] [cmd {save}] [arg memberslist]]
+
+Definition...
+
+[list_end]
+
+[para]
+[section {tdbo::Itcl::DBObject Class}]
+[para]
+Instantiate a tdbo object based on the OO-system....
+
+[list_begin definitions]
+
+[call [arg obj] [cmd {add}] [arg memberslist]]
+
+Definition...
+
+[call [arg obj] [cmd {delete}]]
+
+Definition...
+
+[call [arg obj] [cmd {get}] [arg memberslist]]
+
+Definition...
+
+[call [arg obj] [cmd {save}] [arg memberslist]]
+
+Definition...
+
+[list_end]
+
+[para]
+[section EXAMPLES]
+ 
+Following example gives a step-by-step illustration on how to use
+this package.
+
+[para]
+[example_begin]
+#
+# Step 0: Setup a database named employee using the employee_schema.sql
+#         found in the respective sub-folder in demo folder. Create
+#         necessary user account and previleges.
+#
+# Step 1: Load tdao package and import dao and dbc commands
+#
+#
+package require tdao
+namespace import -force tdao::dao::dao
+namespace import -force tdao::dbc::dbc
+[example_end]
+[para]
+[example {
+#
+# Step 2: Load Database connectivity module and open a connection.
+#         Un/Comment lines below as necessary
+#
+#
+set db [dbc load sqlite]
+set conn [$db open [file normalize "sqlite/employee.db"]]
+#~ set db [dbc load postgres]
+#~ set conn [$db open employee -user nagu -password Welcome123]
+#~ set db [dbc load mariadb]
+#~ set conn [$db open employee -user nagu -password Welcome123]
+}]
+[para]
+[example {
+#
+# Step 3: Define Data Access Objects (DAO): address & employee
+#
+#
+puts [dao define Address \
+  address {
+    id
+    addrline1
+    addrline2
+    {city Bangalore}
+    {postalcode 560001}
+    {country India}
+} -primarykey id -autoincrement id]
+#
+#
+puts [dao define Employee \
+  employee {
+    id
+    name
+    rollno
+    address_id
+} -primarykey id -autoincrement id]
+}]
+[para]
+[example {
+#
+# Step 4: Define Transactions: save_employee
+#
+#
+proc save_employee {conn op emp addr} {
+  $conn begin
+    switch $op {
+      add {
+        if {[catch {$addr add} err]} {
+          $conn rollback
+          return -code error $err
+        }
+
+        $emp configure -address_id [$addr cget -id]
+        if {[catch {$emp add} err]} {
+          $conn rollback
+          return -code error $err
+        }
+      }
+      update {
+        if {[catch {$addr save} err]} {
+          $conn rollback
+          return -code error $err
+        }
+        if {[catch {$emp save} err]} {
+          $conn rollback
+          return -code error $err
+        }          
+      }
+    }
+  $conn commit
+
+  return 1
+}
+}]
+[para]
+[example {
+#
+# Step 5: Instantiate DAOs address & employee
+#
+#
+Employee emp $conn -name "Employee Name1" -rollno "INBNG0001"
+puts "Employee before adding: [emp cget]"
+
+Address addr $conn \
+  -addrline1 "Address Line 1" \
+  -addrline2 "Address Line 2"
+puts "Address before adding: [addr cget]"
+}]
+[para]
+[example {
+#
+# Step 6: Add/Modify employee & address
+#
+#
+if {[catch {save_employee $conn add emp addr} err]} {
+  puts "Saving employee failed...\nError: $err"
+  $conn close
+  exit
+}
+
+puts "Employee after adding: [emp cget]"
+puts "Address after adding: [addr cget]"
+
+# Modify and save Address object.
+addr configure \
+  -addrline1 "Updated Address Line 1" \
+  -addrline2 "Updated Address Line 2" \
+  -city "Updated City Name" \
+  -country "Updated Country Name" \
+  -postalcode "Updated Postal Code"
+addr save
+
+# Check if the changes are reflected by retrieving it from database
+addr reset
+puts "Reset address: [addr cget]"
+addr configure -id [emp cget -address_id]
+addr get
+puts "Modified address: [addr cget]"
+}]
+[para]
+[example {
+#
+# Step 7: Clean up and close the database connection
+#
+#
+dao delete instances addr emp
+dao delete definition Address Employee
+$conn close
+}]
+
+
+[para]
+[section {See Also}]
+[cmd struct::record], [cmd tdao::dbc] and [cmd tdao::dao]
+[para]
+[keywords DAO {Data Access Objects} {Database Connectivity}]
+[para]
+[section {AUTHOR}]
+
+Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
+
+[section {BUGS, IDEAS, FEEDBACK}]
+
+This document, and the package it describes, will undoubtedly contain
+bugs and other problems.
+
+Please report such in the category [emph {tdao}] of the
+[uri {http://sourceforge.net/tracker/?group_id=12883} {Tcllib SF Trackers}].
+
+Please also report any ideas for enhancements you may have for either
+package and/or documentation.
+
+[manpage_end]

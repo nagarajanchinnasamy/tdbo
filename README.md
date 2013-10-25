@@ -6,11 +6,12 @@ Tcl DataBase Object (tdbo) provides a simple object oriented interface to databa
 Simple steps to use this package are:
 
 1. Load tdbo package using:
+
 		package require tdbo
 		package require tdbo::Itcl
 		namespace import tdbo::tdbo
 
-2. Define your application object by inheriting tdbo::DBObject
+2. Define your application object by inheriting tdbo::Itcl::DBObject
 
 		# Employee Definition
 

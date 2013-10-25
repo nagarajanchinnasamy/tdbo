@@ -47,16 +47,12 @@ itcl::class ::tdbo::tdbc::postgres {
 	public proc insert {conn schema_name namevaluepairs {sequence_fields ""}} {
 		set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs $sequence_fields]
 
-		if {[catch {$conn prepare $sqlscript} stmt]} {
-			return -code error $stmt
+		if {[catch {_execute $conn $sqlscript stmt resultset} err]} {
+			return -code error $err
 		}
-		if {[catch {$stmt execute} resultset]} {
-			$stmt close
-			return -code error $resultset
-		}
-		
+
 		set status [$resultset rowcount]
-		
+	
 		if {$sequence_fields == ""} {
 			$stmt close
 			return $status
@@ -98,7 +94,7 @@ itcl::class ::tdbo::tdbc::postgres {
 		dict for {fname val} $namevaluepairs {
 			set nsname [_nsvar $conn $fname]
 			set $nsname $val
-			lappend valuelist ":$nsname"
+			lappend valuelist ":$fname"
 		}
 
 		set stmt "INSERT INTO $schema_name ([join $fnames ", "]) VALUES ([join $valuelist ", "])"

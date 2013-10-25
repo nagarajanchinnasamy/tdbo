@@ -10,6 +10,6 @@ drop table if exists employee;
 create table employee(
 	id integer primary key auto_increment,
 	name text not null,
-	rollno text not null,
+	rollno varchar(64) unique not null,
 	address_id integer not null,
 	foreign key(address_id) references address(id));

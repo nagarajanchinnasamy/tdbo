@@ -25,7 +25,7 @@ itcl::class Employee {
 			define_autoincrement id
 		}
 		method _define_unique {} {
-			define_unique {{rollno}}
+			define_unique {rollno}
 		}
 	}
 }

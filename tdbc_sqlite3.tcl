@@ -30,14 +30,9 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 		}
 
 		if {$initscript != ""} {
-			if {[catch {$conn prepare $initscript} stmt]} {
-				return -code error $stmt
+			if {[catch {$conn allrows -- $initscript} err]} {
+				return -code error $err
 			}
-			if {[catch {$stmt execute} resultset]} {
-				$stmt close
-				return -code error $resultset
-			}
-			$stmt close
 		}
 
 		return $conn
@@ -56,14 +51,11 @@ itcl::class ::tdbo::tdbc::sqlite3 {
 	}
 
 	public proc insert {conn schema_name namevaluepairs {sequence_fields ""}} {
+$log($conn)::debug "namevaluepairs: $namevaluepairs"
 		set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs]
 
-		if {[catch {$conn prepare $sqlscript} stmt]} {
-			return -code error $stmt
-		}
-		if {[catch {$stmt execute} resultset]} {
-			$stmt close
-			return -code error $resultset
+		if {[catch {_execute $conn $sqlscript stmt resultset} err]} {
+			return -code error $err
 		}
 		
 		set status [$resultset rowcount]

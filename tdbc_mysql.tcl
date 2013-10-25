@@ -47,12 +47,8 @@ itcl::class ::tdbo::tdbc::mysql {
 	public proc insert {conn schema_name namevaluepairs {sequence_fields ""}} {
 		set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs]
 
-		if {[catch {$conn prepare $sqlscript} stmt]} {
-			return -code error $stmt
-		}
-		if {[catch {$stmt execute} resultset]} {
-			$stmt close
-			return -code error $resultset
+		if {[catch {_execute $conn $sqlscript stmt resultset} err]} {
+			return -code error $err
 		}
 		
 		set status [$resultset rowcount]

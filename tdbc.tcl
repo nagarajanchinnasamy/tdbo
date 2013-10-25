@@ -66,12 +66,8 @@ itcl::class ::tdbo::tdbc {
 
 	protected proc update {conn schema_name namevaluepairs {conditionlist ""}} {
 		set sqlscript [_prepare_update_stmt $conn $schema_name $namevaluepairs $conditionlist]
-		if {[catch {$conn prepare $sqlscript} stmt]} {
-			return -code error $stmt
-		}
-		if {[catch {$stmt execute} resultset]} {
-			$stmt close
-			return -code error $resultset
+		if {[catch {_execute $conn $sqlscript stmt resultset} err]} {
+			return -code error $err
 		}
 		
 		set status [$resultset rowcount]
@@ -82,12 +78,8 @@ itcl::class ::tdbo::tdbc {
 
 	protected proc delete {conn schema_name {conditionlist ""}} {
 		set sqlscript [_prepare_delete_stmt $conn $schema_name $conditionlist]
-		if {[catch {$conn prepare $sqlscript} stmt]} {
-			return -code error $stmt
-		}
-		if {[catch {$stmt execute} resultset]} {
-			$stmt close
-			return -code error $resultset
+		if {[catch {_execute $conn $sqlscript stmt resultset} err]} {
+			return -code error $err
 		}
 		
 		set status [$resultset rowcount]
@@ -106,6 +98,26 @@ itcl::class ::tdbo::tdbc {
 		$conn rollback
 	}
 
+	# ----------------------------------------------------------------------
+	# method  : 
+	# args    : 
+	# 
+	# returns :
+	#
+	# ----------------------------------------------------------------------
+	protected proc _execute {conn sqlscript stmtvarname resultsetvarname} {
+		variable ns
+		upvar $stmtvarname stmt
+		upvar $resultsetvarname resultset
+
+		if {[catch {$conn prepare $sqlscript} stmt]} {
+			return -code error $stmt
+		}
+		if {[catch {namespace eval $ns($conn) [list $stmt execute]} resultset]} {
+			$stmt close
+			return -code error $resultset
+		}
+	}
 	# ----------------------------------------------------------------------
 	# method  : 
 	# args    : 
@@ -134,7 +146,7 @@ itcl::class ::tdbo::tdbc {
 				} else {
 					set nsname [_nsvar $conn $fname]
 					set $nsname $val
-					lappend complist "$fname=:$nsname"
+					lappend complist "$fname=:$fname"
 				}
 			}
 			if {$complist != ""} {
@@ -163,7 +175,7 @@ itcl::class ::tdbo::tdbc {
 		dict for {fname val} $namevaluepairs {
 			set nsname [_nsvar $conn $fname]
 			set $nsname $val
-			lappend valuelist ":$nsname"
+			lappend valuelist ":$fname"
 		}
 
 		set stmt "INSERT INTO $schema_name ([join $fnames ", "]) VALUES ([join $valuelist ", "])"
@@ -183,7 +195,7 @@ itcl::class ::tdbo::tdbc {
 		dict for {fname val} $namevaluepairs {
 			set nsname [_nsvar $conn $fname] 
 			set $nsname $val
-			lappend setlist "$fname=:$nsname"
+			lappend setlist "$fname=:$fname"
 		}
 
 		set setlist [join $setlist ", "]
@@ -277,15 +289,9 @@ itcl::class ::tdbo::tdbc {
 		}
 
 		set sqlscript [_prepare_select_stmt $conn $schema_name {*}$args]
-		if {[catch {$conn prepare $sqlscript} stmt]} {
-			return -code error $stmt
+		if {[catch {_execute $conn $sqlscript stmt resultset} err]} {
+			return -code error $err
 		}
-
-		if {[catch {$stmt execute} resultset]} {
-			$stmt close
-			return -code error $resultset
-		}
-
 
 		set recordslist ""
 		switch -- $format {

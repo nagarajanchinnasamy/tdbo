@@ -140,7 +140,7 @@
 <ul class="syntax">
 <li><a href="#1"><b class="cmd">tdbo load</b> <i class="arg">driver</i></a></li>
 <li><a href="#2"><i class="arg">db</i> <b class="cmd">open</b> <i class="arg">args</i></a></li>
-<li><a href="#3"><i class="arg">conn</i> <b class="cmd">begin</b></a></li>
+<li><a href="#3"><i class="arg">conn</i> <b class="cmd">begin</b> <i class="arg">args</i></a></li>
 <li><a href="#4"><i class="arg">conn</i> <b class="cmd">close</b></a></li>
 <li><a href="#5"><i class="arg">conn</i> <b class="cmd">commit</b></a></li>
 <li><a href="#6"><i class="arg">conn</i> <b class="cmd">conn</b></a></li>
@@ -159,14 +159,22 @@
 <li><a href="#19"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_unique</b> <i class="arg">args</i></a></li>
 <li><a href="#20"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_autoincrement</b> <i class="arg">args</i></a></li>
 <li><a href="#21"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::configure</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></a></li>
-<li><a href="#22"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::cget</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></a></li>
-<li><a href="#23"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::clear</b></a></li>
-<li><a href="#24"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::add</b> <i class="arg">args</i></a></li>
-<li><a href="#25"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::delete</b></a></li>
-<li><a href="#26"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::get</b> <i class="arg">args</i></a></li>
-<li><a href="#27"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::save</b> <i class="arg">args</i></a></li>
-<li><a href="#28"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::clsName</b></a></li>
-<li><a href="#29"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::log</b></a></li>
+<li><a href="#22"><i class="arg">obj</i> <b class="cmd">configure</b> <span class="opt">?<i class="arg">-opt1 val</i>?</span> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></a></li>
+<li><a href="#23"><i class="arg">obj</i> <b class="cmd">configure</b> <i class="arg">from_obj</i></a></li>
+<li><a href="#24"><i class="arg">obj</i> <b class="cmd">configure</b></a></li>
+<li><a href="#25"><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">-opt1 val</i> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></a></li>
+<li><a href="#26"><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">from_obj</i></a></li>
+<li><a href="#27"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::cget</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></a></li>
+<li><a href="#28"><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt</i></a></li>
+<li><a href="#29"><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt1 vName1</i> <span class="opt">?<i class="arg">-opt2 vName2</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></a></li>
+<li><a href="#30"><i class="arg">obj</i> <b class="cmd">cget</b></a></li>
+<li><a href="#31"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::clear</b></a></li>
+<li><a href="#32"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::add</b> <i class="arg">args</i></a></li>
+<li><a href="#33"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::delete</b></a></li>
+<li><a href="#34"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::get</b> <i class="arg">args</i></a></li>
+<li><a href="#35"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::save</b> <i class="arg">args</i></a></li>
+<li><a href="#36"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::clsName</b></a></li>
+<li><a href="#37"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::log</b></a></li>
 </ul>
 </div>
 </div>
@@ -220,30 +228,32 @@ dependent. Please refer to the documentation of respective driver.</p></dd>
 </div>
 <div id="subsection3" class="subsection"><h3><a name="subsection3">TDBO Connection Commands</a></h3>
 <dl class="definitions">
-<dt><a name="3"><i class="arg">conn</i> <b class="cmd">begin</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dt><a name="3"><i class="arg">conn</i> <b class="cmd">begin</b> <i class="arg">args</i></a></dt>
+<dd><p>Begins a database transaction. Arguments are driver dependent. Please
+refer to the documentation of respective driver.</p></dd>
 <dt><a name="4"><i class="arg">conn</i> <b class="cmd">close</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Closes the connection with database.</p></dd>
 <dt><a name="5"><i class="arg">conn</i> <b class="cmd">commit</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Commits the currently active database transaction.</p></dd>
 <dt><a name="6"><i class="arg">conn</i> <b class="cmd">conn</b></a></dt>
 <dd><p>Definition...</p></dd>
 <dt><a name="7"><i class="arg">conn</i> <b class="cmd">rollback</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Rolls back the currently active database transaction.</p></dd>
 </dl>
-<p>Driver may provide other commands to perform....</p>
 </div>
 <div id="subsection4" class="subsection"><h3><a name="subsection4">TDBO Object Commands</a></h3>
-<p>Instantiate a tdbo object based on the OO-system....</p>
+<p>A tdbo object can be defined using various ways based on the OO system
+the application written in. Please refer to the corresponding section
+on how to define and use tdbo objects using the respective OO system.</p>
 <dl class="definitions">
 <dt><a name="8"><i class="arg">obj</i> <b class="cmd">add</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument args is passed, it uses only those field names in the args-list in preparing the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &quot;&lt;undefined&gt;&quot;. In Itcl, Member variables that are uninitialized or unset are internally identified with the value &quot;&lt;undefined&gt;&quot;. We make use of this state of a member variable to omit a field in the insert operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;. Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.</p></dd>
 <dt><a name="9"><i class="arg">obj</i> <b class="cmd">delete</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>delete the record represented by the object from database and reset the object values. The record to be deleted from the database is identified based on the description provided in Object To Database Record Mapping.</p></dd>
 <dt><a name="10"><i class="arg">obj</i> <b class="cmd">get</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Retrieve a record from the database and populate object's member variables with values retrieved. The record to be retrieved from the database is identified based on the description provided in Object To Database Record Mapping. By default, this method uses all public member variable names as the fields of the record to be retrieved from the database. However, if the argument args is passed with a list of field names (corresponding to its public member variables), then only those fields are retrieved and populated into the object.</p></dd>
 <dt><a name="11"><i class="arg">obj</i> <b class="cmd">save</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Save the object by updating the corresponding record in the database. The record to be updated in the database is identified based on the description provided in Object To Database Record Mapping. In preparing the record to save, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument args is passed, it uses only those field names in the args-list in preparing the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &lt;undefined&gt;. In Itcl, member variables that are not initialized or unset are internally identified with the value &lt;undefined&gt;. We make use of this state of a member variable to omit a field in the update operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;.</p></dd>
 </dl>
 </div>
 </div>
@@ -252,49 +262,101 @@ dependent. Please refer to the documentation of respective driver.</p></dd>
 <div id="subsection5" class="subsection"><h3><a name="subsection5">Constructor &amp; Destructor</a></h3>
 <dl class="definitions">
 <dt><a name="12"><b class="cmd">tdbo::Itcl::DBObject::constructor</b> <i class="arg">conn</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Stores the definition of primary keys, unique fields and sequence /
+auto-increment fields by invoking following protected methods:
+<b class="method">_define_primarykey</b>, <b class="method">_define_unique</b> and
+<b class="method">_define_autoincrement</b>. Also prepares list of field names for
+later usage by <b class="method">add</b> and <b class="method">save</b> methods. <i class="arg">conn</i> is
+the connection handle obtained through <i class="arg">db</i> <b class="cmd">open</b> command.</p></dd>
 <dt><a name="13"><b class="cmd">tdbo::Itcl::DBObject::destructor</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Nothing special done here.</p></dd>
 </dl>
 </div>
 <div id="subsection6" class="subsection"><h3><a name="subsection6">Proc / Methods</a></h3>
 <dl class="definitions">
 <dt><a name="14"><i class="arg">public proc</i> <b class="cmd">tdbo::Itcl::DBObject::schema_name</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>This is an abstract static proc to be implemented by the derived class
+to return the name of the table / view that the derived class
+represents.</p></dd>
 <dt><a name="15"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_primarykey</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Provides a default implementation by invoking <b class="method">define_primarykey</b>
+with an empty list. Override this method to invoke
+<b class="cmd">define_primarykey</b> with your own list of names of the public
+variables that constitute the primary key of the table that the class
+represents.</p></dd>
 <dt><a name="16"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_unique</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Provides a default implementation by invoking <b class="method">define_unique</b>
+with an empty list. Override this method to invoke
+<b class="cmd">define_unique</b> with your own list of list-of-names of the public
+variables that constitute the unique fields of the table or view that
+the class represents.</p></dd>
 <dt><a name="17"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_autoincrement</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Provides a default implementation by invoking
+<b class="method">define_autoincrement</b> with an empty list. Override this method
+to invoke <b class="cmd">define_autoincrement</b> with your own list of names of the
+public variables that are autoincrement or sequence fields in the table
+that the class represents.</p></dd>
 <dt><a name="18"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_primarykey</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Defines a list of public variable names that map to the primary key
+fields of the associated table / view in the database. This method is
+meant to be invoked by derived classes from within
+<b class="method">_define_primarykey</b> method. <i class="arg">args</i> is a list of field names
+that constitute the primary key.</p></dd>
 <dt><a name="19"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_unique</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Defines a list of list of public variable names that map to the list of
+combination of unique fields of the associated table / view in the
+database. This method is meant to be invoked by derived classes
+from within <b class="method">_define_unique</b> method. <i class="arg">args</i> is a list of
+list-of-field-names that constitute list of combination of unique
+fields.</p></dd>
 <dt><a name="20"><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_autoincrement</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>Defines a list of public variable names that map to the auto-increment / 
+sequence fields of the associated table / view in the database. This
+method is meant to be invoked by derived classes from within
+<b class="method">_define_autoincrement</b> method. <i class="arg">args</i> is a list of field
+names that are auto-increment / sequence fields.</p></dd>
 <dt><a name="21"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::configure</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
-<dt><a name="22"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::cget</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
-<dt><a name="23"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::clear</b></a></dt>
-<dd><p>Definition...</p></dd>
-<dt><a name="24"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::add</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
-<dt><a name="25"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::delete</b></a></dt>
-<dd><p>Definition...</p></dd>
-<dt><a name="26"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::get</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
-<dt><a name="27"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::save</b> <i class="arg">args</i></a></dt>
-<dd><p>Definition...</p></dd>
+<dd><p>This method has following usages:</p>
+<dl class="definitions">
+<dt><a name="22"><i class="arg">obj</i> <b class="cmd">configure</b> <span class="opt">?<i class="arg">-opt1 val</i>?</span> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></a></dt>
+<dd><p>To set values of public member variables. <i class="arg">opt</i> is the name of a public member variable.</p></dd>
+<dt><a name="23"><i class="arg">obj</i> <b class="cmd">configure</b> <i class="arg">from_obj</i></a></dt>
+<dd><p>Object to object copy. To copy the values of all public member variables of <i class="arg">from_obj</i> into the corresponding public member variables of <i class="arg">obj</i>.</p></dd>
+<dt><a name="24"><i class="arg">obj</i> <b class="cmd">configure</b></a></dt>
+<dd><p>To retrieve initial and current values of all public member variables. Returns a dictionary in the format: -opt {-ival val -cval val} -opt {-ival val -cval val} ...</p></dd>
+<dt><a name="25"><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">-opt1 val</i> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></a></dt>
+<dd><p>Though this is not a direct usage of this method, when <i class="arg">obj</i> is being constructed, Itcl's object construction mechanism invokes the 1st usage of the <b class="method">configure</b> method on <i class="arg">obj</i> passing <i class="arg">-opt1 val</i> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span> as its arguments to set the values of the public member variables.</p></dd>
+<dt><a name="26"><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">from_obj</i></a></dt>
+<dd><p>Though this is not a direct usage of this method, when <i class="arg">obj</i> is being constructed, ITcl's object construction mechanism invokes the 2nd usage of the <b class="method">configure</b> method on <i class="arg">obj</i> passing <i class="arg">from_obj</i> as its parameter. Hence, it results into object-to-object copy of public member variables.</p></dd>
+</dl></dd>
+<dt><a name="27"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::cget</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></a></dt>
+<dd><p>This method has following usages:</p>
+<dl class="definitions">
+<dt><a name="28"><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt</i></a></dt>
+<dd><p>Returns current value of the public member variable specified by <i class="arg">opt</i>.</p></dd>
+<dt><a name="29"><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt1 vName1</i> <span class="opt">?<i class="arg">-opt2 vName2</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></a></dt>
+<dd><p>To get the value of public member variables into the respective variable names specified. <i class="arg">opt</i> is the name of a public member variable. <i class="arg">vName</i> is the name of a variable into which the value of the <i class="arg">opt</i> is to be stored.</p></dd>
+<dt><a name="30"><i class="arg">obj</i> <b class="cmd">cget</b></a></dt>
+<dd><p>To get current values of all public member variables as a dictionary. Returns the dictionary in the format: -opt1 val1 -opt2 val2 ...</p></dd>
+</dl></dd>
+<dt><a name="31"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::clear</b></a></dt>
+<dd><p>Resets all public member variables with the initialization value given in the class definition.</p></dd>
+<dt><a name="32"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::add</b> <i class="arg">args</i></a></dt>
+<dd><p>Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument args is passed, it uses only those field names in the args-list in preparing the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &quot;&lt;undefined&gt;&quot;. In Itcl, Member variables that are uninitialized or unset are internally identified with the value &quot;&lt;undefined&gt;&quot;. We make use of this state of a member variable to omit a field in the insert operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;. Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.</p></dd>
+<dt><a name="33"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::delete</b></a></dt>
+<dd><p>Delete the record represented by the object from database and reset the object values. The record to be deleted from the database is identified based on the description provided in Object To Database Record Mapping.</p></dd>
+<dt><a name="34"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::get</b> <i class="arg">args</i></a></dt>
+<dd><p>Retrieve a record from the database and populate object's member variables with values retrieved. The record to be retrieved from the database is identified based on the description provided in Object To Database Record Mapping. By default, this method uses all public member variable names as the fields of the record to be retrieved from the database. However, if the argument args is passed with a list of field names (corresponding to its public member variables), then only those fields are retrieved and populated into the object.</p></dd>
+<dt><a name="35"><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::save</b> <i class="arg">args</i></a></dt>
+<dd><p>Save the object by updating the corresponding record in the database. The record to be updated in the database is identified based on the description provided in Object To Database Record Mapping. In preparing the record to save, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument args is passed, it uses only those field names in the args-list in preparing the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &lt;undefined&gt;. In Itcl, member variables that are not initialized or unset are internally identified with the value &lt;undefined&gt;. We make use of this state of a member variable to omit a field in the update operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;.</p></dd>
 </dl>
 </div>
 <div id="subsection7" class="subsection"><h3><a name="subsection7">Common / Variables</a></h3>
 <dl class="definitions">
-<dt><a name="28"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::clsName</b></a></dt>
-<dd><p>Definition...</p></dd>
-<dt><a name="29"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::log</b></a></dt>
-<dd><p>Definition...</p></dd>
+<dt><a name="36"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::clsName</b></a></dt>
+<dd><p>Name of the derived class as returned by [$this info class]</p></dd>
+<dt><a name="37"><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::log</b></a></dt>
+<dd><p>Tcllib's logger object command to invoke logging commands such as ${log}::info &quot;message&quot;</p></dd>
 </dl>
 </div>
 </div>
@@ -303,126 +365,8 @@ dependent. Please refer to the documentation of respective driver.</p></dd>
 this package.</p>
 <pre class="example">
 #
-# Step 0: Setup a database named employee using the employee_schema.sql
-#         found in the respective sub-folder in demo folder. Create
-#         necessary user account and previleges.
+# Example goes here
 #
-# Step 1: Load tdao package and import dao and dbc commands
-#
-#
-package require tdao
-namespace import -force tdao::dao::dao
-namespace import -force tdao::dbc::dbc
-</pre>
-<pre class="example">
-#
-# Step 2: Load Database connectivity module and open a connection.
-#         Un/Comment lines below as necessary
-#
-#
-set db [dbc load sqlite]
-set conn [$db open [file normalize &quot;sqlite/employee.db&quot;]]
-#~ set db [dbc load postgres]
-#~ set conn [$db open employee -user nagu -password Welcome123]
-#~ set db [dbc load mariadb]
-#~ set conn [$db open employee -user nagu -password Welcome123]
-</pre>
-<pre class="example">
-#
-# Step 3: Define Data Access Objects (DAO): address &amp; employee
-#
-#
-puts [dao define Address  address {
-    id
-    addrline1
-    addrline2
-    {city Bangalore}
-    {postalcode 560001}
-    {country India}
-} -primarykey id -autoincrement id]
-#
-#
-puts [dao define Employee  employee {
-    id
-    name
-    rollno
-    address_id
-} -primarykey id -autoincrement id]
-</pre>
-<pre class="example">
-#
-# Step 4: Define Transactions: save_employee
-#
-#
-proc save_employee {conn op emp addr} {
-  $conn begin
-    switch $op {
-      add {
-        if {[catch {$addr add} err]} {
-          $conn rollback
-          return -code error $err
-        }
-        $emp configure -address_id [$addr cget -id]
-        if {[catch {$emp add} err]} {
-          $conn rollback
-          return -code error $err
-        }
-      }
-      update {
-        if {[catch {$addr save} err]} {
-          $conn rollback
-          return -code error $err
-        }
-        if {[catch {$emp save} err]} {
-          $conn rollback
-          return -code error $err
-        }          
-      }
-    }
-  $conn commit
-  return 1
-}
-</pre>
-<pre class="example">
-#
-# Step 5: Instantiate DAOs address &amp; employee
-#
-#
-Employee emp $conn -name &quot;Employee Name1&quot; -rollno &quot;INBNG0001&quot;
-puts &quot;Employee before adding: [emp cget]&quot;
-Address addr $conn  -addrline1 &quot;Address Line 1&quot;  -addrline2 &quot;Address Line 2&quot;
-puts &quot;Address before adding: [addr cget]&quot;
-</pre>
-<pre class="example">
-#
-# Step 6: Add/Modify employee &amp; address
-#
-#
-if {[catch {save_employee $conn add emp addr} err]} {
-  puts &quot;Saving employee failed...\nError: $err&quot;
-  $conn close
-  exit
-}
-puts &quot;Employee after adding: [emp cget]&quot;
-puts &quot;Address after adding: [addr cget]&quot;
-# Modify and save Address object.
-addr configure  -addrline1 &quot;Updated Address Line 1&quot;  -addrline2 &quot;Updated Address Line 2&quot;  -city &quot;Updated City Name&quot;  -country &quot;Updated Country Name&quot;  -postalcode &quot;Updated Postal Code&quot;
-addr save
-# Check if the changes are reflected by retrieving it from database
-addr reset
-puts &quot;Reset address: [addr cget]&quot;
-addr configure -id [emp cget -address_id]
-addr get
-puts &quot;Modified address: [addr cget]&quot;
-</pre>
-<pre class="example">
-#
-# Step 7: Clean up and close the database connection
-#
-#
-dao delete instances addr emp
-dao delete definition Address Employee
-$conn close
 </pre>
 </div>
 <div id="section5" class="section"><h2><a name="section5">See Also</a></h2>

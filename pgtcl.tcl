@@ -1,6 +1,6 @@
-# sqlite.tcl --
+# pgtcl.tcl --
 #
-# sqlite3 connectivity module.
+# PostgreSQL connectivity module.
 #
 # Copyright (c) 2013 by Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 #
@@ -9,47 +9,29 @@
 
 package require logger
 
-namespace eval ::tdbo::sqlite {
+namespace eval ::tdbo::Pgtcl {
 	variable log [::logger::init [namespace current]]
-	variable count 0
-	variable ns
-	array set ns {}
 }
 
-proc ::tdbo::sqlite::Load {} {
-	package require sqlite3
+proc ::tdbo::Pgtcl::Load {{_use_tdbc 0}} {
+	package require Pgtcl
 }
 
-proc ::tdbo::sqlite::open {location {initscript ""}} {
-	variable count
-	variable ns
-	
-	incr count
-	set conn [format "%s%s%s" [namespace current] "conn" $count]
-
-	if {[catch {sqlite3 $conn $location} err]} {
-		return -code error $err
-	}
-	if {$initscript != ""} {
-		uplevel 1 $conn eval $initscript
+proc ::tdbo::Pgtcl::open {dbname args} {
+	if {[catch {pg_connect $dbname {*}$args} result]} {
+		return -code error $result
 	}
 
-	set _ns [format "%s%s%s" [namespace current] "::ns" $count]
-	set ns($conn) ${_ns}
-	namespace eval ${_ns} {}
-
+	set conn $result
 	return $conn
 }
 
-proc ::tdbo::sqlite::close {conn} {
-	variable ns
 
-	catch {$conn close}
-	catch {namespace delete $ns($conn)}
-	array unset ns $conn
+proc ::tdbo::Pgtcl::close {conn} {
+	catch {pg_disconnect $conn}
 }
 
-proc ::tdbo::sqlite::get {conn schema_name fieldslist conditionlist {format "dict"}} {
+proc ::tdbo::Pgtcl::get {conn schema_name fieldslist conditionlist {format "dict"}} {
 	return [
 		_select \
 			$conn \
@@ -60,79 +42,91 @@ proc ::tdbo::sqlite::get {conn schema_name fieldslist conditionlist {format "dic
 	]
 }
 
-proc ::tdbo::sqlite::mget {conn schema_name args} {
+proc ::tdbo::Pgtcl::mget {conn schema_name args} {
 	return [_select $conn $schema_name {*}$args]
 }
 
-proc ::tdbo::sqlite::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
-	set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs]
-	if {[catch {$conn eval $sqlscript} result]} {
+proc ::tdbo::Pgtcl::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
+	set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs $sequence_fields]
+
+	if {[catch {pg_exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
 
-	set status [$conn changes]
-	if {$sequence_fields == ""} {
-		return $status
+	set status [pg_result $result -status]
+
+	if {$status != "PGRES_COMMAND_OK" && $status != "PGRES_TUPLES_OK"} {
+		set error [pg_result $result -error]
+		pg_result $result -clear
+		return -code error $error
 	}
 
-	set sequence_values [dict create]
-	set rowid [$conn last_insert_rowid]
-	foreach fname $sequence_fields {
-		dict set sequence_values $fname $rowid
+	set numrows [pg_result $result -numTuples]
+	if {$numrows} {
+		set sequencedict [pg_result $result -dict]		
+		pg_result $result -clear
+		return [list $numrows [dict get $sequencedict 0]]
 	}
 
-	return [list $status $sequence_values]
+	pg_result $result -clear
+	return 1
 }
 
-proc ::tdbo::sqlite::update {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::Pgtcl::update {conn schema_name namevaluepairs {conditionlist ""}} {
 	set sqlscript [_prepare_update_stmt $conn $schema_name $namevaluepairs $conditionlist]
-	if {[catch {$conn eval $sqlscript} err]} {
-		return -code error $err
+	if {[catch {pg_exec $conn $sqlscript} result]} {
+		return -code error $result
 	}
 
-	return [$conn changes]
+	set changes [pg_result $result -cmdTuples]
+	pg_result $result -clear
+	return $changes
 }
 
-proc ::tdbo::sqlite::delete {conn schema_name {conditionlist ""}} {
+proc ::tdbo::Pgtcl::delete {conn schema_name {conditionlist ""}} {
 	set sqlscript [_prepare_delete_stmt $conn $schema_name $conditionlist]
-	if {[catch {$conn eval $sqlscript} err]} {
-		return -code error $err
+	if {[catch {pg_exec $conn $sqlscript} result]} {
+		return -code error $result
 	}
 
-	return [$conn changes]
+	set changes [pg_result $result -cmdTuples]
+	pg_result $result -clear
+
+	if {[string is integer -strict $changes]} {
+		return $changes
+	}
+
+	return 0
 }
 
-proc ::tdbo::sqlite::begin {conn {lock deferred}} {
-	$conn eval begin $lock
+proc ::tdbo::Pgtcl::begin {conn {lock deferrable}} {
+	if {[catch {pg_exec $conn "begin $lock"} result]} {
+		return -code error $result
+	}
+	pg_result $result -clear
 }
 
-proc ::tdbo::sqlite::commit {conn} {
-	$conn eval commit
+proc ::tdbo::Pgtcl::commit {conn} {
+	if {[catch {pg_exec $conn commit} result]} {
+		return -code error $result
+	}
+	pg_result $result -clear
 }
 
-proc ::tdbo::sqlite::rollback {conn} {
-	$conn eval rollback
+proc ::tdbo::Pgtcl::rollback {conn} {
+	if {[catch {pg_exec $conn rollback} result]} {
+		return -code error $result
+	}
+	pg_result $result -clear
 }
 
 # ----------------------------------------------------------------------
-# method  : 
-# args    : 
-# 
-# returns :
-#
-# ----------------------------------------------------------------------
-proc ::tdbo::sqlite::_nsvar {conn varname} {
-	variable ns
-	return [format "%s%s%s" $ns($conn) "::" $varname]
-}
-
-# ----------------------------------------------------------------------
 #
 #
 #
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::sqlite::_prepare_condition {conn conditionlist} {
+proc ::tdbo::Pgtcl::_prepare_condition {conn conditionlist} {
 	set sqlcondition [list]
 	foreach condition $conditionlist {
 		set complist [list]
@@ -140,9 +134,7 @@ proc ::tdbo::sqlite::_prepare_condition {conn conditionlist} {
 			if {$val == "IS NULL"} {
 				lappend complist "$fname IS NULL"
 			} else {
-				set nsname [_nsvar $conn $fname]
-				set $nsname $val
-				lappend complist "$fname=:$nsname"
+				lappend complist "$fname=[pg_quote $val]"
 			}
 		}
 		if {$complist != ""} {
@@ -165,21 +157,26 @@ proc ::tdbo::sqlite::_prepare_condition {conn conditionlist} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::sqlite::_prepare_insert_stmt {conn schema_name namevaluepairs} {
+proc ::tdbo::Pgtcl::_prepare_insert_stmt {conn schema_name namevaluepairs {sequencefields ""}} {
 	variable log
 
-	set fnames [dict keys $namevaluepairs]
+	set fnamelist [join [dict keys $namevaluepairs] ", "]
+	set valuelist [list]
+	foreach value [dict values $namevaluepairs] {
+		lappend valuelist [pg_quote $value]
+	} 
+	set valuelist [join $valuelist ", "]
 
-	dict for {fname val} $namevaluepairs {
-		set nsname [_nsvar $conn $fname]
-		set $nsname $val
-		lappend valuelist ":$nsname"
+	set stmt "INSERT INTO $schema_name ($fnamelist) VALUES ($valuelist)"
+	if {$sequencefields != ""} {
+		set sequencefields [join $sequencefields ", "]
+		append stmt " RETURNING $sequencefields"
 	}
 
-	set stmt "INSERT INTO $schema_name ([join $fnames ", "]) VALUES ([join $valuelist ", "])"
 	${log}::debug $stmt
 	return $stmt
 }
+
 
 # ----------------------------------------------------------------------
 # method  : 
@@ -188,19 +185,17 @@ proc ::tdbo::sqlite::_prepare_insert_stmt {conn schema_name namevaluepairs} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::sqlite::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::Pgtcl::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
 	variable log
 
 	dict for {fname val} $namevaluepairs {
-		set nsname [_nsvar $conn $fname] 
-		set $nsname $val
-		lappend setlist "$fname=:$nsname"
+		lappend setlist "$fname=[pg_quote $val]"
 	}
 
 	set setlist [join $setlist ", "]
 
 	set stmt "UPDATE $schema_name SET $setlist"
-	if [llength $conditionlist] {
+	if {[llength $conditionlist]} {
 		append stmt " WHERE [_prepare_condition $conn $conditionlist]"
 	}
 
@@ -216,7 +211,7 @@ proc ::tdbo::sqlite::_prepare_update_stmt {conn schema_name namevaluepairs {cond
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::sqlite::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
+proc ::tdbo::Pgtcl::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
 	variable log
 
 	set stmt "DELETE FROM $schema_name"
@@ -235,7 +230,7 @@ proc ::tdbo::sqlite::_prepare_delete_stmt {conn schema_name {conditionlist ""}} 
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::sqlite::_prepare_select_stmt {schema_name args} {
+proc ::tdbo::Pgtcl::_prepare_select_stmt {schema_name args} {
 	variable log
 
 	set fieldslist "*"
@@ -278,12 +273,15 @@ proc ::tdbo::sqlite::_prepare_select_stmt {schema_name args} {
 	return $stmt
 }
 
+
 # ----------------------------------------------------------------------
 #
 # format: one of "dict", "llist", "list" 
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::sqlite::_select {conn schema_name args} {
+proc ::tdbo::Pgtcl::_select {conn schema_name args} {
+	variable log
+
 	set format "dict"
 	if {[dict exists $args -format]} {
 		set format [dict get $args -format]
@@ -291,40 +289,29 @@ proc ::tdbo::sqlite::_select {conn schema_name args} {
 	}
 
 	set sqlscript [_prepare_select_stmt $schema_name {*}$args]
+	if {[catch {pg_exec $conn $sqlscript} result]} {
+		return -code error $result
+	}
 
 	set recordslist ""
 	switch -- $format {
 		dict {
-			if {[catch {
-				$conn eval $sqlscript record {
-					array unset record "\\*"
-					set reccfg [dict create]
-					dict for {f v} [array get record] {
-						dict set reccfg "-$f" "$v"
-					}
-					lappend recordslist [dict get $reccfg]
-				}} err]} {
-				return -code error $err
+			foreach row [dict values [pg_result $result -dict]] {
+				set record ""
+				foreach {field val} $row {
+					lappend record "-$field" $val
+				}
+				lappend recordslist $record
 			}
 		}
+		list -
 		llist {
-			if {[catch {
-				$conn eval $sqlscript record {
-					array unset record "\\*"
-					lappend recordslist [dict values [array get record]]
-				}} err]} {
-				return -code error $err
-			}
-		}
-		list {
-			if {[catch {$conn eval $sqlscript} result]} {
-				return -code error $result
-			}
-			set recordslist $result 
+			set recordslist [dict values [pg_result $result -$format]]
 		}
 	}
 
+	pg_result $result -clear
 	return $recordslist
 }
 
-package provide tdbo::sqlite 0.1.1
+package provide tdbo::Pgtcl 0.1.1

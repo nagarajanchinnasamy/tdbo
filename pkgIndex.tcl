@@ -10,10 +10,9 @@
 
 package ifneeded tdbo 0.1.4 [list source [file join $dir tdbo.tcl]]
 package ifneeded tdbo::Itcl 0.1.0 [list source [file join $dir itcl.tcl]]
-package ifneeded tdbo::dbc 0.1.2 [list source [file join $dir dbc.tcl]]
-package ifneeded tdbo::mariadb 0.1.1 [list source [file join $dir mariadb.tcl]]
-package ifneeded tdbo::postgres 0.1.1 [list source [file join $dir postgres.tcl]]
-package ifneeded tdbo::sqlite 0.1.1 [list source [file join $dir sqlite.tcl]]
+package ifneeded tdbo::Pgtcl 0.1.1 [list source [file join $dir pgtcl.tcl]]
+package ifneeded tdbo::mysqltcl 0.1.1 [list source [file join $dir mysqltcl.tcl]]
+package ifneeded tdbo::sqlite3 0.1.1 [list source [file join $dir sqlite3.tcl]]
 package ifneeded tdbo::tdbc 0.1.0 [list source [file join $dir tdbc.tcl]]
 package ifneeded tdbo::tdbc::mysql 0.1.0 [list source [file join $dir tdbc_mysql.tcl]]
 package ifneeded tdbo::tdbc::postgres 0.1.0 [list source [file join $dir tdbc_postgres.tcl]]

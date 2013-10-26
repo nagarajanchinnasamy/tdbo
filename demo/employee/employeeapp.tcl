@@ -26,15 +26,15 @@ source [file join $dir "saveemployee.tcl"]
 set log [::logger::init EmployeeApp]
 
 # Open SQLite Database connection
-#set db [tdbo load tdbc::sqlite3]
-#set conn [$db open [file normalize "sqlite/employee.db"]]
+set db [tdbo load sqlite3]
+set conn [$db open [file normalize "sqlite/employee.db"]]
 
 # Open PostgreSQL Database connection
-set db [tdbo load tdbc::postgres]
-set conn [$db open employee -user nagu -password Welcome123]
+#set db [tdbo load Pgtcl]
+#set conn [$db open employee -user nagu -password Welcome123]
 
 # Open MariaDB/MySQL Database connection
-#set db [tdbo load tdbc::mysql]
+#set db [tdbo load mysqltcl]
 #set conn [$db open employee -user nagu -password Welcome123]
 
 # Create Employee and Address instances 

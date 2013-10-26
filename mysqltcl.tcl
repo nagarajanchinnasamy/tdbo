@@ -1,4 +1,4 @@
-# mariadb.tcl --
+# mysqltcl.tcl --
 #
 # MariaDB/MySQL connecitivity module.
 #
@@ -9,15 +9,15 @@
 
 package require logger
 
-namespace eval ::tdbo::mariadb {
+namespace eval ::tdbo::mysqltcl {
 	variable log [::logger::init [namespace current]]
 }
 
-proc ::tdbo::mariadb::Load {{_use_tdbc 0}} {
+proc ::tdbo::mysqltcl::Load {{_use_tdbc 0}} {
 	package require mysqltcl
 }
 
-proc ::tdbo::mariadb::open {dbname args} {
+proc ::tdbo::mysqltcl::open {dbname args} {
 	
 	if {[catch {mysql::connect {*}$args} result]} {
 		return -code error $result
@@ -32,11 +32,11 @@ proc ::tdbo::mariadb::open {dbname args} {
 	return $conn
 }
 
-proc ::tdbo::mariadb::close {conn} {
+proc ::tdbo::mysqltcl::close {conn} {
 	catch {mysql::close $conn}
 }
 
-proc ::tdbo::mariadb::get {conn schema_name fieldslist conditionlist {format "dict"}} {
+proc ::tdbo::mysqltcl::get {conn schema_name fieldslist conditionlist {format "dict"}} {
 	return [
 		_select \
 			$conn \
@@ -47,11 +47,11 @@ proc ::tdbo::mariadb::get {conn schema_name fieldslist conditionlist {format "di
 	]
 }
 
-proc ::tdbo::mariadb::mget {conn schema_name args} {
+proc ::tdbo::mysqltcl::mget {conn schema_name args} {
 	return [_select $conn $schema_name {*}$args]
 }
 
-proc ::tdbo::mariadb::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
+proc ::tdbo::mysqltcl::insert {conn schema_name namevaluepairs {sequence_fields ""}} {
 	set sqlscript [_prepare_insert_stmt $conn $schema_name $namevaluepairs]
 
 	if {[catch {mysql::exec $conn $sqlscript} result]} {
@@ -72,7 +72,7 @@ proc ::tdbo::mariadb::insert {conn schema_name namevaluepairs {sequence_fields "
 	return [list $status $sequence_values]
 }
 
-proc ::tdbo::mariadb::update {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::mysqltcl::update {conn schema_name namevaluepairs {conditionlist ""}} {
 	set sqlscript [_prepare_update_stmt $conn $schema_name $namevaluepairs $conditionlist]
 	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
@@ -81,7 +81,7 @@ proc ::tdbo::mariadb::update {conn schema_name namevaluepairs {conditionlist ""}
 	return $result
 }
 
-proc ::tdbo::mariadb::delete {conn schema_name {conditionlist ""}} {
+proc ::tdbo::mysqltcl::delete {conn schema_name {conditionlist ""}} {
 	set sqlscript [_prepare_delete_stmt $conn $schema_name $conditionlist]
 	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
@@ -90,7 +90,7 @@ proc ::tdbo::mariadb::delete {conn schema_name {conditionlist ""}} {
 	return $result
 }
 
-proc ::tdbo::mariadb::begin {conn {isolation ""}} {
+proc ::tdbo::mysqltcl::begin {conn {isolation ""}} {
 	if {$isolation != ""} {
 		set sqlscript "set transaction isolation level $isolation"
 		if {[catch {mysql::exec $conn $sqlscript} result]} {
@@ -103,14 +103,14 @@ proc ::tdbo::mariadb::begin {conn {isolation ""}} {
 	}
 }
 
-proc ::tdbo::mariadb::commit {conn} {
+proc ::tdbo::mysqltcl::commit {conn} {
 	set sqlscript "commit;\n"
 	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
 	}
 }
 
-proc ::tdbo::mariadb::rollback {conn} {
+proc ::tdbo::mysqltcl::rollback {conn} {
 	set sqlscript "rollback;\n"
 	if {[catch {mysql::exec $conn $sqlscript} result]} {
 		return -code error $result
@@ -123,7 +123,7 @@ proc ::tdbo::mariadb::rollback {conn} {
 #
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::mariadb::_prepare_condition {conn conditionlist} {
+proc ::tdbo::mysqltcl::_prepare_condition {conn conditionlist} {
 	set sqlcondition [list]
 	foreach condition $conditionlist {
 		set complist [list]
@@ -154,7 +154,7 @@ proc ::tdbo::mariadb::_prepare_condition {conn conditionlist} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::mariadb::_prepare_insert_stmt {conn schema_name namevaluepairs} {
+proc ::tdbo::mysqltcl::_prepare_insert_stmt {conn schema_name namevaluepairs} {
 	variable log
 
 	set fnamelist [join [dict keys $namevaluepairs] ", "]
@@ -177,7 +177,7 @@ proc ::tdbo::mariadb::_prepare_insert_stmt {conn schema_name namevaluepairs} {
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::mariadb::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
+proc ::tdbo::mysqltcl::_prepare_update_stmt {conn schema_name namevaluepairs {conditionlist ""}} {
 	variable log
 
 	dict for {fname val} $namevaluepairs {
@@ -202,7 +202,7 @@ proc ::tdbo::mariadb::_prepare_update_stmt {conn schema_name namevaluepairs {con
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::mariadb::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
+proc ::tdbo::mysqltcl::_prepare_delete_stmt {conn schema_name {conditionlist ""}} {
 	variable log
 
 	set stmt "DELETE FROM $schema_name"
@@ -221,7 +221,7 @@ proc ::tdbo::mariadb::_prepare_delete_stmt {conn schema_name {conditionlist ""}}
 # returns :
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::mariadb::_prepare_select_stmt {schema_name args} {
+proc ::tdbo::mysqltcl::_prepare_select_stmt {schema_name args} {
 	variable log
 
 	set fieldslist "*"
@@ -269,7 +269,7 @@ proc ::tdbo::mariadb::_prepare_select_stmt {schema_name args} {
 # format: one of "dict", "llist", "list" 
 #
 # ----------------------------------------------------------------------
-proc ::tdbo::mariadb::_select {conn schema_name args} {
+proc ::tdbo::mysqltcl::_select {conn schema_name args} {
 	set format "dict"
 	if {[dict exists $args -format]} {
 		set format [dict get $args -format]
@@ -305,4 +305,4 @@ proc ::tdbo::mariadb::_select {conn schema_name args} {
 	return $recordslist
 }
 
-package provide tdbo::mariadb 0.1.1
+package provide tdbo::mysqltcl 0.1.1

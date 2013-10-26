@@ -16,6 +16,11 @@ methods to access data members of an instance in a standard tcl-ish
 style.
 
 [para]
+tdbo objects can be defined in various ways based on the OO-system that
+is used by the application. For e.g., a tdbo object can be defined in
+Itcl by inheriting [class tdbo::Itcl::DBObject] class. Similarly ....
+
+[para]
 A data-store-driver is the one that implements necessary connectivity
 mechanism and procedures to access the data store. [cmd tdbo::load]
 method is used to load a specific data-store-driver instance. Using
@@ -26,27 +31,22 @@ to make use of the connection handle to perform [cmd add], [cmd get],
 [cmd save] and [cmd delete] methods on the data store.
 
 [para]
-A data-store-driver, may also provide other methods to 1) retrieve /
-manipulate multiple insances of data objects based on filtering
-conditions, sorting and grouping criteria 2) perform atomic and
-concurrent transactions 3) etc... Applications can make use of the
-connection handle to perform such operations and create instances of
-tdbo objects from resulting data.
+Using the connection handle, an application can also invoke 1)
+[cmd mget] 2) [cmd begin], [cmd commit] and [cmd rollback] and 3)
+[cmd close] methods to 1) retrieve multiple data records based on
+filtering, sorting and grouping criteria 2) perform atomic and
+concurrent transactions and 3) close the connection respectively.
 
 [para]
 Currently, tdbo supports [const sqlite3], [const mysqltcl],
 [const Pgtcl], [const tdbc::sqlite3], [const tdbc::mysql] and
 [const tdbc::postgres] drivers. Note that sqlite3, mysqltcl and
-Pgtcl drivers are functional in both Tcl 8.5 and Tcl 8.6
-environments while tdbc is available only on Tcl 8.6 and above.
+Pgtcl drivers are functional in Tcl 8.5 and above environments while
+tdbc::<driver>s are available only on Tcl 8.6 and above.
 
 [para]
-tdbo objects can be defined in various ways based on the OO-system that
-is used by the application. For e.g., tdbo object can be defined in
-Itcl by inheriting [cmd tdbo::Itcl::DBObject] class. Similarly ....
-
-[para]
-[section {TDBO Commands}]
+[section {Commands}]
+[subsection {TDBO Commands}]
 
 [list_begin definitions]
 
@@ -60,7 +60,7 @@ Loads a data-store-driver and returns a handle to the driver instance.
 [list_end]
 
 [para]
-[section {TDBO Driver Commands}]
+[subsection {TDBO Driver Commands}]
 [list_begin definitions]
 
 [call [arg db] [cmd open] [arg args]]
@@ -72,12 +72,20 @@ dependent. Please refer to the documentation of respective driver.
 
 [list_end]
 [para]
-[section {TDBO Connection Commands}]
+[subsection {TDBO Connection Commands}]
 [para]
 
 [list_begin definitions]
 
+[call [arg conn] [cmd begin]]
+
+Definition...
+
 [call [arg conn] [cmd close]]
+
+Definition...
+
+[call [arg conn] [cmd commit]]
 
 Definition...
 
@@ -85,18 +93,23 @@ Definition...
 
 Definition...
 
+[call [arg conn] [cmd rollback]]
+
+Definition...
+
+
 [list_end]
 [para]
 Driver may provide other commands to perform....
 
 [para]
-[section {TDBO Object Commands}]
+[subsection {TDBO Object Commands}]
 [para]
 Instantiate a tdbo object based on the OO-system....
 
 [list_begin definitions]
 
-[call [arg obj] [cmd {add}] [arg memberslist]]
+[call [arg obj] [cmd {add}] [arg args]]
 
 Definition...
 
@@ -104,11 +117,11 @@ Definition...
 
 Definition...
 
-[call [arg obj] [cmd {get}] [arg memberslist]]
+[call [arg obj] [cmd {get}] [arg args]]
 
 Definition...
 
-[call [arg obj] [cmd {save}] [arg memberslist]]
+[call [arg obj] [cmd {save}] [arg args]]
 
 Definition...
 
@@ -117,28 +130,94 @@ Definition...
 [para]
 [section {tdbo::Itcl::DBObject Class}]
 [para]
-Instantiate a tdbo object based on the OO-system....
+A base class to be inherited by Itcl based tdbo object definitions.
 
+[subsection {Constructor & Destructor}]
 [list_begin definitions]
 
-[call [arg obj] [cmd {add}] [arg memberslist]]
+[call [cmd {tdbo::Itcl::DBObject::constructor}] [arg conn]]
 
 Definition...
 
-[call [arg obj] [cmd {delete}]]
-
-Definition...
-
-[call [arg obj] [cmd {get}] [arg memberslist]]
-
-Definition...
-
-[call [arg obj] [cmd {save}] [arg memberslist]]
+[call [cmd {tdbo::Itcl::DBObject::destructor}]]
 
 Definition...
 
 [list_end]
 
+[subsection {Proc / Methods}]
+[list_begin definitions]
+
+[call [arg {public proc}] [cmd {tdbo::Itcl::DBObject::schema_name}]]
+
+Definition...
+
+[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_primarykey}]]
+
+Definition...
+
+[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_unique}]]
+
+Definition...
+
+[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_autoincrement}]]
+
+Definition...
+
+[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_primarykey}] [arg args]]
+
+Definition...
+
+[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_unique}] [arg args]]
+
+Definition...
+
+[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_autoincrement}] [arg args]]
+
+Definition...
+
+[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::configure}] [arg {{option ""}}] [arg args]]
+
+Definition...
+
+[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::cget}] [arg {{option ""}}] [arg args]]
+
+Definition...
+
+[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::clear}]]
+
+Definition...
+
+[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::add}] [arg args]]
+
+Definition...
+
+[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::delete}]]
+
+Definition...
+
+[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::get}] [arg args]]
+
+Definition...
+
+[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::save}] [arg args]]
+
+Definition...
+
+[list_end]
+
+[subsection {Common / Variables}]
+[list_begin definitions]
+
+[call [arg {protected variable}] [cmd {tdbo::Itcl::DBObject::clsName}]]
+
+Definition...
+
+[call [arg {protected variable}] [cmd {tdbo::Itcl::DBObject::log}]]
+
+Definition...
+
+[list_end]
 [para]
 [section EXAMPLES]
  

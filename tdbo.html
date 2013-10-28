@@ -116,18 +116,19 @@
 <li class="subsection"><a href="#subsection4">TDBO Connection Commands</a></li>
 </ul>
 </li>
-<li class="section"><a href="#section3">TDBO Itcl Interface</a>
+<li class="section"><a href="#section3">TDBO Tcllib-Record Like Interface</a>
 <ul>
-<li class="subsection"><a href="#subsection5">Constructor &amp; Destructor</a></li>
-<li class="subsection"><a href="#subsection6">Proc / Methods</a></li>
-<li class="subsection"><a href="#subsection7">Common / Variables</a></li>
+<li class="subsection"><a href="#subsection5">Record Commands</a></li>
+<li class="subsection"><a href="#subsection6">Definition Commands</a></li>
+<li class="subsection"><a href="#subsection7">Record Instance Commands</a></li>
 </ul>
 </li>
-<li class="section"><a href="#section4">TDBO Tcllib-Record Like Interface</a>
+<li class="section"><a href="#section4">TDBO Itcl Interface</a>
 <ul>
-<li class="subsection"><a href="#subsection8">Record Commands</a></li>
-<li class="subsection"><a href="#subsection9">Definition Commands</a></li>
-<li class="subsection"><a href="#subsection10">Record Instance Commands</a></li>
+<li class="subsection"><a href="#subsection8">tdbo::Itcl::DBObject Class</a></li>
+<li class="subsection"><a href="#subsection9">Constructor &amp; Destructor</a></li>
+<li class="subsection"><a href="#subsection10">Proc / Methods</a></li>
+<li class="subsection"><a href="#subsection11">Common / Variables</a></li>
 </ul>
 </li>
 <li class="section"><a href="#section5">Object To Record Mapping</a></li>
@@ -160,8 +161,8 @@
 <li><a href="#12"><i class="arg">conn</i> <b class="cmd">commit</b></a></li>
 <li><a href="#13"><i class="arg">conn</i> <b class="cmd">conn</b></a></li>
 <li><a href="#14"><i class="arg">conn</i> <b class="cmd">rollback</b></a></li>
-<li><a href="#15"><i class="arg">class</i> <b class="cmd">tdbo::Itcl::DBObject</b></a></li>
-<li><a href="#16"><i class="arg">class</i> <b class="cmd">tdbo::record::reocrd</b></a></li>
+<li><a href="#15"><i class="arg">package</i> <b class="cmd">tdbo::record</b></a></li>
+<li><a href="#16"><i class="arg">package</i> <b class="cmd">tdbo::Itcl</b></a></li>
 </ul>
 </div>
 </div>
@@ -218,22 +219,22 @@ dependent. Please refer to the documentation of respective driver.</p></dd>
 </dl>
 </div>
 <div id="subsection3" class="subsection"><h3><a name="subsection3">TDBO Object Commands</a></h3>
-<p>A tdbo object can be defined using various ways based on the OO system
-the application written in. Please refer to the corresponding section
-on how to define and use tdbo objects using the respective OO system.</p>
+<p>A tdbo object can be defined using various ways based on the application
+interface chosen. Please refer to the corresponding section
+on how to define and use tdbo objects using the respective interface.</p>
 <dl class="definitions">
 <dt><a name="3"><i class="arg">obj</i> <b class="cmd">configure</b> <span class="opt">?<i class="arg">args</i>?</span></a></dt>
 <dd><p>Method to configure (set) the member variables of an object. Arguments
-are OO system dependent. Please refer to the correponding section on
-how to define and use tdbo objects using the respective OO system.</p></dd>
+are interface dependent. Please refer to the correponding section on
+how to define and use tdbo objects using the respective interface.</p></dd>
 <dt><a name="4"><i class="arg">obj</i> <b class="cmd">cget</b> <span class="opt">?<i class="arg">args</i>?</span></a></dt>
 <dd><p>Method to retrieve the values of member variables of an object. Arguments
-are OO system dependent. Please refer to the correponding section on
-how to define and use tdbo objects using the respective OO system.</p></dd>
+are interface dependent. Please refer to the correponding section on
+how to define and use tdbo objects using the respective interface.</p></dd>
 <dt><a name="5"><i class="arg">obj</i> <b class="cmd">clear</b></a></dt>
 <dd><p>Method to reset the values of member variables of an object. Behaviour
-is OO system dependent. Please refer to the correponding section on
-how to define and use tdbo objects using the respective OO system.</p></dd>
+is interface dependent. Please refer to the correponding section on
+how to define and use tdbo objects using the respective interface.</p></dd>
 <dt><a name="6"><i class="arg">obj</i> <b class="cmd">add</b> <span class="opt">?<i class="arg">args</i>?</span></a></dt>
 <dd><p>Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument <i class="arg">args</i> is passed, it uses only those field names in <i class="arg">args</i> to prepare the name-value pairs. While preparing the name-value pairs, it skips those member variables that are not defined (un-initialized). To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;. Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.</p></dd>
 <dt><a name="7"><i class="arg">obj</i> <b class="cmd">delete</b></a></dt>
@@ -264,123 +265,20 @@ not interfere with the functioning of tdbo commands.</p></dd>
 </dl>
 </div>
 </div>
-<div id="section3" class="section"><h2><a name="section3">TDBO Itcl Interface</a></h2>
-<p>Through <b class="cmd">tdbo::Itcl</b> package, TDBO provides a way for Itcl based
-applications to define and use Itcl based tdbo objects. To make use of
-this feature you will need to <b class="cmd">package require</b> <b class="const">tdbo::Itcl</b>.</p>
+<div id="section3" class="section"><h2><a name="section3">TDBO Tcllib-Record Like Interface</a></h2>
+<p>For applications that are not based on any OO-system such as TclOO,
+Itcl, Snit, XOTcl etc., TDBO provides Tcllib's <b class="cmd">struct::record</b> like
+interface to define and use tdbo objects.</p>
 <dl class="definitions">
-<dt><a name="15"><i class="arg">class</i> <b class="cmd">tdbo::Itcl::DBObject</b></a></dt>
-<dd><p>A base class to be inherited by Itcl based tdbo object definitions.</p></dd>
-</dl>
-<div id="subsection5" class="subsection"><h3><a name="subsection5">Constructor &amp; Destructor</a></h3>
-<dl class="definitions">
-<dt><b class="cmd">tdbo::Itcl::DBObject::constructor</b> <i class="arg">conn</i></dt>
-<dd><p>Stores the definition of primary keys, unique fields and sequence / auto-increment fields by invoking following protected methods: <b class="method">_define_primarykey</b>, <b class="method">_define_unique</b> and <b class="method">_define_autoincrement</b>. Also prepares list of field names for later usage by <b class="method">add</b> and <b class="method">save</b> methods. <i class="arg">conn</i> is the connection handle obtained through <i class="arg">db</i> <b class="cmd">open</b> command.</p></dd>
-<dt><b class="cmd">tdbo::Itcl::DBObject::destructor</b></dt>
-<dd><p>Nothing special done here.</p></dd>
-</dl>
-</div>
-<div id="subsection6" class="subsection"><h3><a name="subsection6">Proc / Methods</a></h3>
-<dl class="definitions">
-<dt><i class="arg">public proc</i> <b class="cmd">tdbo::Itcl::DBObject::schema_name</b></dt>
-<dd><p>This is an abstract static proc to be implemented by the derived class
-to return the name of the table / view that the derived class
-represents.</p></dd>
-<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_primarykey</b></dt>
-<dd><p>Provides a default implementation by invoking <b class="method">define_primarykey</b>
-with an empty list. Override this method to invoke
-<b class="cmd">define_primarykey</b> with your own list of names of the public
-variables that constitute the primary key of the table that the class
-represents.</p></dd>
-<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_unique</b></dt>
-<dd><p>Provides a default implementation by invoking <b class="method">define_unique</b>
-with an empty list. Override this method to invoke
-<b class="cmd">define_unique</b> with your own list of list-of-names of the public
-variables that constitute the unique fields of the table or view that
-the class represents.</p></dd>
-<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_autoincrement</b></dt>
-<dd><p>Provides a default implementation by invoking
-<b class="method">define_autoincrement</b> with an empty list. Override this method
-to invoke <b class="cmd">define_autoincrement</b> with your own list of names of the
-public variables that are autoincrement or sequence fields in the table
-that the class represents.</p></dd>
-<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_primarykey</b> <i class="arg">args</i></dt>
-<dd><p>Defines a list of public variable names that map to the primary key
-fields of the associated table / view in the database. This method is
-meant to be invoked by derived classes from within
-<b class="method">_define_primarykey</b> method. <i class="arg">args</i> is a list of field names
-that constitute the primary key.</p></dd>
-<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_unique</b> <i class="arg">args</i></dt>
-<dd><p>Defines a list of list of public variable names that map to the list of
-combination of unique fields of the associated table / view in the
-database. This method is meant to be invoked by derived classes
-from within <b class="method">_define_unique</b> method. <i class="arg">args</i> is a list of
-list-of-field-names that constitute list of combination of unique
-fields.</p></dd>
-<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_autoincrement</b> <i class="arg">args</i></dt>
-<dd><p>Defines a list of public variable names that map to the auto-increment / 
-sequence fields of the associated table / view in the database. This
-method is meant to be invoked by derived classes from within
-<b class="method">_define_autoincrement</b> method. <i class="arg">args</i> is a list of field
-names that are auto-increment / sequence fields.</p></dd>
-<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::configure</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></dt>
-<dd><p>This method has following usages:</p>
-<dl class="definitions">
-<dt><i class="arg">obj</i> <b class="cmd">configure</b> <span class="opt">?<i class="arg">-opt1 val</i>?</span> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></dt>
-<dd><p>To set values of public member variables. <i class="arg">opt</i> is the name of a public member variable.</p></dd>
-<dt><i class="arg">obj</i> <b class="cmd">configure</b> <i class="arg">from_obj</i></dt>
-<dd><p>Object to object copy. To copy the values of all public member variables of <i class="arg">from_obj</i> into the corresponding public member variables of <i class="arg">obj</i>.</p></dd>
-<dt><i class="arg">obj</i> <b class="cmd">configure</b></dt>
-<dd><p>To retrieve initial and current values of all public member variables. Returns a dictionary in the format: -opt {-ival val -cval val} -opt {-ival val -cval val} ...</p></dd>
-<dt><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">-opt1 val</i> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></dt>
-<dd><p>Though this is not a direct usage of this method, when <i class="arg">obj</i> is being constructed, Itcl's object construction mechanism invokes the 1st usage of the <b class="method">configure</b> method on <i class="arg">obj</i> passing <i class="arg">-opt1 val</i> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span> as its arguments to set the values of the public member variables.</p></dd>
-<dt><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">from_obj</i></dt>
-<dd><p>Though this is not a direct usage of this method, when <i class="arg">obj</i> is being constructed, ITcl's object construction mechanism invokes the 2nd usage of the <b class="method">configure</b> method on <i class="arg">obj</i> passing <i class="arg">from_obj</i> as its parameter. Hence, it results into object-to-object copy of public member variables.</p></dd>
-</dl></dd>
-<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::cget</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></dt>
-<dd><p>This method has following usages:</p>
-<dl class="definitions">
-<dt><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt</i></dt>
-<dd><p>Returns current value of the public member variable specified by <i class="arg">opt</i>.</p></dd>
-<dt><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt1 vName1</i> <span class="opt">?<i class="arg">-opt2 vName2</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></dt>
-<dd><p>To get the value of public member variables into the respective variable names specified. <i class="arg">opt</i> is the name of a public member variable. <i class="arg">vName</i> is the name of a variable into which the value of the <i class="arg">opt</i> is to be stored.</p></dd>
-<dt><i class="arg">obj</i> <b class="cmd">cget</b></dt>
-<dd><p>To get current values of all public member variables as a dictionary. Returns the dictionary in the format: -opt1 val1 -opt2 val2 ...</p></dd>
-</dl></dd>
-<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::clear</b></dt>
-<dd><p>Resets all public member variables with the initialization value given in the class definition.</p></dd>
-<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::add</b> <span class="opt">?<i class="arg">args</i>?</span></dt>
-<dd><p>Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument <i class="arg">args</i> is passed, it uses only those field names in the <i class="arg">args</i> to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &quot;&lt;undefined&gt;&quot;. In Itcl, Member variables that are uninitialized or unset are internally identified with the value &quot;&lt;undefined&gt;&quot;. We make use of this state of a member variable to omit a field in the insert operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;. Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.</p></dd>
-<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::delete</b></dt>
-<dd><p>Delete the record represented by the object from database and reset the object values. The record to be deleted from the database is identified based on the description given in the section <span class="sectref"><a href="#section5">Object To Record Mapping</a></span>.</p></dd>
-<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::get</b> <span class="opt">?<i class="arg">args</i>?</span></dt>
-<dd><p>Retrieve a record from the database and populate object's member variables with values retrieved. The record to be retrieved from the database is identified based on the description given in the section <span class="sectref"><a href="#section5">Object To Record Mapping</a></span>. By default, this method uses all public member variable names as the fields of the record to be retrieved from the database. However, if the argument <i class="arg">args</i> is passed with a list of field names (corresponding to its public member variables), then only those fields are retrieved and populated into the object.</p></dd>
-<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::save</b> <span class="opt">?<i class="arg">args</i>?</span></dt>
-<dd><p>Save the object by updating the corresponding record in the database. The record to be updated in the database is identified based on the description given in the section <span class="sectref"><a href="#section5">Object To Record Mapping</a></span>. In preparing the record to save, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument <i class="arg">args</i> is passed, it uses only those field names in <i class="arg">args</i> to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &lt;undefined&gt;. In Itcl, member variables that are not initialized or unset are internally identified with the value &lt;undefined&gt;. We make use of this state of a member variable to omit a field in the update operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;.</p></dd>
-</dl>
-</div>
-<div id="subsection7" class="subsection"><h3><a name="subsection7">Common / Variables</a></h3>
-<dl class="definitions">
-<dt><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::clsName</b></dt>
-<dd><p>Name of the derived class as returned by [$this info class]</p></dd>
-<dt><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::log</b></dt>
-<dd><p>Tcllib's logger object command to invoke logging commands such as ${log}::info &quot;message&quot;</p></dd>
-</dl>
-</div>
-</div>
-<div id="section4" class="section"><h2><a name="section4">TDBO Tcllib-Record Like Interface</a></h2>
-<p>Through <b class="cmd">tdbo::record</b> package, TDBO provides a way for non-OO based
-applications to define and use tdbo objects with a <b class="cmd">struct::record</b>
-like structure. To make use of this feature you will need to
+<dt><a name="15"><i class="arg">package</i> <b class="cmd">tdbo::record</b></a></dt>
+<dd><p>To make use of <b class="cmd">struct::record</b> like interface you will need to
 <b class="cmd">package require</b> <b class="const">tdbo::record</b>.</p>
-<dl class="definitions">
-<dt><a name="16"><i class="arg">class</i> <b class="cmd">tdbo::record::reocrd</b></a></dt>
-<dd><p>The <b class="cmd">tdbo::record</b> package only contains one top level command, but
+<p>The <b class="cmd">tdbo::record</b> package only contains one top level command, but
 several sub commands (see below). It also obeys the namespace in which
 the tdbo object was defined, hence the objects returned are fully
 qualified.</p></dd>
 </dl>
-<div id="subsection8" class="subsection"><h3><a name="subsection8">Record Commands</a></h3>
+<div id="subsection5" class="subsection"><h3><a name="subsection5">Record Commands</a></h3>
 <dl class="definitions">
 <dt><b class="cmd">record define</b> <i class="arg">definitionName</i> <i class="arg">schemaName</i> <i class="arg">schemaFields</i> <span class="opt">?<i class="arg">-primarykey  fieldsList</i>?</span> <span class="opt">?<i class="arg">-autoincrement fieldsList</i>?</span> <span class="opt">?<i class="arg">-unique fieldsListOfLists</i>?</span></dt>
 <dd><p>Defines a tdbo object with the definition <i class="arg">definitionName</i> that is
@@ -423,7 +321,7 @@ does not exist.</p></dd>
 returns an error if the <i class="arg">instanceName</i> does not exist.</p></dd>
 </dl>
 </div>
-<div id="subsection9" class="subsection"><h3><a name="subsection9">Definition Commands</a></h3>
+<div id="subsection6" class="subsection"><h3><a name="subsection6">Definition Commands</a></h3>
 <p>tdbo object instances are created using the <i class="arg">definitionName</i>
 command that was returned by <b class="method">record define</b> command.</p>
 <dl class="definitions">
@@ -455,7 +353,7 @@ Address addr2 conn -city Chennai -postalcode 638001
 </dd>
 </dl>
 </div>
-<div id="subsection10" class="subsection"><h3><a name="subsection10">Record Instance Commands</a></h3>
+<div id="subsection7" class="subsection"><h3><a name="subsection7">Record Instance Commands</a></h3>
 <p>The following subcommands and corresponding arguments are available to
 any record instance:</p>
 <dl class="definitions">
@@ -571,14 +469,123 @@ greater than zero indicates success.</p></dd>
 </dl>
 </div>
 </div>
+<div id="section4" class="section"><h2><a name="section4">TDBO Itcl Interface</a></h2>
+<dl class="definitions">
+<dt><a name="16"><i class="arg">package</i> <b class="cmd">tdbo::Itcl</b></a></dt>
+<dd><p>Through <b class="cmd">tdbo::Itcl</b> package, TDBO provides a way for Itcl based
+applications to define and use Itcl based tdbo objects. To make use of
+this feature you will need to <b class="cmd">package require</b> <b class="const">tdbo::Itcl</b>.</p></dd>
+</dl>
+<div id="subsection8" class="subsection"><h3><a name="subsection8">tdbo::Itcl::DBObject Class</a></h3>
+<dl class="definitions">
+<dt><i class="arg">class</i> <b class="cmd">tdbo::Itcl::DBObject</b></dt>
+<dd><p>A base class to be inherited by Itcl based tdbo object definitions.</p></dd>
+</dl>
+</div>
+<div id="subsection9" class="subsection"><h3><a name="subsection9">Constructor &amp; Destructor</a></h3>
+<dl class="definitions">
+<dt><b class="cmd">tdbo::Itcl::DBObject::constructor</b> <i class="arg">conn</i></dt>
+<dd><p>Stores the definition of primary keys, unique fields and sequence / auto-increment fields by invoking following protected methods: <b class="method">_define_primarykey</b>, <b class="method">_define_unique</b> and <b class="method">_define_autoincrement</b>. Also prepares list of field names for later usage by <b class="method">add</b> and <b class="method">save</b> methods. <i class="arg">conn</i> is the connection handle obtained through <i class="arg">db</i> <b class="cmd">open</b> command.</p></dd>
+<dt><b class="cmd">tdbo::Itcl::DBObject::destructor</b></dt>
+<dd><p>Nothing special done here.</p></dd>
+</dl>
+</div>
+<div id="subsection10" class="subsection"><h3><a name="subsection10">Proc / Methods</a></h3>
+<dl class="definitions">
+<dt><i class="arg">public proc</i> <b class="cmd">tdbo::Itcl::DBObject::schema_name</b></dt>
+<dd><p>This is an abstract static proc to be implemented by the derived class
+to return the name of the table / view that the derived class
+represents.</p></dd>
+<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_primarykey</b></dt>
+<dd><p>Provides a default implementation by invoking <b class="method">define_primarykey</b>
+with an empty list. Override this method to invoke
+<b class="cmd">define_primarykey</b> with your own list of names of the public
+variables that constitute the primary key of the table that the class
+represents.</p></dd>
+<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_unique</b></dt>
+<dd><p>Provides a default implementation by invoking <b class="method">define_unique</b>
+with an empty list. Override this method to invoke
+<b class="cmd">define_unique</b> with your own list of list-of-names of the public
+variables that constitute the unique fields of the table or view that
+the class represents.</p></dd>
+<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::_define_autoincrement</b></dt>
+<dd><p>Provides a default implementation by invoking
+<b class="method">define_autoincrement</b> with an empty list. Override this method
+to invoke <b class="cmd">define_autoincrement</b> with your own list of names of the
+public variables that are autoincrement or sequence fields in the table
+that the class represents.</p></dd>
+<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_primarykey</b> <i class="arg">args</i></dt>
+<dd><p>Defines a list of public variable names that map to the primary key
+fields of the associated table / view in the database. This method is
+meant to be invoked by derived classes from within
+<b class="method">_define_primarykey</b> method. <i class="arg">args</i> is a list of field names
+that constitute the primary key.</p></dd>
+<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_unique</b> <i class="arg">args</i></dt>
+<dd><p>Defines a list of list of public variable names that map to the list of
+combination of unique fields of the associated table / view in the
+database. This method is meant to be invoked by derived classes
+from within <b class="method">_define_unique</b> method. <i class="arg">args</i> is a list of
+list-of-field-names that constitute list of combination of unique
+fields.</p></dd>
+<dt><i class="arg">protected method</i> <b class="cmd">tdbo::Itcl::DBObject::define_autoincrement</b> <i class="arg">args</i></dt>
+<dd><p>Defines a list of public variable names that map to the auto-increment / 
+sequence fields of the associated table / view in the database. This
+method is meant to be invoked by derived classes from within
+<b class="method">_define_autoincrement</b> method. <i class="arg">args</i> is a list of field
+names that are auto-increment / sequence fields.</p></dd>
+<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::configure</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></dt>
+<dd><p>This method has following usages:</p>
+<dl class="definitions">
+<dt><i class="arg">obj</i> <b class="cmd">configure</b> <span class="opt">?<i class="arg">-opt1 val</i>?</span> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></dt>
+<dd><p>To set values of public member variables. <i class="arg">opt</i> is the name of a public member variable.</p></dd>
+<dt><i class="arg">obj</i> <b class="cmd">configure</b> <i class="arg">from_obj</i></dt>
+<dd><p>Object to object copy. To copy the values of all public member variables of <i class="arg">from_obj</i> into the corresponding public member variables of <i class="arg">obj</i>.</p></dd>
+<dt><i class="arg">obj</i> <b class="cmd">configure</b></dt>
+<dd><p>To retrieve initial and current values of all public member variables. Returns a dictionary in the format: -opt {-ival val -cval val} -opt {-ival val -cval val} ...</p></dd>
+<dt><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">-opt1 val</i> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></dt>
+<dd><p>Though this is not a direct usage of this method, when <i class="arg">obj</i> is being constructed, Itcl's object construction mechanism invokes the 1st usage of the <b class="method">configure</b> method on <i class="arg">obj</i> passing <i class="arg">-opt1 val</i> <span class="opt">?<i class="arg">-opt2 val</i>?</span> <span class="opt">?<i class="arg">...</i>?</span> as its arguments to set the values of the public member variables.</p></dd>
+<dt><b class="cmd">class</b> <i class="arg">obj</i> <i class="arg">from_obj</i></dt>
+<dd><p>Though this is not a direct usage of this method, when <i class="arg">obj</i> is being constructed, ITcl's object construction mechanism invokes the 2nd usage of the <b class="method">configure</b> method on <i class="arg">obj</i> passing <i class="arg">from_obj</i> as its parameter. Hence, it results into object-to-object copy of public member variables.</p></dd>
+</dl></dd>
+<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::cget</b> <i class="arg">{option &quot;&quot;}</i> <i class="arg">args</i></dt>
+<dd><p>This method has following usages:</p>
+<dl class="definitions">
+<dt><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt</i></dt>
+<dd><p>Returns current value of the public member variable specified by <i class="arg">opt</i>.</p></dd>
+<dt><i class="arg">obj</i> <b class="cmd">cget</b> <i class="arg">-opt1 vName1</i> <span class="opt">?<i class="arg">-opt2 vName2</i>?</span> <span class="opt">?<i class="arg">...</i>?</span></dt>
+<dd><p>To get the value of public member variables into the respective variable names specified. <i class="arg">opt</i> is the name of a public member variable. <i class="arg">vName</i> is the name of a variable into which the value of the <i class="arg">opt</i> is to be stored.</p></dd>
+<dt><i class="arg">obj</i> <b class="cmd">cget</b></dt>
+<dd><p>To get current values of all public member variables as a dictionary. Returns the dictionary in the format: -opt1 val1 -opt2 val2 ...</p></dd>
+</dl></dd>
+<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::clear</b></dt>
+<dd><p>Resets all public member variables with the initialization value given in the class definition.</p></dd>
+<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::add</b> <span class="opt">?<i class="arg">args</i>?</span></dt>
+<dd><p>Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument <i class="arg">args</i> is passed, it uses only those field names in the <i class="arg">args</i> to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &quot;&lt;undefined&gt;&quot;. In Itcl, Member variables that are uninitialized or unset are internally identified with the value &quot;&lt;undefined&gt;&quot;. We make use of this state of a member variable to omit a field in the insert operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;. Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.</p></dd>
+<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::delete</b></dt>
+<dd><p>Delete the record represented by the object from database and reset the object values. The record to be deleted from the database is identified based on the description given in the section <span class="sectref"><a href="#section5">Object To Record Mapping</a></span>.</p></dd>
+<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::get</b> <span class="opt">?<i class="arg">args</i>?</span></dt>
+<dd><p>Retrieve a record from the database and populate object's member variables with values retrieved. The record to be retrieved from the database is identified based on the description given in the section <span class="sectref"><a href="#section5">Object To Record Mapping</a></span>. By default, this method uses all public member variable names as the fields of the record to be retrieved from the database. However, if the argument <i class="arg">args</i> is passed with a list of field names (corresponding to its public member variables), then only those fields are retrieved and populated into the object.</p></dd>
+<dt><i class="arg">public method</i> <b class="cmd">tdbo::Itcl::DBObject::save</b> <span class="opt">?<i class="arg">args</i>?</span></dt>
+<dd><p>Save the object by updating the corresponding record in the database. The record to be updated in the database is identified based on the description given in the section <span class="sectref"><a href="#section5">Object To Record Mapping</a></span>. In preparing the record to save, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument <i class="arg">args</i> is passed, it uses only those field names in <i class="arg">args</i> to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than &lt;undefined&gt;. In Itcl, member variables that are not initialized or unset are internally identified with the value &lt;undefined&gt;. We make use of this state of a member variable to omit a field in the update operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to &quot;&lt;null&gt;&quot;.</p></dd>
+</dl>
+</div>
+<div id="subsection11" class="subsection"><h3><a name="subsection11">Common / Variables</a></h3>
+<dl class="definitions">
+<dt><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::clsName</b></dt>
+<dd><p>Name of the derived class as returned by [$this info class]</p></dd>
+<dt><i class="arg">protected variable</i> <b class="cmd">tdbo::Itcl::DBObject::log</b></dt>
+<dd><p>Tcllib's logger object command to invoke logging commands such as ${log}::info &quot;message&quot;</p></dd>
+</dl>
+</div>
+</div>
 <div id="section5" class="section"><h2><a name="section5">Object To Record Mapping</a></h2>
 <p>tdbo object methods <b class="method">get</b>, <b class="method">save</b> and <b class="method">delete</b>
 need to identify a unique record in the database that the object
 instance represents. A unique record is identified by the values of
 primary key and/or unique fields of the object. Process of defining
-these field names are OO system dependent. Please refer to the
+these field names are interface dependent. Please refer to the
 corresponding section on how to define and use tdbo objects using the
-respective OO system.</p>
+respective interface.</p>
 <p>For e.g., if the primary key was defined as {pk1 pk2} and unique fields
 were defined as {{uq1} {uq2 uq3}} then the condition to be used in
 WHERE clause of an SQL statement to identify the unique record will be:</p>
@@ -609,16 +616,11 @@ the condition will be:</p>
 </pre>
 </div>
 <div id="section6" class="section"><h2><a name="section6">EXAMPLES</a></h2>
-<p>Following example gives a step-by-step illustration on how to use
-this package.</p>
-<pre class="example">
-#
-# Example goes here
-#
-</pre>
+<p>Plesae refer to examples in demo folder of this package distribution.</p>
 </div>
 <div id="section7" class="section"><h2><a name="section7">See Also</a></h2>
-<p><b class="cmd">struct::record</b>, <b class="cmd">tdao::dbc</b> and <b class="cmd">tdao::dao</b></p>
+<p><b class="cmd">struct::record</b>, <b class="cmd">sqlite3</b>, <b class="cmd">Pgtcl</b>, <b class="cmd">mysqltcl</b>,
+<b class="cmd">tdbc::sqlite3</b>, <b class="cmd">tdbc::postgres</b>, <b class="cmd">tdbc::mysql</b></p>
 </div>
 <div id="section8" class="section"><h2><a name="section8">AUTHOR</a></h2>
 <p>Nagarajan Chinnasamy &lt;nagarajanchinnasamy@gmail.com&gt;</p>
@@ -632,7 +634,7 @@ Please also report any ideas for enhancements you may have for either
 package and/or documentation.</p>
 </div>
 <div id="keywords" class="section"><h2><a name="keywords">Keywords</a></h2>
-<p>DAO, Data Access Objects, Database Connectivity</p>
+<p>Data Access Objects, Database Connectivity, Object Relations Mapping</p>
 </div>
 <div id="category" class="section"><h2><a name="category">Category</a></h2>
 <p>Database</p>

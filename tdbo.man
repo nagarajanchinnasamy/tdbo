@@ -83,29 +83,29 @@ dependent. Please refer to the documentation of respective driver.
 [para]
 [subsection {TDBO Object Commands}]
 [para]
-A tdbo object can be defined using various ways based on the OO system
-the application written in. Please refer to the corresponding section
-on how to define and use tdbo objects using the respective OO system.
+A tdbo object can be defined using various ways based on the application
+interface chosen. Please refer to the corresponding section
+on how to define and use tdbo objects using the respective interface.
 
 [list_begin definitions]
 
 [call [arg obj] [cmd {configure}] [opt [arg args]]]
 
 Method to configure (set) the member variables of an object. Arguments
-are OO system dependent. Please refer to the correponding section on
-how to define and use tdbo objects using the respective OO system.
+are interface dependent. Please refer to the correponding section on
+how to define and use tdbo objects using the respective interface.
 
 [call [arg obj] [cmd {cget}] [opt [arg args]]]
 
 Method to retrieve the values of member variables of an object. Arguments
-are OO system dependent. Please refer to the correponding section on
-how to define and use tdbo objects using the respective OO system.
+are interface dependent. Please refer to the correponding section on
+how to define and use tdbo objects using the respective interface.
 
 [call [arg obj] [cmd {clear}]]
 
 Method to reset the values of member variables of an object. Behaviour
-is OO system dependent. Please refer to the correponding section on
-how to define and use tdbo objects using the respective OO system.
+is interface dependent. Please refer to the correponding section on
+how to define and use tdbo objects using the respective interface.
 
 [call [arg obj] [cmd {add}] [opt [arg args]]]
 
@@ -159,166 +159,16 @@ Rolls back the currently active database transaction.
 [list_end]
 
 [para]
-[section {TDBO Itcl Interface}]
-[para]
-Through [cmd tdbo::Itcl] package, TDBO provides a way for Itcl based
-applications to define and use Itcl based tdbo objects. To make use of
-this feature you will need to [cmd {package require}] [const tdbo::Itcl].
-
-[list_begin definitions]
-[call [arg class] [cmd {tdbo::Itcl::DBObject}]]
-
-A base class to be inherited by Itcl based tdbo object definitions.
-[list_end]
-
-[subsection {Constructor & Destructor}]
-[list_begin definitions]
-
-[def "[cmd {tdbo::Itcl::DBObject::constructor}] [arg conn]"]
-
-Stores the definition of primary keys, unique fields and sequence / auto-increment fields by invoking following protected methods: [method _define_primarykey], [method _define_unique] and [method _define_autoincrement]. Also prepares list of field names for later usage by [method add] and [method save] methods. [arg conn] is the connection handle obtained through [arg db] [cmd open] command.
-
-[def "[cmd {tdbo::Itcl::DBObject::destructor}]"]
-
-Nothing special done here.
-
-[list_end]
-
-[subsection {Proc / Methods}]
-[list_begin definitions]
-
-[def "[arg {public proc}] [cmd {tdbo::Itcl::DBObject::schema_name}]"]
-
-This is an abstract static proc to be implemented by the derived class
-to return the name of the table / view that the derived class
-represents.
-
-[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_primarykey}]"]
-
-Provides a default implementation by invoking [method define_primarykey]
-with an empty list. Override this method to invoke
-[cmd define_primarykey] with your own list of names of the public
-variables that constitute the primary key of the table that the class
-represents.
-
-[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_unique}]"]
-
-Provides a default implementation by invoking [method define_unique]
-with an empty list. Override this method to invoke
-[cmd define_unique] with your own list of list-of-names of the public
-variables that constitute the unique fields of the table or view that
-the class represents.
-
-[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_autoincrement}]"]
-
-Provides a default implementation by invoking
-[method define_autoincrement] with an empty list. Override this method
-to invoke [cmd define_autoincrement] with your own list of names of the
-public variables that are autoincrement or sequence fields in the table
-that the class represents.
-
-[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_primarykey}] [arg args]"]
-
-Defines a list of public variable names that map to the primary key
-fields of the associated table / view in the database. This method is
-meant to be invoked by derived classes from within
-[method _define_primarykey] method. [arg args] is a list of field names
-that constitute the primary key.
-
-[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_unique}] [arg args]"]
-
-Defines a list of list of public variable names that map to the list of
-combination of unique fields of the associated table / view in the
-database. This method is meant to be invoked by derived classes
-from within [method _define_unique] method. [arg args] is a list of
-list-of-field-names that constitute list of combination of unique
-fields.
-
-[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_autoincrement}] [arg args]"]
-
-Defines a list of public variable names that map to the auto-increment / 
-sequence fields of the associated table / view in the database. This
-method is meant to be invoked by derived classes from within
-[method _define_autoincrement] method. [arg args] is a list of field
-names that are auto-increment / sequence fields.
-
-[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::configure}] [arg {{option ""}}] [arg args]"]
-
-This method has following usages:
-
-[list_begin definitions]
-
-[def "[arg obj] [cmd configure] [opt [arg {-opt1 val}]] [opt [arg {-opt2 val}]] [opt [arg ...]]"]
-To set values of public member variables. [arg opt] is the name of a public member variable.
-
-[def "[arg obj] [cmd configure] [arg from_obj]"]
-Object to object copy. To copy the values of all public member variables of [arg from_obj] into the corresponding public member variables of [arg obj].
-
-[def "[arg obj] [cmd configure]"]
-To retrieve initial and current values of all public member variables. Returns a dictionary in the format: -opt {-ival val -cval val} -opt {-ival val -cval val} ...
-
-[def "[cmd class] [arg obj] [arg {-opt1 val}] [opt [arg {-opt2 val}]] [opt [arg ...]]"]
-Though this is not a direct usage of this method, when [arg obj] is being constructed, Itcl's object construction mechanism invokes the 1st usage of the [method configure] method on [arg obj] passing [arg {-opt1 val}] [opt [arg {-opt2 val}]] [opt [arg ...]] as its arguments to set the values of the public member variables.
-
-[def "[cmd class] [arg obj] [arg from_obj]"]
-Though this is not a direct usage of this method, when [arg obj] is being constructed, ITcl's object construction mechanism invokes the 2nd usage of the [method configure] method on [arg obj] passing [arg from_obj] as its parameter. Hence, it results into object-to-object copy of public member variables.
-[list_end]
-
-[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::cget}] [arg {{option ""}}] [arg args]"]
-
-This method has following usages:
-
-[list_begin definitions]
-
-[def "[arg obj] [cmd cget] [arg -opt]"]
-Returns current value of the public member variable specified by [arg opt].
-
-[def "[arg obj] [cmd cget] [arg {-opt1 vName1}] [opt [arg {-opt2 vName2}]] [opt [arg ...]]"]
-To get the value of public member variables into the respective variable names specified. [arg opt] is the name of a public member variable. [arg vName] is the name of a variable into which the value of the [arg opt] is to be stored.
-
-[def "[arg obj] [cmd cget]"]
-To get current values of all public member variables as a dictionary. Returns the dictionary in the format: -opt1 val1 -opt2 val2 ...
-
-[list_end]
-
-[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::clear}]"]
-Resets all public member variables with the initialization value given in the class definition.
-
-[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::add}] [opt [arg args]]"]
-Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument [arg args] is passed, it uses only those field names in the [arg args] to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than "<undefined>". In Itcl, Member variables that are uninitialized or unset are internally identified with the value "<undefined>". We make use of this state of a member variable to omit a field in the insert operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to "<null>". Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.
-
-[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::delete}]"]
-Delete the record represented by the object from database and reset the object values. The record to be deleted from the database is identified based on the description given in the section [sectref {Object To Record Mapping}].
-
-[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::get}] [opt [arg args]]"]
-Retrieve a record from the database and populate object's member variables with values retrieved. The record to be retrieved from the database is identified based on the description given in the section [sectref {Object To Record Mapping}]. By default, this method uses all public member variable names as the fields of the record to be retrieved from the database. However, if the argument [arg args] is passed with a list of field names (corresponding to its public member variables), then only those fields are retrieved and populated into the object.
-
-[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::save}] [opt [arg args]]"]
-Save the object by updating the corresponding record in the database. The record to be updated in the database is identified based on the description given in the section [sectref {Object To Record Mapping}]. In preparing the record to save, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument [arg args] is passed, it uses only those field names in [arg args] to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than <undefined>. In Itcl, member variables that are not initialized or unset are internally identified with the value <undefined>. We make use of this state of a member variable to omit a field in the update operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to "<null>".
-
-[list_end]
-
-[subsection {Common / Variables}]
-[list_begin definitions]
-
-[def "[arg {protected variable}] [cmd {tdbo::Itcl::DBObject::clsName}]"]
-Name of the derived class as returned by [lb]$this info class[rb]
-
-[def "[arg {protected variable}] [cmd {tdbo::Itcl::DBObject::log}]"]
-Tcllib's logger object command to invoke logging commands such as ${log}::info "message"
-
-[list_end]
-
-[para]
 [section {TDBO Tcllib-Record Like Interface}]
 [para]
-Through [cmd tdbo::record] package, TDBO provides a way for non-OO based
-applications to define and use tdbo objects with a [cmd struct::record]
-like structure. To make use of this feature you will need to
-[cmd {package require}] [const tdbo::record].
+For applications that are not based on any OO-system such as TclOO,
+Itcl, Snit, XOTcl etc., TDBO provides Tcllib's [cmd struct::record] like
+interface to define and use tdbo objects.
 
 [list_begin definitions]
-[call [arg class] [cmd {tdbo::record::reocrd}]]
+[call [arg package] [cmd {tdbo::record}]]
+To make use of [cmd struct::record] like interface you will need to
+[cmd {package require}] [const tdbo::record].
 
 [para]
 The [cmd tdbo::record] package only contains one top level command, but
@@ -591,14 +441,171 @@ greater than zero indicates success.
 [list_end]
 
 [para]
+[section {TDBO Itcl Interface}]
+[para]
+
+[list_begin definitions]
+[call [arg package] [cmd {tdbo::Itcl}]]
+
+Through [cmd tdbo::Itcl] package, TDBO provides a way for Itcl based
+applications to define and use Itcl based tdbo objects. To make use of
+this feature you will need to [cmd {package require}] [const tdbo::Itcl].
+[list_end]
+
+[subsection {tdbo::Itcl::DBObject Class}]
+
+[list_begin definitions]
+[def "[arg class] [cmd {tdbo::Itcl::DBObject}]"]
+
+A base class to be inherited by Itcl based tdbo object definitions.
+[list_end]
+
+[subsection {Constructor & Destructor}]
+[list_begin definitions]
+
+[def "[cmd {tdbo::Itcl::DBObject::constructor}] [arg conn]"]
+
+Stores the definition of primary keys, unique fields and sequence / auto-increment fields by invoking following protected methods: [method _define_primarykey], [method _define_unique] and [method _define_autoincrement]. Also prepares list of field names for later usage by [method add] and [method save] methods. [arg conn] is the connection handle obtained through [arg db] [cmd open] command.
+
+[def "[cmd {tdbo::Itcl::DBObject::destructor}]"]
+
+Nothing special done here.
+
+[list_end]
+
+[subsection {Proc / Methods}]
+[list_begin definitions]
+
+[def "[arg {public proc}] [cmd {tdbo::Itcl::DBObject::schema_name}]"]
+
+This is an abstract static proc to be implemented by the derived class
+to return the name of the table / view that the derived class
+represents.
+
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_primarykey}]"]
+
+Provides a default implementation by invoking [method define_primarykey]
+with an empty list. Override this method to invoke
+[cmd define_primarykey] with your own list of names of the public
+variables that constitute the primary key of the table that the class
+represents.
+
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_unique}]"]
+
+Provides a default implementation by invoking [method define_unique]
+with an empty list. Override this method to invoke
+[cmd define_unique] with your own list of list-of-names of the public
+variables that constitute the unique fields of the table or view that
+the class represents.
+
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_autoincrement}]"]
+
+Provides a default implementation by invoking
+[method define_autoincrement] with an empty list. Override this method
+to invoke [cmd define_autoincrement] with your own list of names of the
+public variables that are autoincrement or sequence fields in the table
+that the class represents.
+
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_primarykey}] [arg args]"]
+
+Defines a list of public variable names that map to the primary key
+fields of the associated table / view in the database. This method is
+meant to be invoked by derived classes from within
+[method _define_primarykey] method. [arg args] is a list of field names
+that constitute the primary key.
+
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_unique}] [arg args]"]
+
+Defines a list of list of public variable names that map to the list of
+combination of unique fields of the associated table / view in the
+database. This method is meant to be invoked by derived classes
+from within [method _define_unique] method. [arg args] is a list of
+list-of-field-names that constitute list of combination of unique
+fields.
+
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_autoincrement}] [arg args]"]
+
+Defines a list of public variable names that map to the auto-increment / 
+sequence fields of the associated table / view in the database. This
+method is meant to be invoked by derived classes from within
+[method _define_autoincrement] method. [arg args] is a list of field
+names that are auto-increment / sequence fields.
+
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::configure}] [arg {{option ""}}] [arg args]"]
+
+This method has following usages:
+
+[list_begin definitions]
+
+[def "[arg obj] [cmd configure] [opt [arg {-opt1 val}]] [opt [arg {-opt2 val}]] [opt [arg ...]]"]
+To set values of public member variables. [arg opt] is the name of a public member variable.
+
+[def "[arg obj] [cmd configure] [arg from_obj]"]
+Object to object copy. To copy the values of all public member variables of [arg from_obj] into the corresponding public member variables of [arg obj].
+
+[def "[arg obj] [cmd configure]"]
+To retrieve initial and current values of all public member variables. Returns a dictionary in the format: -opt {-ival val -cval val} -opt {-ival val -cval val} ...
+
+[def "[cmd class] [arg obj] [arg {-opt1 val}] [opt [arg {-opt2 val}]] [opt [arg ...]]"]
+Though this is not a direct usage of this method, when [arg obj] is being constructed, Itcl's object construction mechanism invokes the 1st usage of the [method configure] method on [arg obj] passing [arg {-opt1 val}] [opt [arg {-opt2 val}]] [opt [arg ...]] as its arguments to set the values of the public member variables.
+
+[def "[cmd class] [arg obj] [arg from_obj]"]
+Though this is not a direct usage of this method, when [arg obj] is being constructed, ITcl's object construction mechanism invokes the 2nd usage of the [method configure] method on [arg obj] passing [arg from_obj] as its parameter. Hence, it results into object-to-object copy of public member variables.
+[list_end]
+
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::cget}] [arg {{option ""}}] [arg args]"]
+
+This method has following usages:
+
+[list_begin definitions]
+
+[def "[arg obj] [cmd cget] [arg -opt]"]
+Returns current value of the public member variable specified by [arg opt].
+
+[def "[arg obj] [cmd cget] [arg {-opt1 vName1}] [opt [arg {-opt2 vName2}]] [opt [arg ...]]"]
+To get the value of public member variables into the respective variable names specified. [arg opt] is the name of a public member variable. [arg vName] is the name of a variable into which the value of the [arg opt] is to be stored.
+
+[def "[arg obj] [cmd cget]"]
+To get current values of all public member variables as a dictionary. Returns the dictionary in the format: -opt1 val1 -opt2 val2 ...
+
+[list_end]
+
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::clear}]"]
+Resets all public member variables with the initialization value given in the class definition.
+
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::add}] [opt [arg args]]"]
+Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument [arg args] is passed, it uses only those field names in the [arg args] to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than "<undefined>". In Itcl, Member variables that are uninitialized or unset are internally identified with the value "<undefined>". We make use of this state of a member variable to omit a field in the insert operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to "<null>". Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.
+
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::delete}]"]
+Delete the record represented by the object from database and reset the object values. The record to be deleted from the database is identified based on the description given in the section [sectref {Object To Record Mapping}].
+
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::get}] [opt [arg args]]"]
+Retrieve a record from the database and populate object's member variables with values retrieved. The record to be retrieved from the database is identified based on the description given in the section [sectref {Object To Record Mapping}]. By default, this method uses all public member variable names as the fields of the record to be retrieved from the database. However, if the argument [arg args] is passed with a list of field names (corresponding to its public member variables), then only those fields are retrieved and populated into the object.
+
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::save}] [opt [arg args]]"]
+Save the object by updating the corresponding record in the database. The record to be updated in the database is identified based on the description given in the section [sectref {Object To Record Mapping}]. In preparing the record to save, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument [arg args] is passed, it uses only those field names in [arg args] to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than <undefined>. In Itcl, member variables that are not initialized or unset are internally identified with the value <undefined>. We make use of this state of a member variable to omit a field in the update operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to "<null>".
+
+[list_end]
+
+[subsection {Common / Variables}]
+[list_begin definitions]
+
+[def "[arg {protected variable}] [cmd {tdbo::Itcl::DBObject::clsName}]"]
+Name of the derived class as returned by [lb]$this info class[rb]
+
+[def "[arg {protected variable}] [cmd {tdbo::Itcl::DBObject::log}]"]
+Tcllib's logger object command to invoke logging commands such as ${log}::info "message"
+
+[list_end]
+[para]
 [section {Object To Record Mapping}]
 tdbo object methods [method get], [method save] and [method delete]
 need to identify a unique record in the database that the object
 instance represents. A unique record is identified by the values of
 primary key and/or unique fields of the object. Process of defining
-these field names are OO system dependent. Please refer to the
+these field names are interface dependent. Please refer to the
 corresponding section on how to define and use tdbo objects using the
-respective OO system.
+respective interface.
 
 [para]
 For e.g., if the primary key was defined as {pk1 pk2} and unique fields
@@ -648,22 +655,15 @@ the condition will be:
 
 [para]
 [section EXAMPLES]
- 
-Following example gives a step-by-step illustration on how to use
-this package.
-
 [para]
-[example_begin]
-#
-# Example goes here
-#
-[example_end]
+Plesae refer to examples in demo folder of this package distribution.
 
 [para]
 [section {See Also}]
-[cmd struct::record], [cmd tdao::dbc] and [cmd tdao::dao]
+[cmd struct::record], [cmd sqlite3], [cmd Pgtcl], [cmd mysqltcl],
+[cmd tdbc::sqlite3], [cmd tdbc::postgres], [cmd tdbc::mysql]
 [para]
-[keywords DAO {Data Access Objects} {Database Connectivity}]
+[keywords {Data Access Objects} {Database Connectivity} {Object Relations Mapping}]
 [para]
 [section {AUTHOR}]
 

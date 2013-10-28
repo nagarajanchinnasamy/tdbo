@@ -1,8 +1,8 @@
 Version: 0.1.4
-Date: 2013-10-
-  1. Integrating tdao into tdbo 
-  2. Support for tdbc
-  3. Support for multiple OO systems (Itcl, Tcllib record, tcloo, snit etc.)
+Date: 2013-10-28
+  1. Integrated tdao into tdbo as tdbo::record
+  2. Support for tdbc::sqlite3 tdbc::mysql and tdbc::postgres added
+  3. Redesigned to support for multiple OO interfaces (Itcl, Tcllib record, tcloo, snit etc.)
 Version: 0.1.3
 Date: 2013-10-22
   1. Closing connection in the destructor of connectivity impl. classes 

@@ -377,7 +377,7 @@ Deletes tdbo object definition [arg definitionName], and all instances
 of [arg definitionName]. It returns an error if the [arg definitionName]
 does not exist.
 
-[call [cmd {record delete instance}] [arg instanceName]]
+[def "[cmd {record delete instance}] [arg instanceName]"]
 
 Deletes [arg instance] with the name of [arg instanceName]. It
 returns an error if the [arg instanceName] does not exist.

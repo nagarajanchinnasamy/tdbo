@@ -16,18 +16,19 @@ lappend ::auto_path /usr/local/lib/pgtcl1.9
 package require tdbo
 namespace import tdbo::tdbo
 
-set oosystem itcl
+package require tdbo::Itcl
+
 set dir [file dirname [info script]]
-source [file join $dir "$oosystem/employee.tcl"]
-source [file join $dir "$oosystem/address.tcl"]
-source [file join $dir "saveemployee.tcl"]
+source [file join $dir "employee.tcl"]
+source [file join $dir "address.tcl"]
+source [file normalize [file join $dir "../saveemployee.tcl"]]
 
 # Setup logging facility
 set log [::logger::init EmployeeApp]
 
 # Open SQLite Database connection
 set db [tdbo load sqlite3]
-set conn [$db open [file normalize "sqlite/employee.db"]]
+set conn [$db open [file normalize "../sqlite/employee.db"]]
 
 # Open PostgreSQL Database connection
 #set db [tdbo load Pgtcl]
@@ -76,10 +77,10 @@ addr get
 ${log}::debug "Modified address: [addr cget]"
 
 # Delete the record
-#emp delete
-#${log}::debug "Employee After deleting: [emp cget]"
-#addr delete
-#${log}::debug "Address After deleting: [addr cget]"
+emp delete
+${log}::debug "Employee After deleting: [emp cget]"
+addr delete
+${log}::debug "Address After deleting: [addr cget]"
 
 # Close the db connection
 $conn close

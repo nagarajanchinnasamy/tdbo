@@ -1,5 +1,3 @@
-package require tdbo::Itcl
-
 itcl::class Address {
 	inherit tdbo::Itcl::DBObject
 

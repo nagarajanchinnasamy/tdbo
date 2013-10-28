@@ -16,9 +16,18 @@ methods to access data members of an instance in a standard tcl-ish
 style.
 
 [para]
-tdbo objects can be defined in various ways based on the OO-system that
-is used by the application. For e.g., a tdbo object can be defined in
-Itcl by inheriting [class tdbo::Itcl::DBObject] class. Similarly ....
+tdbo objects can be defined in various ways:
+
+[list_begin enumerated]
+[enum]
+Through [cmd tdbo::record] package, TDBO provides a way for
+applications to define and use tdbo objects with Tcllib's
+[cmd struct::record] like structure.
+[enum]
+by inheriting Itcl based [class tdbo::Itcl::DBObject] class.
+[enum]
+Others to follow ....
+[list_end]
 
 [para]
 A data-store-driver is the one that implements necessary connectivity
@@ -150,23 +159,26 @@ Rolls back the currently active database transaction.
 [list_end]
 
 [para]
-[section {tdbo::Itcl::DBObject Class}]
+[section {TDBO Itcl Interface}]
 [para]
+Through [cmd tdbo::Itcl] package, TDBO provides a way for Itcl based
+applications to define and use Itcl based tdbo objects. To make use of
+this feature you will need to [cmd {package require}] [const tdbo::Itcl].
+
+[list_begin definitions]
+[call [arg class] [cmd {tdbo::Itcl::DBObject}]]
+
 A base class to be inherited by Itcl based tdbo object definitions.
+[list_end]
 
 [subsection {Constructor & Destructor}]
 [list_begin definitions]
 
-[call [cmd {tdbo::Itcl::DBObject::constructor}] [arg conn]]
+[def "[cmd {tdbo::Itcl::DBObject::constructor}] [arg conn]"]
 
-Stores the definition of primary keys, unique fields and sequence /
-auto-increment fields by invoking following protected methods:
-[method _define_primarykey], [method _define_unique] and
-[method _define_autoincrement]. Also prepares list of field names for
-later usage by [method add] and [method save] methods. [arg conn] is
-the connection handle obtained through [arg db] [cmd open] command.
+Stores the definition of primary keys, unique fields and sequence / auto-increment fields by invoking following protected methods: [method _define_primarykey], [method _define_unique] and [method _define_autoincrement]. Also prepares list of field names for later usage by [method add] and [method save] methods. [arg conn] is the connection handle obtained through [arg db] [cmd open] command.
 
-[call [cmd {tdbo::Itcl::DBObject::destructor}]]
+[def "[cmd {tdbo::Itcl::DBObject::destructor}]"]
 
 Nothing special done here.
 
@@ -175,13 +187,13 @@ Nothing special done here.
 [subsection {Proc / Methods}]
 [list_begin definitions]
 
-[call [arg {public proc}] [cmd {tdbo::Itcl::DBObject::schema_name}]]
+[def "[arg {public proc}] [cmd {tdbo::Itcl::DBObject::schema_name}]"]
 
 This is an abstract static proc to be implemented by the derived class
 to return the name of the table / view that the derived class
 represents.
 
-[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_primarykey}]]
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_primarykey}]"]
 
 Provides a default implementation by invoking [method define_primarykey]
 with an empty list. Override this method to invoke
@@ -189,7 +201,7 @@ with an empty list. Override this method to invoke
 variables that constitute the primary key of the table that the class
 represents.
 
-[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_unique}]]
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_unique}]"]
 
 Provides a default implementation by invoking [method define_unique]
 with an empty list. Override this method to invoke
@@ -197,7 +209,7 @@ with an empty list. Override this method to invoke
 variables that constitute the unique fields of the table or view that
 the class represents.
 
-[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_autoincrement}]]
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::_define_autoincrement}]"]
 
 Provides a default implementation by invoking
 [method define_autoincrement] with an empty list. Override this method
@@ -205,7 +217,7 @@ to invoke [cmd define_autoincrement] with your own list of names of the
 public variables that are autoincrement or sequence fields in the table
 that the class represents.
 
-[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_primarykey}] [arg args]]
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_primarykey}] [arg args]"]
 
 Defines a list of public variable names that map to the primary key
 fields of the associated table / view in the database. This method is
@@ -213,7 +225,7 @@ meant to be invoked by derived classes from within
 [method _define_primarykey] method. [arg args] is a list of field names
 that constitute the primary key.
 
-[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_unique}] [arg args]]
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_unique}] [arg args]"]
 
 Defines a list of list of public variable names that map to the list of
 combination of unique fields of the associated table / view in the
@@ -222,7 +234,7 @@ from within [method _define_unique] method. [arg args] is a list of
 list-of-field-names that constitute list of combination of unique
 fields.
 
-[call [arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_autoincrement}] [arg args]]
+[def "[arg {protected method}] [cmd {tdbo::Itcl::DBObject::define_autoincrement}] [arg args]"]
 
 Defines a list of public variable names that map to the auto-increment / 
 sequence fields of the associated table / view in the database. This
@@ -230,79 +242,58 @@ method is meant to be invoked by derived classes from within
 [method _define_autoincrement] method. [arg args] is a list of field
 names that are auto-increment / sequence fields.
 
-[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::configure}] [arg {{option ""}}] [arg args]]
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::configure}] [arg {{option ""}}] [arg args]"]
 
 This method has following usages:
 
-[list_begin itemized]
+[list_begin definitions]
 
-[item]
-[arg obj] [cmd configure] [opt [arg {-opt1 val}]] [opt [arg {-opt2 val}]] [opt [arg ...]]
-[para]
+[def "[arg obj] [cmd configure] [opt [arg {-opt1 val}]] [opt [arg {-opt2 val}]] [opt [arg ...]]"]
 To set values of public member variables. [arg opt] is the name of a public member variable.
 
-[item]
-[arg obj] [cmd configure] [arg from_obj]
-[para]
+[def "[arg obj] [cmd configure] [arg from_obj]"]
 Object to object copy. To copy the values of all public member variables of [arg from_obj] into the corresponding public member variables of [arg obj].
 
-[item]
-[arg obj] [cmd configure]
-[para]
+[def "[arg obj] [cmd configure]"]
 To retrieve initial and current values of all public member variables. Returns a dictionary in the format: -opt {-ival val -cval val} -opt {-ival val -cval val} ...
 
-[item]
-[cmd class] [arg obj] [arg {-opt1 val}] [opt [arg {-opt2 val}]] [opt [arg ...]]
-[para]
+[def "[cmd class] [arg obj] [arg {-opt1 val}] [opt [arg {-opt2 val}]] [opt [arg ...]]"]
 Though this is not a direct usage of this method, when [arg obj] is being constructed, Itcl's object construction mechanism invokes the 1st usage of the [method configure] method on [arg obj] passing [arg {-opt1 val}] [opt [arg {-opt2 val}]] [opt [arg ...]] as its arguments to set the values of the public member variables.
 
-[item]
-[cmd class] [arg obj] [arg from_obj]
-[para]
+[def "[cmd class] [arg obj] [arg from_obj]"]
 Though this is not a direct usage of this method, when [arg obj] is being constructed, ITcl's object construction mechanism invokes the 2nd usage of the [method configure] method on [arg obj] passing [arg from_obj] as its parameter. Hence, it results into object-to-object copy of public member variables.
 [list_end]
 
-[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::cget}] [arg {{option ""}}] [arg args]]
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::cget}] [arg {{option ""}}] [arg args]"]
 
 This method has following usages:
 
-[list_begin itemized]
+[list_begin definitions]
 
-[item]
-[arg obj] [cmd cget] [arg -opt]
-[para]
+[def "[arg obj] [cmd cget] [arg -opt]"]
 Returns current value of the public member variable specified by [arg opt].
 
-[item]
-[arg obj] [cmd cget] [arg {-opt1 vName1}] [opt [arg {-opt2 vName2}]] [opt [arg ...]]
-[para]
+[def "[arg obj] [cmd cget] [arg {-opt1 vName1}] [opt [arg {-opt2 vName2}]] [opt [arg ...]]"]
 To get the value of public member variables into the respective variable names specified. [arg opt] is the name of a public member variable. [arg vName] is the name of a variable into which the value of the [arg opt] is to be stored.
 
-[item]
-[arg obj] [cmd cget]
-[para]
+[def "[arg obj] [cmd cget]"]
 To get current values of all public member variables as a dictionary. Returns the dictionary in the format: -opt1 val1 -opt2 val2 ...
 
 [list_end]
 
-[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::clear}]]
-
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::clear}]"]
 Resets all public member variables with the initialization value given in the class definition.
 
-[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::add}] [opt [arg args]]]
-
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::add}] [opt [arg args]]"]
 Insert the object as a new record into database. In preparing the record to insert, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument [arg args] is passed, it uses only those field names in the [arg args] to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than "<undefined>". In Itcl, Member variables that are uninitialized or unset are internally identified with the value "<undefined>". We make use of this state of a member variable to omit a field in the insert operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to "<null>". Upon successful completion of add operation, the new values of sequence / auto-incremented fields are populated back into the object.
 
-[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::delete}]]
-
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::delete}]"]
 Delete the record represented by the object from database and reset the object values. The record to be deleted from the database is identified based on the description given in the section [sectref {Object To Record Mapping}].
 
-[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::get}] [opt [arg args]]]
-
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::get}] [opt [arg args]]"]
 Retrieve a record from the database and populate object's member variables with values retrieved. The record to be retrieved from the database is identified based on the description given in the section [sectref {Object To Record Mapping}]. By default, this method uses all public member variable names as the fields of the record to be retrieved from the database. However, if the argument [arg args] is passed with a list of field names (corresponding to its public member variables), then only those fields are retrieved and populated into the object.
 
-[call [arg {public method}] [cmd {tdbo::Itcl::DBObject::save}] [opt [arg args]]]
-
+[def "[arg {public method}] [cmd {tdbo::Itcl::DBObject::save}] [opt [arg args]]"]
 Save the object by updating the corresponding record in the database. The record to be updated in the database is identified based on the description given in the section [sectref {Object To Record Mapping}]. In preparing the record to save, this method prepares a list of name-value pairs, by default, from all public member variables of the object. However, if the argument [arg args] is passed, it uses only those field names in [arg args] to prepare the name-value pairs. While preparing the name-value pairs, it includes only those member variables that are initialized with a value other than <undefined>. In Itcl, member variables that are not initialized or unset are internally identified with the value <undefined>. We make use of this state of a member variable to omit a field in the update operation. To set a particular field's value to NULL, you need to set the value of the corresponding public member variable to "<null>".
 
 [list_end]
@@ -310,15 +301,295 @@ Save the object by updating the corresponding record in the database. The record
 [subsection {Common / Variables}]
 [list_begin definitions]
 
-[call [arg {protected variable}] [cmd {tdbo::Itcl::DBObject::clsName}]]
-
+[def "[arg {protected variable}] [cmd {tdbo::Itcl::DBObject::clsName}]"]
 Name of the derived class as returned by [lb]$this info class[rb]
 
-[call [arg {protected variable}] [cmd {tdbo::Itcl::DBObject::log}]]
-
+[def "[arg {protected variable}] [cmd {tdbo::Itcl::DBObject::log}]"]
 Tcllib's logger object command to invoke logging commands such as ${log}::info "message"
 
 [list_end]
+
+[para]
+[section {TDBO Tcllib-Record Like Interface}]
+[para]
+Through [cmd tdbo::record] package, TDBO provides a way for non-OO based
+applications to define and use tdbo objects with a [cmd struct::record]
+like structure. To make use of this feature you will need to
+[cmd {package require}] [const tdbo::record].
+
+[list_begin definitions]
+[call [arg class] [cmd {tdbo::record::reocrd}]]
+
+[para]
+The [cmd tdbo::record] package only contains one top level command, but
+several sub commands (see below). It also obeys the namespace in which
+the tdbo object was defined, hence the objects returned are fully
+qualified.
+[list_end]
+
+[para]
+[subsection {Record Commands}]
+
+[list_begin definitions]
+
+[def "[cmd {record define}] [arg definitionName] [arg schemaName] [arg schemaFields] [opt [arg {-primarykey  fieldsList}]] [opt [arg {-autoincrement fieldsList}]] [opt [arg {-unique fieldsListOfLists}]]"]
+
+Defines a tdbo object with the definition [arg definitionName] that is
+also used as an object command. This object command is used to
+create tdbo object instances. [arg schemaName] is the name of the
+table/view that this definition represents. [arg schemaFields] are the
+field names of the table / view. Optional arguments
+[opt [arg "-primarykey  fieldsList"]] 
+[opt [arg "-autoincrement fieldsList"]]
+[opt [arg "-unique fieldsListOfLists"]] are used to include further
+details of the tdbo object definition.
+
+[para]
+A record definition contains a list of field names, where each field name
+represents a column name in a table/view. A field can optionally have a
+default initial value. When a default value is given, the field is
+specified as a list having its name and value as list elements. If no
+default initial value is given, then the value is automatically set to
+[const <undefined>] by the [method {record define}] method. For
+example, a definition of address table would look like this:
+
+[example_begin]
+dao define Address address {
+	id
+    addrline1
+    addrline2
+    {city Bangalore}
+    {postalcode 560001}
+    {country India}
+}
+
+[example_end]
+
+All instances created from this definition, will initially have 
+Bangalore, 560001 and India as the value for [arg city],
+[arg postalcode] and [arg country] respectively. [arg addrline1] and
+[arg addrline2] will have internally set value of
+[const <undefined>]
+
+[def "[cmd {record delete}] [arg definition] [arg definitionName]"]
+
+Deletes tdbo object definition [arg definitionName], and all instances
+of [arg definitionName]. It returns an error if the [arg definitionName]
+does not exist.
+
+[call [cmd {record delete instance}] [arg instanceName]]
+
+Deletes [arg instance] with the name of [arg instanceName]. It
+returns an error if the [arg instanceName] does not exist.
+[list_end]
+
+[para]
+[subsection {Definition Commands}]
+[para]
+tdbo object instances are created using the [arg definitionName]
+command that was returned by [method {record define}] command.
+
+[list_begin definitions]
+
+[def "[arg definitionName] [method [arg instanceName|#auto]] [method [arg conn]] [opt [arg "-field1 val1"]] [opt [arg "-field2 val2"]] [opt [arg "..."]]"]
+
+Once an instance is created, then it contains the fields listed in the
+definition with default values as per the definition. During instance
+generation, an object command for the instance is created as well,
+using [arg instanceName]. This instance object command is used to
+access the data members of the instance. During the instantiation,
+values for that instance can be given in key/value pairs.
+
+[para]
+With every record instance, [method [arg conn]] needs to be
+associated to enable the instance to communicate with the database
+drivers when data manipulation methods [method add], [method get],
+[method save] and [method delete] are invoked. This
+[method [arg connectionName]] can be obtained using [arg db] [method open]
+method.
+
+[para]
+Optionally, [arg #auto] can be used in place of [arg instanceName].
+When #auto is used, then an instance name will automatically be
+generated, of the form definitionName<integer>, where <integer> is a
+unique integer that is generated.
+
+[para]
+[example_begin]
+# create an object instance addr1 with default values
+Address addr1 conn
+[example_end]
+
+[para]
+[example_begin]
+# create an object instance addr2 with assigned values
+Address addr2 conn -city Chennai -postalcode 638001
+[example_end]
+[list_end]
+
+[para]
+[subsection {Record Instance Commands}]
+ 
+The following subcommands and corresponding arguments are available to
+any record instance:
+
+[list_begin definitions]
+ 
+[def "[arg instanceName] [method cget] [opt [arg -field1]] [opt [arg -field2]] [opt [arg {...}]]"]
+
+Each instance has the sub command [method cget] associated with it. This
+is very similar to how Tk widget's cget command works. It queries
+the values of the field for that particular instance. If
+no arguments are given, then a key/value list is returned.
+
+[para]
+
+To get a value of a field, there are several ways to do this. 
+
+[list_begin enumerated]
+
+[enum]
+To get a field's value, use the instance built-in [method cget] method:
+
+[para]
+[example_begin]
+    [arg addr1] [method cget] -city
+[example_end]
+
+[enum]
+To get multiple field values, you can specify them all in one command:
+[para]
+[example_begin]
+    [arg addr1] [method cget] -addrline1 -addrline2
+[example_end]
+
+[enum]
+To get a list of the key/value of all of the members, there are 3 ways:
+[para]
+[example_begin]
+    [arg addr1]
+    [arg addr1] [method cget]
+    [arg addr1] [method configure]
+[example_end]
+
+[list_end]
+
+[def "[arg instanceName] [method configure] [opt [arg {-field1 val1}]] [opt [arg {-field2 val2}]] [opt [arg {...}]]"]
+
+Each instance has the sub command [method configure] associated with it. This
+is very similar to how Tk widget's configure command works. It sets
+the values of the particular field for that particular instance. If
+no arguments are given, then a key/value list is returned.
+
+[def "[arg instanceName] [method clear]"]
+
+Each instance has the sub command [method clear] associated with it. It
+sets the values of the particular field to it's initial default value
+given in the correponding object definition. Fields that were not given
+default initial value are given a value of [const <undefined>].
+
+[para]
+
+To set a value of a field, there are several ways to do this. 
+
+[list_begin enumerated]
+
+[enum]
+To set a field value:
+[para]
+[example_begin]
+    [arg addr1] [method configure] -addrline1 val1
+[example_end]
+
+[enum]
+To set multiple field values, you can specify them all in one command:
+[para]
+[example_begin]
+    [arg addr1] [method configure] -addrline1 va1 -addrline2 val2
+[example_end]
+
+[enum]
+To reset all the field values as per the DAO definition:
+[para]
+[example_begin]
+    [arg addr1] [method reset]
+[example_end]
+
+[list_end]
+
+[def "[arg instanceName] [method add] [opt [arg -field1]] [opt [arg -field2]] [opt [arg {...}]]"]
+
+Each instance has the sub command [method add] associated with it. It 
+inserts the object as a new record into database. In preparing the
+record to insert, this method prepares a list of name-value pairs,
+by default, from all the fields of the object. However, if the optional
+arguments are passed, it uses only those field names in the arguments
+in preparing the name-value pairs. While preparing the name-value
+pairs, it includes only those fields that are initialized with a value
+other than <undefined>. Instead of an empty string, we make use
+of this state of a field to indicate the absense of a field in the
+insert operation (thus resulting in default value as per the schema
+definition in the database). To set a field's value to NULL,
+[method configure] the same to value [const <null>]. Upon successful
+completion of add operation, the new values of sequence /
+auto-incremented fields are populated back into the object.
+
+[para]
+Returns the status of add operation as a numerical value. A value
+greater than zero indicates success.
+
+[def "[arg instanceName] [method get] [opt [arg -field1]] [opt [arg -field2]] [opt [arg {...}]]"]
+
+Each instance has the sub command [method get] associated with it. It
+retrieves a unique record from the database and populates instance's
+fields. The process of preparing the condition needed to identify the
+unique record from the field values of an instance is explained in
+section [sectref {Object To Record Mapping}]. By default, this method
+retrieves the values for all the fields of the object. However, if the
+optional arguments are passed, it retrieves only those fields in the
+arguments.
+
+[para]
+Returns fieldname-value pairs retrieved from database as a Tcl 
+dictionary. If the retrieval does not return any record from database,
+then the result will be an empty string.
+
+[def "[arg instanceName] [method save] [opt [arg -field1]] [opt [arg -field2]] [opt [arg {...}]]"]
+
+Each instance has the sub command [method save] associated with it. It
+saves the object by updating the corresponding record into the
+database. The process of preparing the condition needed to identify the
+unique record from the field values of a DAO instance is explained in
+section [sectref {Object To Record Mapping}]. In preparing the
+record to updte, this method prepares a list of name-value pairs,
+by default, from all the fields of the object. However, if the optional
+arguments are passed, it uses only those field names in the arguments
+to prepare the name-value pairs. While preparing the name-value
+pairs, it includes only those fields that are initialized with a value
+other than <undefined>. Instead of an empty string, we make use
+of this state of a field to indicate the absense of a field in the
+update operation (thus not affecting those fields in the database). To
+set a field's value to NULL, [method configure] the same to value
+[const <null>].
+
+[para]
+Returns the status of save operation as a numerical value. A value
+greater than zero indicates success.
+
+[def "[arg instanceName] [method delete]"]
+
+Each instance has the sub command [method delete] associated with it.
+It deletes the record from database represented by the object and
+resets the object values. The unique record to be deleted from the
+database is identified based on the description given in the section
+[sectref {Object To Record Mapping}].
+
+[para]
+Returns the status of delete operation as a numerical value. A value
+greater than zero indicates success.
+
+[list_end]
+
 [para]
 [section {Object To Record Mapping}]
 tdbo object methods [method get], [method save] and [method delete]
@@ -365,6 +636,17 @@ Or, for e.g., if uq1 is undefined, then the condition will be:
 [example_end]
 
 [para]
+If any of the fields listed as part of primary key or unique fields are
+set to <null>, then its value is replaced with \"IS NULL\" in the
+condition. For e.g., if pk1 is undefined and uq1 is set to <null>, then
+the condition will be:
+
+[para]
+[example_begin]
+((uq1 IS NULL) OR (uq2='uq2value' AND uq3='uq3value'))
+[example_end]
+
+[para]
 [section EXAMPLES]
  
 Following example gives a step-by-step illustration on how to use
@@ -392,8 +674,8 @@ Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>
 This document, and the package it describes, will undoubtedly contain
 bugs and other problems.
 
-Please report such in the category [emph {tdao}] of the
-[uri {http://sourceforge.net/tracker/?group_id=12883} {Tcllib SF Trackers}].
+Please report such problems at GitHub 
+[uri {https://github.com/nagarajanchinnasamy/tdbo/issues} {Issues Page}].
 
 Please also report any ideas for enhancements you may have for either
 package and/or documentation.

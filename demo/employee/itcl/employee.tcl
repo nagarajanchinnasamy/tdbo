@@ -1,4 +1,3 @@
-package require tdbo::Itcl
 
 itcl::class Employee {
 	inherit tdbo::Itcl::DBObject

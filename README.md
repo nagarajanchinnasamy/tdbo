@@ -1,76 +1,26 @@
 tdbo - Tcl DataBase Object
 ==========================
 
-Tcl DataBase Object (tdbo) provides a simple object oriented interface to database layer of an application. It supports connectivity to SQLite3, PostgreSQL and MySQL / MariaDB database systems. However, tdbo package is written in a generic way to plugin support for other databases. We will add support for other databases such as Oracle etc., in future releases.
+The tdbo package provides an object oriented mechanism to access data in data stores. A tdbo object instance provides add, get, save and delete methods to manipulate data in the data store. In addition, they provide configure and cget methods to access data members of an instance in a standard tcl-ish style.
 
-Simple steps to use this package are:
+tdbo objects can be defined in various ways:
 
-1. Load tdbo package using:
+   1. Through tdbo::record package, TDBO provides a way for applications to define and use tdbo objects with Tcllib's struct::record like structure.
 
-		package require tdbo
-		package require tdbo::Itcl
-		namespace import tdbo::tdbo
+   2. By inheriting Itcl based tdbo::Itcl::DBObject class.
 
-2. Define your application object by inheriting tdbo::Itcl::DBObject
+   3. Others to follow ....
 
-		# Employee Definition
+A data-store-driver is the one that implements necessary connectivity mechanism and procedures to access the data store. tdbo::load method is used to load a specific data-store-driver instance. Using open method of a data-store-driver instance, an application obtains one or many connection handles to the data store. During the instantiation of a tdbo object, a connection handle is passed on to it to make use of the connection handle to perform add, get, save and delete methods on the data store.
 
-		itcl::class Employee {
-			inherit tdbo::Itcl::DBObject
+Using the connection handle, an application can also invoke 1) mget 2) begin, commit and rollback and 3) close methods to 1) retrieve multiple data records based on filtering, sorting and grouping criteria 2) perform atomic and concurrent transactions and 3) close the connection respectively.
 
-			# db argument is an instance of tdbo::SQLite class
-			constructor {db args} {tdbo::Itcl::DBObject::constructor $db} {
-				configure {*}$args
-			}
+Currently, tdbo supports sqlite3, mysqltcl, Pgtcl, tdbc::sqlite3, tdbc::mysql and tdbc::postgres drivers. Note that sqlite3, mysqltcl and Pgtcl drivers are functional in Tcl 8.5 and later releases while tdbc::<driver>s are available only from Tcl 8.6 onwards.
 
-			# Implementing this proc is mandatory to return
-			# name of the table/view.
-			proc schema_name {} {
-				return "employeeTable"
-			}
+For example applications using tdbo::record and tdbo::Itcl packages please look into the demo folder of this package.
 
-			# public variables correspond to fields in the database table
-			public variable id
-			public variable name
-			public variable rollno
-
-			# define primary key, unique and sequence/autoincrement fields
-			protected method _define_primarykey {} {
-				define_primarykey id  
-			}
-
-			protected method _define_autoincrement {} {
-				define_autoincrement id
-			}
-			protected method _define_unique {} {
-				define_unique {rollno}
-			}
-		}
-
-3. Now in your application, load a database driver and open a connection:
-
-		set db [tdbo load tdbc::sqlite3]
-		set conn [$db open [file normalize "sqlite/employee.db"]]
-
-4. Create instances of Employee and start using it transparently:
-
-		Employee emp $conn -name "new employee" -rollno "MK12345"
-	
-		# insert the record. After addition the id is automatically populated.
-		emp1 add
-	
-		# modify the record
-		emp1 configure -name "new updated employee"
-		emp1 save
-	
-		# delete the record
-		emp1 delete	
-	
-		# query about another employee with rollno "MK67890"
-		emp clear
-		emp configure -rollno "MK67890"
-		emp get
-		puts [emp cget]
+For detailed documentation, please refer to tdbo.html. For license information, please refer to license.terms file.
 
 
-For more details please refer to the documentation in doc folder and examples in demo folder.
+--------
+Copyright © 2013, Nagarajan Chinnasamy <nagarajanchinnasamy@gmail.com>

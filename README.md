@@ -3,11 +3,7 @@ tdbo - Tcl DataBase Object
 
 The tdbo package provides an object oriented mechanism to access data in data stores. A tdbo object instance provides add, get, save and delete methods to manipulate data in the data store. In addition, they provide configure and cget methods to access data members of an instance in a standard tcl-ish style.
 
-tdbo objects can be defined in various ways:
-
-   1. Through tdbo::record package, TDBO provides a way for applications to define and use tdbo objects with Tcllib's struct::record like structure.
-   2. By inheriting Itcl based tdbo::Itcl::DBObject class.
-   3. 3. Others to follow ....
+tdbo objects can be defined in various ways: 1. Through tdbo::record package, TDBO provides a way for applications to define and use tdbo objects with Tcllib's struct::record like structure 2. By inheriting Itcl based tdbo::Itcl::DBObject class 3. Others to follow ....
 
 A data-store-driver is the one that implements necessary connectivity mechanism and procedures to access the data store. tdbo::load method is used to load a specific data-store-driver instance. Using open method of a data-store-driver instance, an application obtains one or many connection handles to the data store. During the instantiation of a tdbo object, a connection handle is passed on to it to make use of the connection handle to perform add, get, save and delete methods on the data store.
 
